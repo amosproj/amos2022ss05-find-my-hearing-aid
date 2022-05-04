@@ -1,2 +1,2 @@
-# Fabulous Project (AMOS SS 20xx)
-Something something something
+Find my BLE device (AMOS SS 2022)
+
