@@ -15,6 +15,6 @@ This is the knowledge base document from: *insert name*.
  - List item
 
 ### Special skills: 
-*Please list any special skills you have acquired over the past few years in the field of computer science (eg. focus on software architecture, focus on UI-design, focus on AI-topics, ...) *
+*Please list any special skills you have acquired over the past few years in the field of computer science (eg. focus on software architecture, focus on UI-design, focus on AI-topics, ...)*
  - List item
 
