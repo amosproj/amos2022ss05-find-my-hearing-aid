@@ -1,0 +1,14 @@
+name: Trigger Both Builds
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+jobs:
+  message:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Send trigger message
+      run: echo "${{ github.event.inputs.name }} triggered both builds."
