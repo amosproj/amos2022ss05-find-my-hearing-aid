@@ -1,0 +1,27 @@
+name: Build Xamarin.Andriod
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API or when called by another workflow.
+on: [workflow_dispatch, workflow_call]
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set default Xamarin SDK versions
+      run: |
+        $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.10 --android=10.2
+
+    - name: Setup .NET Core SDK 5.0.x
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: '5.0.x'
+
+    - name: Install dependencies
+      run: nuget restore Implementation/FindMyBLEDevice.sln
+
+    - name: Build
+      run: msbuild Implementation/FindMyBLEDevice/FindMyBLEDevice/FindMyBLEDevice.csproj /t:PackageForAndroid /p:Configuration=Debug
