@@ -25,3 +25,9 @@ jobs:
 
     - name: Build
       run: msbuild Implementation/FindMyBLEDevice/FindMyBLEDevice.Android/FindMyBLEDevice.Android.csproj /t:PackageForAndroid /p:Configuration=Debug
+
+    - name: Archive APK
+      uses: actions/upload-artifact@v3
+      with: 
+        name: FindMyBLEDevice.apk
+        path: Implementation/FindMyBLEDevice/FindMyBLEDevice.Android/bin/Debug/com.companyname.findmybledevice.apk
