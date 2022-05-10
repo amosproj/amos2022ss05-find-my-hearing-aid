@@ -7,8 +7,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  message:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Send trigger message
-      run: echo "${{ github.event.inputs.name }} triggered both builds."
+  build-android: 
+    uses: ./.github/workflows/android.yml
+    
+  build-ios: 
+    uses: ./.github/workflows/iOS.yml
