@@ -7,7 +7,7 @@ This is the knowledge base document from: *insert name*.
  - List item
 
 ### Software Project Management: 
-*Please list all your experience regarding software project management here (years of experience, size of group, working experience, ...)*
+*Please list all your experience regarding software project management here (years of experience, size of group, working experience, Scrum experience, XP experience, ...)*
  - List item
 
 ### App Development: 
