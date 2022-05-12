@@ -1,6 +1,13 @@
 ﻿## AMOS Meetings
 
-Here are all the meetings of AMOS-Team-5 listed. 
+Here are all the meetings of AMOS-Team-5 listed. A protocol will only be written for SCRUM Team Meetings (Wednesday, 12.30 - 14.00) and for Meetings with our Industry Partner. Our Scrum Master takes care of writing these protocols. 
+For all the other meetings (meetings with POs, meetings with all SDs, meetings with 2 SDs, ...), please do the following: 
+- Add new line to the table
+- Add number column
+- Add date column
+- Add type column (SD|PO|Orga)
+- Add Description column
+- Link protocol if needed
 
 
 
