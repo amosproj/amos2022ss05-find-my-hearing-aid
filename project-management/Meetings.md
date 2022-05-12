@@ -13,8 +13,8 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 
 |No |Date |Type|Description |Attendees |Protocol |
 |---|-----|----|------------|----------|---------|
-|1|05/05/22, 13.00 - 14.00|Dev|This is a short description of the meeting. Keep it short please. |~~XC~~, EW, LM, NS, ~~DP~~, JS, AW, ~~MA~~, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Protocol_1)|
-|1|05/05/22, 13.00 - 14.00|Dev|This is a short description of the meeting. Keep it short please. |~~XC~~, EW, LM, NS, ~~DP~~, JS, AW, ~~MA~~, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Protocol_1)|
+|1|27/04/22, 12.30 - 14.00|Team|Kick-off meeting of Sprint 0. |XC, EW, LM, NS, DP, JS, AW, MA, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/AMOS_team_meeting_01_27042022.docx)|
+|1|30/04/22, 13.00 - 14.00|Team|  |XC, EW, LM, NS, DP, JS, AW, MA, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/AMOS_team_meeting_02_30042022.docx)|
 |1|05/05/22, 13.00 - 14.00|Dev|This is a short description of the meeting. Keep it short please. |~~XC~~, EW, LM, NS, ~~DP~~, JS, AW, ~~MA~~, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Protocol_1)|
 
 _______________________
