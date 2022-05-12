@@ -7,6 +7,7 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 - Add date column
 - Add type column (SD|PO|Orga)
 - Add Description column
+- Add attendees of the meeting and cross out names who were not present
 - Link protocol if needed
 
 
