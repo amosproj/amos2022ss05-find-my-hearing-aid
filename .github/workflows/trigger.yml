@@ -1,12 +1,19 @@
-name: Trigger Both Builds
+# SPDX-License-Identifier: CC0-1.0
+# SDPX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+
+name: Trigger Builds and Unit Tests
 
 on:
   push:
-    branches:
-      - dev
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
   workflow_dispatch:
 
 jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+
   build-android: 
     uses: ./.github/workflows/android.yml
     
