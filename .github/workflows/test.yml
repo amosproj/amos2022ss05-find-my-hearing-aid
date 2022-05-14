@@ -18,5 +18,7 @@ jobs:
         dotnet-version: 6.0.x
     - name: Restore dependencies
       run: dotnet restore Implementation/FindMyBLEDevice.Tests/FindMyBLEDevice.Tests.csproj
+    - name: Build
+      run: dotnet build Implementation/FindMyBLEDevice.Tests/FindMyBLEDevice.Tests.csproj --no-restore
     - name: Test
       run: dotnet test Implementation/FindMyBLEDevice.Tests/FindMyBLEDevice.Tests.csproj --no-build --verbosity normal
