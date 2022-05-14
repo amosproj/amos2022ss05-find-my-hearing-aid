@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: CC0-1.0
+# SDPX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+
+name: Run Unit Tests
+
+on: [workflow_dispatch, workflow_call]
+
+jobs:
+  test:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v2
+      with:
+        dotnet-version: 6.0.x
+    - name: Restore dependencies
+      run: dotnet restore Implementation/FindMyBLEDevice.Tests/FindMyBLEDevice.Tests.csproj
+    - name: Test
+      run: dotnet test Implementation/FindMyBLEDevice.Tests/FindMyBLEDevice.Tests.csproj --verbosity normal
