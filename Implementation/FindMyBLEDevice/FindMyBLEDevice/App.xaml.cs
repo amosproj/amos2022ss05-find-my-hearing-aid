@@ -1,4 +1,8 @@
-﻿using FindMyBLEDevice.Services;
+﻿// SPDX-License-Identifier: MIT
+// SDPX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SDPX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
+
+using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Views;
 using System;
 using Xamarin.Forms;
@@ -27,6 +31,18 @@ namespace FindMyBLEDevice
 
         protected override void OnResume()
         {
+        }
+
+        /// <summary>
+        /// This method was created for setting up unit tests. 
+        /// It may be deleted in the future.
+        /// </summary>
+        /// <param name="a">A number</param>
+        /// <param name="b">Another number</param>
+        /// <returns>The sum of those numbers</returns>
+        public int Add(int a, int b)
+        {
+            return a + b;
         }
     }
 }
