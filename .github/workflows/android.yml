@@ -18,10 +18,10 @@ jobs:
       run: |
         $VM_ASSETS/select-xamarin-sdk-v2.sh --mono=6.12 --android=11.0
 
-    - name: Setup .NET Core SDK 6.0.x
+    - name: Setup .NET Core SDK 5.0.x
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: '5.0.x'
 
     - name: Install dependencies
       run: nuget restore Implementation/FindMyBLEDevice.sln
