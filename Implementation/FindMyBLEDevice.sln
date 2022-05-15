@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32413.511
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32421.90
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice.Android", "FindMyBLEDevice\FindMyBLEDevice.Android\FindMyBLEDevice.Android.csproj", "{72AF5AF2-8AFA-497C-A1D8-E51292277AD3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice.iOS", "FindMyBLEDevice\FindMyBLEDevice.iOS\FindMyBLEDevice.iOS.csproj", "{EC9259BD-A478-4199-BA86-D7630ACC7CC9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice", "FindMyBLEDevice\FindMyBLEDevice\FindMyBLEDevice.csproj", "{2AA1816C-8510-4B71-93E4-71FB927628C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindMyBLEDevice", "FindMyBLEDevice\FindMyBLEDevice\FindMyBLEDevice.csproj", "{2AA1816C-8510-4B71-93E4-71FB927628C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice.Tests", "FindMyBLEDevice.Tests\FindMyBLEDevice.Tests.csproj", "{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -73,6 +75,18 @@ Global
 		{2AA1816C-8510-4B71-93E4-71FB927628C0}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
 		{2AA1816C-8510-4B71-93E4-71FB927628C0}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 		{2AA1816C-8510-4B71-93E4-71FB927628C0}.Release|iPhoneSimulator.Deploy.0 = Release|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Release|iPhone.Build.0 = Release|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{7FA5E5A4-7483-4261-9B0C-279CBF42EAD9}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
