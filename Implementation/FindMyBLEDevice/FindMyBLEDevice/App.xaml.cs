@@ -1,13 +1,27 @@
 ﻿using FindMyBLEDevice.Services;
-using FindMyBLEDevice.Views;
-using System;
+using FindMyBLEDevice.Services.Database;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace FindMyBLEDevice
 {
     public partial class App : Application
     {
+
+        // Interface to stored BTDevices
+        private static IDevicesStore devicesStore;
+
+        // Create the devices store as a singleton.
+        public static IDevicesStore DevicesStore
+        {
+            get
+            {
+                if (devicesStore == null)
+                {
+                    devicesStore = new DevicesStore();
+                }
+                return devicesStore;
+            }
+        }
 
         public App()
         {

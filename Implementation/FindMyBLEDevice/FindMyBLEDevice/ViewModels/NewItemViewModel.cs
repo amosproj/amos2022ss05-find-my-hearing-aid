@@ -1,5 +1,4 @@
-﻿using FindMyBLEDevice.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
@@ -9,8 +8,8 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class NewItemViewModel : BaseViewModel
     {
-        private string text;
-        private string description;
+        private string name;
+        private string bt_id;
 
         public NewItemViewModel()
         {
@@ -22,20 +21,20 @@ namespace FindMyBLEDevice.ViewModels
 
         private bool ValidateSave()
         {
-            return !String.IsNullOrWhiteSpace(text)
-                && !String.IsNullOrWhiteSpace(description);
+            return !String.IsNullOrWhiteSpace(name)
+                && !String.IsNullOrWhiteSpace(BT_id);
         }
 
-        public string Text
+        public string Name
         {
-            get => text;
-            set => SetProperty(ref text, value);
+            get => name;
+            set => SetProperty(ref name, value);
         }
 
-        public string Description
+        public string BT_id
         {
-            get => description;
-            set => SetProperty(ref description, value);
+            get => bt_id;
+            set => SetProperty(ref bt_id, value);
         }
 
         public Command SaveCommand { get; }
@@ -49,14 +48,8 @@ namespace FindMyBLEDevice.ViewModels
 
         private async void OnSave()
         {
-            Item newItem = new Item()
-            {
-                Id = Guid.NewGuid().ToString(),
-                Text = Text,
-                Description = Description
-            };
-
-            await DataStore.AddItemAsync(newItem);
+            
+            await App.DevicesStore.AddDevice(bt_id, name);
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
