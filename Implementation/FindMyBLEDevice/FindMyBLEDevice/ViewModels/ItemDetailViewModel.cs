@@ -9,10 +9,10 @@ namespace FindMyBLEDevice.ViewModels
     [QueryProperty(nameof(DeviceID), nameof(DeviceID))]
     public class ItemDetailViewModel : BaseViewModel
     {
-        private string deviceId;
+        private int deviceId;
         private string name;
         private string bt_id;
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         public string Name
         {
@@ -26,7 +26,7 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref bt_id, value);
         }
 
-        public string DeviceID
+        public int DeviceID
         {
             get
             {
@@ -39,14 +39,14 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        public async void LoadItemId(string itemId)
+        public async void LoadItemId(int deviceId)
         {
             try
             {
-                var item = await DataStore.GetItemAsync(itemId);
-                Id = item.Id;
-                Name = item.Text;
-                BT_id = item.Description;
+                BTDevice device = await App.DevicesStore.GetDevice(deviceId);
+                Id = device.Id;
+                Name = device.Name;
+                BT_id = device.BT_id;
             }
             catch (Exception)
             {
