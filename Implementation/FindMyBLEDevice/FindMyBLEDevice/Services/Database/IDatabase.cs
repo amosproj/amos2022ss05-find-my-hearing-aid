@@ -29,7 +29,7 @@ namespace FindMyBLEDevice.Services.Database
         /// </summary>
         /// <param name="id"></param>
         /// <returns>
-        /// BTDevice-Object of device with requested id
+        /// BTDevice-Object of device with requested id or null if the id does not exist
         /// </returns>
         Task<BTDevice> GetDeviceAsync(int id);
 
