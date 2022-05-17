@@ -33,4 +33,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with: 
         name: FindMyBLEDevice APK
-        path: Implementation/FindMyBLEDevice/FindMyBLEDevice.Android/bin/Debug/com.companyname.findmybledevice-Signed.apk
+        path: Implementation/FindMyBLEDevice/FindMyBLEDevice.Android/bin/Debug/com.companyname.findmybledevice.apk
