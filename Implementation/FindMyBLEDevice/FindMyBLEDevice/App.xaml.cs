@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
-// SDPX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SDPX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
+// SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
 using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Database;
