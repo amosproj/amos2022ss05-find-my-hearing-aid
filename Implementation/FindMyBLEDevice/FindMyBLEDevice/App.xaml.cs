@@ -40,17 +40,14 @@ namespace FindMyBLEDevice
 
         protected override void OnStart()
         {
-            throw new NotSupportedException();
         }
 
         protected override void OnSleep()
         {
-            throw new NotSupportedException();
         }
 
         protected override void OnResume()
         {
-            throw new NotSupportedException();
         }
 
         /// <summary>
