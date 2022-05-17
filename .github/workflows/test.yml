@@ -21,12 +21,12 @@ jobs:
     - name: Test
       run: |
           dotnet test Implementation/FindMyBLEDevice.Tests/FindMyBLEDevice.Tests.csproj --verbosity normal --collect:"XPlat Code Coverage" --results-directory:.
-          export COVERAGE_FILE=$(find . -maxdepth 2 -ls | grep coverage.cobertura.xml | tr -s ' ' | cut -d ' ' -f 12)
-          echo "::set-env name=COVERAGE_FILE::$COVERAGE_FILE"
+          export coverage_file=$(find . -maxdepth 2 -ls | grep coverage.cobertura.xml | tr -s ' ' | cut -d ' ' -f 12)
+          echo "coverage_file=$coverage_file" >> $GITHUB_ENV
     - name: ReportGenerator
       uses: danielpalme/ReportGenerator-GitHub-Action@5.1.7
       with:
-        reports: ${{ env.COVERAGE_FILE }} # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
+        reports: ${{ env.coverage_file }} # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
         targetdir: 'coveragereport' # REQUIRED # The directory where the generated report should be saved.
         reporttypes: 'Html_Dark' # The output formats and scope (separated by semicolon) Values: Badges, Clover, Cobertura, CsvSummary, Html, Html_Dark, Html_Light, HtmlChart, HtmlInline, HtmlInline_AzurePipelines, HtmlInline_AzurePipelines_Dark, HtmlInline_AzurePipelines_Light, HtmlSummary, JsonSummary, Latex, LatexSummary, lcov, MarkdownSummary, MHtml, PngChart, SonarQube, TeamCitySummary, TextSummary, Xml, XmlSummary
         sourcedirs: '' # Optional directories which contain the corresponding source code (separated by semicolon). The source directories are used if coverage report contains classes without path information.
