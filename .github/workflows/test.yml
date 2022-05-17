@@ -24,7 +24,7 @@ jobs:
           export COVERAGE_FILE=$(find . -maxdepth 2 -ls | grep coverage.cobertura.xml | tr -s ' ' | cut -d ' ' -f 12)
           echo "::set-env name=COVERAGE_FILE::$COVERAGE_FILE"
     - name: ReportGenerator
-      uses: danielpalme/ReportGenerator-GitHub-Action@5.1.8
+      uses: danielpalme/ReportGenerator-GitHub-Action@5.1.7
       with:
         reports: ${{ env.COVERAGE_FILE }} # REQUIRED # The coverage reports that should be parsed (separated by semicolon). Globbing is supported.
         targetdir: 'coveragereport' # REQUIRED # The directory where the generated report should be saved.
