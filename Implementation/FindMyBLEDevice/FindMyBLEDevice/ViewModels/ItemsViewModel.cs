@@ -10,20 +10,20 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private Item _selectedItem;
+        private BTDevice _selectedItem;
 
-        public ObservableCollection<Item> Items { get; }
+        public ObservableCollection<BTDevice> Items { get; }
         public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
-        public Command<Item> ItemTapped { get; }
+        public Command<BTDevice> ItemTapped { get; }
 
         public ItemsViewModel()
         {
             Title = "Browse";
-            Items = new ObservableCollection<Item>();
+            Items = new ObservableCollection<BTDevice>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            ItemTapped = new Command<Item>(OnItemSelected);
+            ItemTapped = new Command<BTDevice>(OnItemSelected);
 
             AddItemCommand = new Command(OnAddItem);
         }
@@ -35,7 +35,7 @@ namespace FindMyBLEDevice.ViewModels
             try
             {
                 Items.Clear();
-                var items = await DataStore.GetItemsAsync(true);
+                var items = await App.DevicesStore.GetAllDevices();
                 foreach (var item in items)
                 {
                     Items.Add(item);
@@ -57,7 +57,7 @@ namespace FindMyBLEDevice.ViewModels
             SelectedItem = null;
         }
 
-        public Item SelectedItem
+        public BTDevice SelectedItem
         {
             get => _selectedItem;
             set
@@ -72,13 +72,13 @@ namespace FindMyBLEDevice.ViewModels
             await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
-        async void OnItemSelected(Item item)
+        async void OnItemSelected(BTDevice device)
         {
-            if (item == null)
+            if (device == null)
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.ItemId)}={item.Id}");
+            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceID)}={device.Id}");
         }
     }
 }

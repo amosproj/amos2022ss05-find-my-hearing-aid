@@ -1,17 +1,34 @@
 ﻿// SPDX-License-Identifier: MIT
-// SDPX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SDPX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
+// SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
 using FindMyBLEDevice.Services;
-using FindMyBLEDevice.Views;
+using FindMyBLEDevice.Services.Database;
 using System;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace FindMyBLEDevice
 {
     public partial class App : Application
     {
+
+        // Interface to stored BTDevices
+        private static IDevicesStore devicesStore;
+
+        // Create the devices store as a singleton.
+        public static IDevicesStore DevicesStore
+        {
+            get
+            {
+                if (devicesStore == null)
+                {
+                    devicesStore = new DevicesStore();
+                }
+                return devicesStore;
+            }
+        }
 
         public App()
         {
@@ -23,14 +40,17 @@ namespace FindMyBLEDevice
 
         protected override void OnStart()
         {
+            throw new NotSupportedException();
         }
 
         protected override void OnSleep()
         {
+            throw new NotSupportedException();
         }
 
         protected override void OnResume()
         {
+            throw new NotSupportedException();
         }
 
         /// <summary>
