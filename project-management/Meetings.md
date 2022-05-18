@@ -22,7 +22,9 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 |6|10/05/22, 13.00 - 14.00|Team|Discuss the technical issues with the industry partner. |~~XC~~, ~~EW~~, LM, NS, DP, JS, AW, MA, LK|
 |7|11/05/22, 12.30 - 14.00|Team|Team meeting of Sprint 2|XC, EW, LM, NS, DP, JS, AW, MA, LK|tbd|
 |8|18/05/22, 12.30 - 14.00|Team|Team meeting of Sprint 3||tbd|
-|9|19/05/22, 11.00 - 12.00|PO|POs meet the industry partner to talk about PO roles in Scrum. |||
-|10|20/05/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner||tbd|
+|9|18/05/22, 16.00 - 16.30|Team|Feedback-Session regarding Team meeting 3|XC, EW, LM, ~~NS~~, ~~DP~~, ~~JS~~, ~~AW~~, ~~MA~~, ~~LK~~|-|
+|10|19/05/22, 11.00 - 12.00|PO|POs meet the industry partner to talk about PO roles in Scrum. |||
+|11|20/05/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner||tbd|
+
 
 _______________________
