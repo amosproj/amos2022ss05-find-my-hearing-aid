@@ -1,3 +1,7 @@
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+
 using FindMyBLEDevice.Exceptions;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Database;
