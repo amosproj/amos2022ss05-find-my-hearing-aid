@@ -5,6 +5,7 @@
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
 using FindMyBLEDevice.Services;
+using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using System;
 using Xamarin.Forms;
@@ -30,12 +31,19 @@ namespace FindMyBLEDevice
             }
         }
 
+
+        private static Bluetooth bluetooth = new Bluetooth();
+
         public App()
         {
             InitializeComponent();
 
             DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
+
+
+            bluetooth.search();
+
         }
 
         protected override void OnStart()
