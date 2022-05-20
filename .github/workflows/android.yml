@@ -27,7 +27,7 @@ jobs:
       run: nuget restore Implementation/FindMyBLEDevice.sln
 
     - name: Build
-      run: msbuild Implementation/FindMyBLEDevice/FindMyBLEDevice.Android/FindMyBLEDevice.Android.csproj /t:PackageForAndroid /p:Configuration=Debug
+      run: msbuild Implementation/FindMyBLEDevice/FindMyBLEDevice.Android/FindMyBLEDevice.Android.csproj /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Debug
 
     - name: Archive APK
       uses: actions/upload-artifact@v3
