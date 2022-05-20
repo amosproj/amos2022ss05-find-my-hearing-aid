@@ -24,7 +24,7 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 |8|18/05/22, 12.30 - 14.00|Team|Team meeting of Sprint 3|XC, EW, LM, NS, DP, JS, AW, MA, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/AMOS_team_meeting_18052022.md)|
 |9|18/05/22, 16.00 - 16.30|PO & SM|Feedback-Session regarding Team meeting 3|XC, EW, LM, ~~NS~~, ~~DP~~, ~~JS~~, ~~AW~~, ~~MA~~, ~~LK~~|-|
 |10|19/05/22, 11.00 - 12.00|PO|POs meet the industry partner to talk about PO roles in Scrum. |||
-|11|20/05/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner||tbd|
+|11|20/05/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner|XC, EW, ~~LM~~, NS, DP, ~~JS~~, AW, ~~MA~~, LK, MR(WSA), SM(WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeiting_with_WSA_20052022.md)|
 
 
 _______________________
