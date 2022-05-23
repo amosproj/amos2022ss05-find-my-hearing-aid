@@ -19,7 +19,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public ItemsViewModel()
         {
-            Title = "Browse";
+            Title = "Devices";
             Items = new ObservableCollection<BTDevice>();
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 

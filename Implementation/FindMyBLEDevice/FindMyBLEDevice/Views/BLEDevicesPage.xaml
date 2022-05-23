@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:FindMyBLEDevice.ViewModels"
+             xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
+             x:Class="FindMyBLEDevice.Views.BLEDevicesPage"
+             Title="{Binding Title}">
+
+    <ContentPage.BindingContext>
+        <vm:BLEDevicesModel />
+    </ContentPage.BindingContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <ScrollView Grid.Row="1">
+            <StackLayout Orientation="Vertical" Padding="20,0,20,0" Spacing="0">
+                <Label Text="Search for available BLE devices" FontSize="Medium"/>
+                <Label FontSize="16" Padding="0,0,0,0">
+                </Label>
+                <Button Margin="0,0,0,0" Text="Scan for devices">
+                    <!-- Command="{Binding OpenWebCommand}"
+                          BackgroundColor="{StaticResource Primary}"
+                        TextColor="White" /> -->
+                </Button>
+
+            </StackLayout>
+        </ScrollView>
+        <ScrollView Grid.Row="2">
+            <StackLayout Orientation="Vertical" Padding="20,0,20,0" Spacing="5">
+                <Label Text="Paired Bluetooth Devices" FontSize="Medium"/>
+                <Frame BorderColor="Black"
+               Padding="5">
+                    <StackLayout Orientation="Horizontal"
+                                 Spacing="15">
+                        <BoxView Color="HotPink"  />
+                        <Label Text="AirPods"
+                               FontSize="Large"
+                               HorizontalOptions="StartAndExpand"/>
+                        <ImageButton Source="icon_about.png" HorizontalOptions="End"></ImageButton>
+                        <ImageButton Source="icon_feed.png" HorizontalOptions="End"></ImageButton>
+                        <ImageButton Source="icon_feed.png" HorizontalOptions="End"></ImageButton>
+                    </StackLayout>
+                </Frame>
+                <Frame BorderColor="Black"
+               Padding="5">
+                    <StackLayout Orientation="Horizontal"
+                         Spacing="15">
+                        <BoxView Color="Indigo" />
+                        <Label Text="AsteroidClassics"
+                       FontSize="Large"
+                       VerticalOptions="Center" />
+                    </StackLayout>
+                </Frame>
+                <Frame BorderColor="Black"
+               Padding="5">
+                    <StackLayout Orientation="Horizontal"
+                         Spacing="15">
+                        <BoxView Color="DarkKhaki" />
+                        <Label Text="Bose Mini II SoundLink"
+                       FontSize="Large"
+                       VerticalOptions="Center" />
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+        <ScrollView Grid.Row="3">
+            <StackLayout Orientation="Vertical" Padding="20,10,20,10" Spacing="5">
+                <Label Text="Available Bluetooth Devices" FontSize="Medium"/>
+                <Frame BorderColor="Black"
+               Padding="5">
+                    <StackLayout Orientation="Horizontal"
+                         Spacing="15">
+                        <BoxView Color="DarkSlateGray" />
+                        <Label Text="unkown Device"
+                       FontSize="Large"
+                       VerticalOptions="Center" />
+                    </StackLayout>
+                </Frame>
+                <Frame BorderColor="Black"
+               Padding="5">
+                    <StackLayout Orientation="Horizontal"
+                         Spacing="15">
+                        <BoxView Color="DarkSlateGray" />
+                        <Label Text="unkown Device"
+                       FontSize="Large"
+                       VerticalOptions="Center" />
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+        <ScrollView Grid.Row="4">
+            <StackLayout Orientation="Vertical" Padding="20,10,20,10" Spacing="5">
+                <Label Text="Available Bluetooth Devices as ListView" FontSize="Medium"/>
+            </StackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
