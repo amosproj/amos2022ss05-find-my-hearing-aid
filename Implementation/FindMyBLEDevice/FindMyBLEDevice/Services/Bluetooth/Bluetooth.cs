@@ -3,51 +3,41 @@ using Plugin.BLE;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
-    class Bluetooth
+    public class Bluetooth
     {
+        private List<AvailableBTDevice> deviceList;
 
-        public async void search()
+        public Bluetooth()
         {
+            deviceList = new List<AvailableBTDevice>();
+        }
 
-            var ble = CrossBluetoothLE.Current;
+        public async Task search(int scanTimeout)
+        {
+            deviceList = new List<AvailableBTDevice>();
             var adapter = CrossBluetoothLE.Current.Adapter;
 
             adapter.DeviceDiscovered += async (s, a) => {
-
-                string name = $"Name: {a.Device.Name} - RSSI: {a.Device.Rssi}";
-
-                List<BTDevice> list = await App.DevicesStore.GetAllDevices();
-
-                bool exists = false;
-                foreach (BTDevice dev in list)
+                deviceList.Add(new AvailableBTDevice()
                 {
-                    if (dev.BT_id == a.Device.Id.ToString())
-                    {
-                        exists = true;
-                    }
-                }
-
-                if (!exists)
-                {
-                    await App.DevicesStore.AddDevice(a.Device.Id.ToString(), name);
-                }
-
+                    Name = a.Device.Name,
+                    Id = a.Device.Id,
+                    Rssi = a.Device.Rssi
+                });
             };
 
-            adapter.ScanTimeout = 5000000;
+            adapter.ScanTimeout = scanTimeout;
 
-            Console.WriteLine("Start scanning");
             await adapter.StartScanningForDevicesAsync();
-            Console.WriteLine("End scanning");
-
-
         }
 
-
-
-
+        public List<AvailableBTDevice> GetAvailableDevices()
+        {
+            return deviceList;
+        }
     }
 }

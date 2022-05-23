@@ -17,6 +17,7 @@ namespace FindMyBLEDevice
 
         // Interface to stored BTDevices
         private static IDevicesStore devicesStore;
+        private static Bluetooth bluetooth;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -30,9 +31,19 @@ namespace FindMyBLEDevice
                 return devicesStore;
             }
         }
+        public static Bluetooth Bluetooth
+        {
+            get
+            {
+                if (bluetooth == null)
+                {
+                    bluetooth = new Bluetooth();
+                }
+                return bluetooth;
+            }
+        }
 
 
-        private static Bluetooth bluetooth = new Bluetooth();
 
         public App()
         {
@@ -40,10 +51,6 @@ namespace FindMyBLEDevice
 
             DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
-
-
-            bluetooth.search();
-
         }
 
         protected override void OnStart()
