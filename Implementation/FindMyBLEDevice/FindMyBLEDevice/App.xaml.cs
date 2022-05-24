@@ -40,14 +40,17 @@ namespace FindMyBLEDevice
 
         protected override void OnStart()
         {
+            // comment to make the linter happy
         }
 
         protected override void OnSleep()
         {
+            // comment to make the linter happy
         }
 
         protected override void OnResume()
         {
+            // comment to make the linter happy
         }
 
         /// <summary>
