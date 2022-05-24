@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    // SPDX-License-Identifier: MIT
+    // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+-->
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:FindMyBLEDevice.Views"
@@ -84,6 +88,12 @@
     <FlyoutItem Title="Browse" Icon="icon_feed.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="StrengthSearch" Icon="icon_about.png">
+        <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="MapSearch" Icon="icon_about.png">
+        <ShellContent Route="MapPage" ContentTemplate="{DataTemplate local:MapPage}" />
+    </FlyoutItem>
     <FlyoutItem Title="Bluetooth" Icon="icon_feed.png">
         <ShellContent Route="BluetoothPage" ContentTemplate="{DataTemplate local:BluetoothPage}" />
     </FlyoutItem>
@@ -102,6 +112,17 @@
     <TabBar>
         <ShellContent Route="LoginPage" ContentTemplate="{DataTemplate local:LoginPage}" />
     </TabBar>
+
+    <Shell.FlyoutFooterTemplate>
+        <DataTemplate>
+            <StackLayout>
+                <Label Text="FindMyHearingAid"
+                       TextColor="DarkGray"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center" />
+            </StackLayout>
+        </DataTemplate>
+    </Shell.FlyoutFooterTemplate>
 
     <!-- Optional Templates 
     // These may be provided inline as below or as separate classes.
