@@ -93,6 +93,7 @@
     </FlyoutItem>
     <FlyoutItem Title="MapSearch" Icon="icon_about.png">
         <ShellContent Route="MapPage" ContentTemplate="{DataTemplate local:MapPage}" />
+    </FlyoutItem>
     <FlyoutItem Title="Bluetooth" Icon="icon_feed.png">
         <ShellContent Route="BluetoothPage" ContentTemplate="{DataTemplate local:BluetoothPage}" />
     </FlyoutItem>
