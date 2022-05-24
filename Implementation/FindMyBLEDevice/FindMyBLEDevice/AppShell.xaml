@@ -88,9 +88,6 @@
     <FlyoutItem Title="Browse" Icon="icon_feed.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="Devices" Icon="icon_about.png">
-        <ShellContent Route="BLEDevicesPage" ContentTemplate="{DataTemplate local:BLEDevicesPage}" />
-    </FlyoutItem>
     <FlyoutItem Title="StrengthSearch" Icon="icon_about.png">
         <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}" />
     </FlyoutItem>
