@@ -5,10 +5,10 @@
              Title="{Binding Name}">
 
     <StackLayout Spacing="20" Padding="15">
-        <Label Text="Text:" FontSize="Medium" />
-        <Label Text="{Binding Name}" FontSize="Small"/>
-        <Label Text="Description:" FontSize="Medium" />
-        <Label Text="{Binding BT_id}" FontSize="Small"/>
+        <Label Text="Text:" FontSize="Medium" TextColor="Black" />
+        <Label Text="{Binding Name}" FontSize="Small" TextColor="Black"/>
+        <Label Text="Description:" FontSize="Medium" TextColor="Black" />
+        <Label Text="{Binding BT_id}" FontSize="Small" TextColor="Black"/>
     </StackLayout>
     
 </ContentPage>

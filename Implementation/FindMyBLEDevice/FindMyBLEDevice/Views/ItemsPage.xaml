@@ -13,7 +13,7 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
-        <ToolbarItem Text="Scan for devices"/>
+        <ToolbarItem Text="Scan" Command="{Binding SearchDevicesCommand}" />
     </ContentPage.ToolbarItems>
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
@@ -63,17 +63,50 @@
         </ScrollView>
 
         <ScrollView Grid.Row="2">
-            <StackLayout>
-                <Label Text=" Available Devices"
-                       BackgroundColor="LightGray"
+            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                <StackLayout>
+                    <Label Text=" Available Devices"
                        FontSize="Medium"
+                       BackgroundColor="LightGray"
                        FontAttributes="Bold" />
-                <Button Margin="0,0,0,0" Text="Scan for devices">
-                    <!-- Command="{Binding OpenWebCommand}"
+                    <Button Margin="0,0,0,0" Text="Scan for available devices"
+                          Command="{Binding SearchDevicesCommand}"
                           BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" /> -->
-                </Button>
-            </StackLayout>
+                        TextColor="White" />
+                    <CollectionView x:Name="AvailableDevicesListView"
+                ItemsSource="{Binding AvailableDevices}"
+                SelectionMode="None">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <StackLayout Padding="10" x:DataType="model:AvailableBTDevice">
+                                    <Label Text="{Binding Name}" 
+                            LineBreakMode="NoWrap" 
+                            Style="{DynamicResource ListItemTextStyle}" 
+                            FontSize="16" 
+                            TextColor="Black" />
+                                    <Label Text="{Binding Id}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="13" 
+                            TextColor="Black" />
+                                    <Label Text="{Binding Rssi}" 
+                            LineBreakMode="NoWrap"
+                            Style="{DynamicResource ListItemDetailTextStyle}"
+                            FontSize="13" 
+                            TextColor="Black" />
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                NumberOfTapsRequired="1"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
+                                CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+            </RefreshView>
         </ScrollView>
     </Grid>
 </ContentPage>
