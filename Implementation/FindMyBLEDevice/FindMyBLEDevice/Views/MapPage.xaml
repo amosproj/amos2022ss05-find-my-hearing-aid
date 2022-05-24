@@ -9,7 +9,7 @@
              Title="{Binding Title}">
     <ContentPage.Content>
         <StackLayout Orientation="Vertical" Padding="20,0,20,0" Spacing="0">
-            <Label Text="Show the underlying Map Application Window" FontSize="Medium"/>
+            <Label Text="Show the underlying Map Application Window" FontSize="Medium" TextColor="Black"/>
             <Label FontSize="16" Padding="0,0,0,0">
             </Label>
         </StackLayout>
