@@ -5,6 +5,7 @@
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
 using FindMyBLEDevice.Services;
+using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using System;
 using Xamarin.Forms;
@@ -16,6 +17,7 @@ namespace FindMyBLEDevice
 
         // Interface to stored BTDevices
         private static IDevicesStore devicesStore;
+        private static Bluetooth bluetooth;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -29,6 +31,19 @@ namespace FindMyBLEDevice
                 return devicesStore;
             }
         }
+        public static Bluetooth Bluetooth
+        {
+            get
+            {
+                if (bluetooth == null)
+                {
+                    bluetooth = new Bluetooth();
+                }
+                return bluetooth;
+            }
+        }
+
+
 
         public App()
         {
@@ -40,14 +55,17 @@ namespace FindMyBLEDevice
 
         protected override void OnStart()
         {
+            // comment to make the linter happy
         }
 
         protected override void OnSleep()
         {
+            // comment to make the linter happy
         }
 
         protected override void OnResume()
         {
+            // comment to make the linter happy
         }
 
         /// <summary>

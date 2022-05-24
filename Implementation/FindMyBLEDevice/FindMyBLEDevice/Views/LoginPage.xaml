@@ -3,12 +3,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d"
              x:Class="FindMyBLEDevice.Views.LoginPage"
-             Shell.NavBarIsVisible="False">
+             Title="Settings">
     <ContentPage.Content>
         <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-            <Button VerticalOptions="Center" Text="Login" Command="{Binding LoginCommand}"/>
+            <Label VerticalOptions="Center" HorizontalOptions="Center" Text="Settings" FontSize="Medium" TextColor="Black" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
