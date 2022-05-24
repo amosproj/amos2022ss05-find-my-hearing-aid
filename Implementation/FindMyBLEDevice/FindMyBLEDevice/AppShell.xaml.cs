@@ -14,11 +14,13 @@ namespace FindMyBLEDevice
             Routing.RegisterRoute(nameof(ItemDetailPage), typeof(ItemDetailPage));
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
         {
-            await Shell.Current.GoToAsync("//LoginPage");
+            Shell.Current.FlyoutIsPresented = false;
+            await Shell.Current.GoToAsync($"{nameof(LoginPage)}");
         }
     }
 }
