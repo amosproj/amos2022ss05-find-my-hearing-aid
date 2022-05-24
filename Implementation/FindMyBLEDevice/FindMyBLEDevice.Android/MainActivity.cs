@@ -25,7 +25,8 @@ namespace FindMyBLEDevice.Droid
             var locationPermissions = new[]
             {
                 Manifest.Permission.AccessCoarseLocation,
-                Manifest.Permission.AccessFineLocation
+                Manifest.Permission.AccessFineLocation,
+                Manifest.Permission.Bluetooth
             };
             // check if the app has permission to access coarse location
             var coarseLocationPermissionGranted =
@@ -33,10 +34,13 @@ namespace FindMyBLEDevice.Droid
             // check if the app has permission to access fine location
             var fineLocationPermissionGranted =
                  ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation);
+            var bluetoothPermissionGranted = 
+                ContextCompat.CheckSelfPermission(this, Manifest.Permission.Bluetooth);
             // if either is denied permission, request permission from the user
             const int locationPermissionsRequestCode = 1000;
             if (coarseLocationPermissionGranted == Permission.Denied ||
-                fineLocationPermissionGranted == Permission.Denied)
+                fineLocationPermissionGranted == Permission.Denied || 
+                bluetoothPermissionGranted == Permission.Denied)
             {
                 ActivityCompat.RequestPermissions(this, locationPermissions,
                 locationPermissionsRequestCode);
