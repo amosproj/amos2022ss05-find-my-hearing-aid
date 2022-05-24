@@ -25,6 +25,8 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 |9|18/05/22, 16.00 - 16.30|PO & SM|Feedback-Session regarding Team meeting 3|XC, EW, LM, ~~NS~~, ~~DP~~, ~~JS~~, ~~AW~~, ~~MA~~, ~~LK~~|-|
 |10|19/05/22, 11.00 - 12.00|PO|POs meet the industry partner to talk about PO roles in Scrum. |||
 |11|20/05/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner|XC, EW, ~~LM~~, NS, DP, ~~JS~~, AW, ~~MA~~, LK, MR(WSA), SM(WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeiting_with_WSA_20052022.md)|
-
+|12|23/05/22, 14.00 - 17.00|PO|Backlog Refinement|Both POs|-|
+|13|24/05/22, 15.00 - 16.00|PO|Backlog Refinement Finetuning|Both POs|-|
+|14|24/05/22, 16.30 - 17.40|PO & 1 Dev|Backlog Refinement with 1 Dev|Both POs and Leo |-|
 
 _______________________
