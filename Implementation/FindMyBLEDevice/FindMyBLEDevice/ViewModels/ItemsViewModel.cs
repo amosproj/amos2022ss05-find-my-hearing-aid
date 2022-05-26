@@ -12,42 +12,42 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private BTDevice _selectedItem;
+        private BTDevice _selectedPairedDevice;
 
-        public ObservableCollection<BTDevice> Items { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get; }
-        public Command<BTDevice> ItemTapped { get; }
+        public ObservableCollection<BTDevice> PairedDevices { get; }
+        public Command LoadPairedDevicesCommand { get; }
+        public Command AddPairedDeviceCommand { get; }
+        public Command<BTDevice> PairedDeviceTapped { get; }
         public ObservableCollection<AvailableBTDevice> AvailableDevices { get; }
-        public Command LoadDevicesCommand { get; }
-        public Command SearchDevicesCommand { get; }
+        public Command LoadAvailableDevicesCommand { get; }
+        public Command SearchAvailableDevicesCommand { get; }
 
         public ItemsViewModel()
         {
             Title = "Devices";
-            Items = new ObservableCollection<BTDevice>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
+            PairedDevices = new ObservableCollection<BTDevice>();
+            LoadPairedDevicesCommand = new Command(async () => await ExecuteLoadPairedDevicesCommand());
 
-            ItemTapped = new Command<BTDevice>(OnItemSelected);
+            PairedDeviceTapped = new Command<BTDevice>(OnPairedDeviceSelected);
 
-            AddItemCommand = new Command(OnAddItem);
+            AddPairedDeviceCommand = new Command(OnAddPairedDevice);
 
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
-            LoadDevicesCommand = new Command(() => ExecuteLoadDevicesCommand());
-            SearchDevicesCommand = new Command(() => ExecuteSearchDevicesCommand());
+            LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand());
+            SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
         }
 
-        async Task ExecuteLoadItemsCommand()
+        async Task ExecuteLoadPairedDevicesCommand()
         {
             IsBusy = true;
 
             try
             {
-                Items.Clear();
-                var items = await App.DevicesStore.GetAllDevices();
-                foreach (var item in items)
+                PairedDevices.Clear();
+                var devices = await App.DevicesStore.GetAllDevices();
+                foreach (var device in devices)
                 {
-                    Items.Add(item);
+                    PairedDevices.Add(device);
                 }
             }
             catch (Exception ex)
@@ -63,25 +63,25 @@ namespace FindMyBLEDevice.ViewModels
         public void OnAppearing()
         {
             IsBusy = true;
-            SelectedItem = null;
+            SelectedPairedDevice = null;
         }
 
-        public BTDevice SelectedItem
+        public BTDevice SelectedPairedDevice
         {
-            get => _selectedItem;
+            get => _selectedPairedDevice;
             set
             {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
+                SetProperty(ref _selectedPairedDevice, value);
+                OnPairedDeviceSelected(value);
             }
         }
 
-        private async void OnAddItem(object obj)
+        private async void OnAddPairedDevice(object obj)
         {
             await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
-        async void OnItemSelected(BTDevice device)
+        async void OnPairedDeviceSelected(BTDevice device)
         {
             if (device == null)
                 return;
@@ -90,7 +90,7 @@ namespace FindMyBLEDevice.ViewModels
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceID)}={device.Id}");
         }
 
-        private void ExecuteLoadDevicesCommand()
+        private void ExecuteLoadAvailableDevicesCommand()
         {
             AvailableDevices.Clear();
             List<AvailableBTDevice> dev = App.Bluetooth.GetAvailableDevices();
@@ -98,14 +98,14 @@ namespace FindMyBLEDevice.ViewModels
             dev.ForEach(AvailableDevices.Add);
         }
 
-        private void ExecuteSearchDevicesCommand()
+        private void ExecuteSearchAvailableDevicesCommand()
         {
 
             int period = 10000;
 
             TimerCallback timerDelegate = new TimerCallback(async o => {
                 await App.Bluetooth.Search(5000);
-                ExecuteLoadDevicesCommand();
+                ExecuteLoadAvailableDevicesCommand();
                 OnPropertyChanged("AvailableDevices");
             });
             Timer timer = new Timer(timerDelegate, null, 0, period);

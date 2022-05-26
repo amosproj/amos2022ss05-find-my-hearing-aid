@@ -25,14 +25,14 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <ScrollView Grid.Row="1">
-            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadItemsCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadPairedDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                 <StackLayout>
                     <Label Text=" Paired Devices"
                        FontSize="Medium"
                        BackgroundColor="LightGray"
                        FontAttributes="Bold" />
                     <CollectionView x:Name="ItemsListView"
-                                ItemsSource="{Binding Items}"
+                                ItemsSource="{Binding PairedDevices}"
                                 SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -50,7 +50,7 @@
                                     <StackLayout.GestureRecognizers>
                                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=ItemTapped}"		
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=PairedDeviceTapped}"		
                                 CommandParameter="{Binding .}">
                                         </TapGestureRecognizer>
                                     </StackLayout.GestureRecognizers>
@@ -63,14 +63,14 @@
         </ScrollView>
 
         <ScrollView Grid.Row="2">
-            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadAvailableDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                 <StackLayout>
                     <Label Text=" Available Devices"
                        FontSize="Medium"
                        BackgroundColor="LightGray"
                        FontAttributes="Bold" />
                     <Button Margin="0,0,0,0" Text="Scan for available devices"
-                          Command="{Binding SearchDevicesCommand}"
+                          Command="{Binding SearchAvailableDevicesCommand}"
                           BackgroundColor="{StaticResource Primary}"
                         TextColor="White" />
                     <CollectionView x:Name="AvailableDevicesListView"
