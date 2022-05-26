@@ -17,10 +17,13 @@ namespace FindMyBLEDevice.ViewModels
     {
         private BTDevice _selectedPairedDevice;
 
+        private AvailableBTDevice _selectedAvailableDevice;
+
         public ObservableCollection<BTDevice> PairedDevices { get; }
         public Command LoadPairedDevicesCommand { get; }
         public Command AddPairedDeviceCommand { get; }
         public Command<BTDevice> PairedDeviceTapped { get; }
+        public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
         public ObservableCollection<AvailableBTDevice> AvailableDevices { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
@@ -32,6 +35,7 @@ namespace FindMyBLEDevice.ViewModels
             LoadPairedDevicesCommand = new Command(async () => await ExecuteLoadPairedDevicesCommand());
 
             PairedDeviceTapped = new Command<BTDevice>(OnPairedDeviceSelected);
+            AvailableDeviceTapped = new Command<AvailableBTDevice>(OnAvailableDeviceSelected);
 
             AddPairedDeviceCommand = new Command(OnAddPairedDevice);
 
@@ -79,6 +83,16 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
+        public AvailableBTDevice SelectedAvailableDevice
+        {
+            get => _selectedAvailableDevice;
+            set
+            {
+                SetProperty(ref _selectedAvailableDevice, value);
+                OnAvailableDeviceSelected(value);
+            }
+        }
+
         private async void OnAddPairedDevice(object obj)
         {
             await Shell.Current.GoToAsync(nameof(NewItemPage));
@@ -91,6 +105,16 @@ namespace FindMyBLEDevice.ViewModels
 
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceID)}={device.Id}");
+        }
+
+        async void OnAvailableDeviceSelected(AvailableBTDevice device)
+        {
+            if (device == null)
+                return;
+
+            // This will replace the navigation stack with StrengthPage:
+            // TODO: find a way to just push the site onto the navigation stack
+            await Shell.Current.GoToAsync($"../StrengthPage?bt_id={device.Id}");
         }
 
         private void ExecuteLoadAvailableDevicesCommand()
