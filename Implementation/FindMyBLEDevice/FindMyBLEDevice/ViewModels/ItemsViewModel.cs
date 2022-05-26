@@ -1,4 +1,7 @@
-﻿using FindMyBLEDevice.Models;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger<adrian.wandinger@fau.de>
+
+using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Views;
 using System;
 using System.Collections.Generic;
