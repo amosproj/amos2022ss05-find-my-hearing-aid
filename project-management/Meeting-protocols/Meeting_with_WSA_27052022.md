@@ -21,13 +21,12 @@ Communicate our to-date progress to and gather feedback from the industry partne
 ### Discussion
 - The app doesn't work on some phones. 
   - Because it requires the phone's GPS permission. For iOS, the bluetooth and local permission are not enough.
-  -  Action
-     -  Fix the bug and ask users for all(GPS,bluetooth,location) permission before using this app.
 - Discussion on MVVM
-  - WSA showed and explained how to use. Ask Leo if you want to know more detail. 
+  - WSA showed and explained MVVM. More details pls reach out to @Chippelius.
 - For iOS version of the app
   - An Apple developer account is needed if you want to install the app on multiple devices.
   - Make confirmation with AMOS team of this issue. 
 
 ### Action items
-- [ ] Fix the bug: the app cannot work on some phones (GPS permission).
+- [ ] Fix the bug on GPS permission: ask users for all(GPS,bluetooth,location) permission before using this app.
+- [ ] Communicate with AMOS teacher team on the Apple developer account issue.
