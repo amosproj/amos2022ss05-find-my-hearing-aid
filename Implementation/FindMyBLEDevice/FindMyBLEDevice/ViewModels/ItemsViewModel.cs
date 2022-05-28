@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System.Linq;
+
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -18,7 +20,22 @@ namespace FindMyBLEDevice.ViewModels
         public Command LoadItemsCommand { get; }
         public Command AddItemCommand { get; }
         public Command<BTDevice> ItemTapped { get; }
-        public ObservableCollection<AvailableBTDevice> AvailableDevices { get; }
+        public Command<AvailableBTDevice> FoundDeviceTapped { get; }
+
+        private ObservableCollection<AvailableBTDevice> _AvailableDevices;
+        public ObservableCollection<AvailableBTDevice> AvailableDevices {
+            get { 
+                return _AvailableDevices; 
+            }
+            set
+            {
+                List<AvailableBTDevice> devices = value.ToList();
+                devices.Sort((x, y) => y.Rssi.CompareTo(x.Rssi));
+                _AvailableDevices = new ObservableCollection<AvailableBTDevice>(devices);                
+                OnPropertyChanged("AvailableDevices");
+            }
+        }
+
         public Command LoadDevicesCommand { get; }
         public Command SearchDevicesCommand { get; }
 
@@ -29,11 +46,11 @@ namespace FindMyBLEDevice.ViewModels
             LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
             ItemTapped = new Command<BTDevice>(OnItemSelected);
+            FoundDeviceTapped = new Command<AvailableBTDevice>(SelectFoundDevice);
 
             AddItemCommand = new Command(OnAddItem);
 
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
-            LoadDevicesCommand = new Command(() => ExecuteLoadDevicesCommand());
             SearchDevicesCommand = new Command(() => ExecuteSearchDevicesCommand());
         }
 
@@ -90,26 +107,21 @@ namespace FindMyBLEDevice.ViewModels
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceID)}={device.Id}");
         }
 
-        private void ExecuteLoadDevicesCommand()
+        async void SelectFoundDevice(AvailableBTDevice device)
         {
-            AvailableDevices.Clear();
-            List<AvailableBTDevice> dev = App.Bluetooth.GetAvailableDevices();
-            dev.Sort((x, y) => y.Rssi.CompareTo(x.Rssi));
-            dev.ForEach(AvailableDevices.Add);
+            if (device == null)
+                return;
+
+            await App.Bluetooth.StopSearch();
+
+            // This will push the ItemDetailPage onto the navigation stack
+            await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(ItemDetailViewModel.DeviceID)}={device.Id}");
         }
 
-        private void ExecuteSearchDevicesCommand()
+
+        private async Task ExecuteSearchDevicesCommand()
         {
-
-            int period = 10000;
-
-            TimerCallback timerDelegate = new TimerCallback(async o => {
-                await App.Bluetooth.Search(5000);
-                ExecuteLoadDevicesCommand();
-                OnPropertyChanged("AvailableDevices");
-            });
-            Timer timer = new Timer(timerDelegate, null, 0, period);
-
+            await App.Bluetooth.Search(20000, AvailableDevices);
         }
 
     }

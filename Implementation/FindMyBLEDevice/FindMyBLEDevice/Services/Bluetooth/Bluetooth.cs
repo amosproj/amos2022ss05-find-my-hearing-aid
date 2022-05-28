@@ -5,43 +5,49 @@
 using FindMyBLEDevice.Models;
 using Plugin.BLE;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using System.Linq;
+using Plugin.BLE.Abstractions.Contracts;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
     public class Bluetooth
     {
-        private readonly List<AvailableBTDevice> deviceList;
+        
+        private readonly IAdapter adapter;
+
+        public Bluetooth(IAdapter adapter)
+        {
+            this.adapter = adapter; 
+        }
 
         public Bluetooth()
         {
-            deviceList = new List<AvailableBTDevice>();
+            adapter = CrossBluetoothLE.Current.Adapter;
         }
 
-        public async Task Search(int scanTimeout)
+        public async Task Search(int scanTimeout, ObservableCollection<AvailableBTDevice> availableDevices)
         {
-
-            deviceList.Clear();
-            Plugin.BLE.Abstractions.Contracts.IAdapter adapter = CrossBluetoothLE.Current.Adapter;
 
             adapter.DeviceDiscovered += (s, a) => {
 
-                if (deviceList.Exists(o => o.Id == a.Device.Id))
+                if (availableDevices.ToList<AvailableBTDevice>().Exists(o => o.Id == a.Device.Id))
                 {
                     return;
                 }
                                 
                 if (a.Device.Rssi < -80 || a.Device.Name is null)
                 {
-                    return;
+                    // return;
                 }
 
-                deviceList.Add(new AvailableBTDevice()
+                availableDevices.Add(new AvailableBTDevice()
                 {
                     Name = a.Device.Name,
                     Id = a.Device.Id,
                     Rssi = a.Device.Rssi
-                });
+                });               
 
             };
 
@@ -50,9 +56,13 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
         }
 
-        public List<AvailableBTDevice> GetAvailableDevices()
+        public async Task StopSearch()
         {
-            return deviceList;
+            if (adapter.IsScanning)
+            {
+                await adapter.StopScanningForDevicesAsync();
+            }
         }
+        
     }
 }
