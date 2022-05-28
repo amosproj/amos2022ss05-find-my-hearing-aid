@@ -26,15 +26,22 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
             adapter.DeviceDiscovered += (s, a) => {
 
-                if(!deviceList.Exists(o => o.Id == a.Device.Id))
+                if (deviceList.Exists(o => o.Id == a.Device.Id))
                 {
-                    deviceList.Add(new AvailableBTDevice()
-                    {
-                        Name = a.Device.Name ?? "Unknown Device",
-                        Id = a.Device.Id,
-                        Rssi = a.Device.Rssi
-                    });
+                    return;
                 }
+                                
+                if (a.Device.Rssi < -80 || a.Device.Name is null)
+                {
+                    return;
+                }
+
+                deviceList.Add(new AvailableBTDevice()
+                {
+                    Name = a.Device.Name,
+                    Id = a.Device.Id,
+                    Rssi = a.Device.Rssi
+                });
 
             };
 
