@@ -71,7 +71,7 @@ namespace FindMyBLEDevice.Tests
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.UpdateDeviceName(id, newName);
+            Task result = store.UpdateDeviceUserLabel(id, newName);
 
             // assert
             db.Verify(mock => mock.GetDeviceAsync(It.Is<int>(arg => arg == id)), Times.Once);
@@ -93,7 +93,7 @@ namespace FindMyBLEDevice.Tests
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.UpdateDeviceName(id, newName);
+            Task result = store.UpdateDeviceUserLabel(id, newName);
 
             // assert
             Assert.IsTrue(result.Exception?.InnerException is ArgumentException);
@@ -117,7 +117,7 @@ namespace FindMyBLEDevice.Tests
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.UpdateDeviceName(id, newName);
+            Task result = store.UpdateDeviceUserLabel(id, newName);
 
             // assert
             Assert.IsTrue(result.Exception?.InnerException is DeviceStoreException);

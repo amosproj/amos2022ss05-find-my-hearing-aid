@@ -32,17 +32,17 @@
                        BackgroundColor="LightGray"
                        FontAttributes="Bold" />
                     <CollectionView x:Name="ItemsListView"
-                                ItemsSource="{Binding Items}"
+                                ItemsSource="{Binding SavedDevices}"
                                 SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Padding="10" x:DataType="model:BTDevice">
-                                    <Label Text="{Binding Name}" 
+                                    <Label Text="{Binding UserLabel}" 
                             LineBreakMode="NoWrap" 
                             Style="{DynamicResource ListItemTextStyle}" 
                             FontSize="16" 
                             TextColor="Black" />
-                                    <Label Text="{Binding BT_id}" 
+                                    <Label Text="{Binding AdvertisedName}" 
                             LineBreakMode="NoWrap"
                             Style="{DynamicResource ListItemDetailTextStyle}"
                             FontSize="13" 

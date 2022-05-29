@@ -6,27 +6,13 @@ using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    [QueryProperty(nameof(DeviceID), nameof(DeviceID))]
+    [QueryProperty(nameof(DeviceId), nameof(DeviceId))]
     public class ItemDetailViewModel : BaseViewModel
     {
         private int deviceId;
-        private string name;
-        private string bt_id;
-        public int Id { get; set; }
+        private BTDevice device;
 
-        public string Name
-        {
-            get => name;
-            set => SetProperty(ref name, value);
-        }
-
-        public string BT_id
-        {
-            get => bt_id;
-            set => SetProperty(ref bt_id, value);
-        }
-
-        public int DeviceID
+        public int DeviceId
         {
             get
             {
@@ -39,14 +25,20 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        public async void LoadItemId(int deviceId)
+        public BTDevice Device
+        {
+            get
+            {
+                return device;
+            }
+        }
+
+        public async Task LoadItemId(int deviceId)
         {
             try
             {
-                BTDevice device = await App.DevicesStore.GetDevice(deviceId);
-                Id = device.Id;
-                Name = device.Name;
-                BT_id = device.BT_id;
+                device = await App.DevicesStore.GetDevice(deviceId);
+                OnPropertyChanged("Device");
             }
             catch (Exception)
             {

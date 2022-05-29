@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
 using Plugin.BLE.Abstractions.Contracts;
+using System;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
@@ -27,7 +28,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
             adapter = CrossBluetoothLE.Current.Adapter;
         }
 
-        public async Task Search(int scanTimeout, ObservableCollection<AvailableBTDevice> availableDevices)
+        public async Task Search(int scanTimeout, ObservableCollection<AvailableBTDevice> availableDevices, Predicate<AvailableBTDevice> filter)
         {
 
             adapter.DeviceDiscovered += (s, a) => {
@@ -39,17 +40,22 @@ namespace FindMyBLEDevice.Services.Bluetooth
                                 
                 if (a.Device.Rssi < -80 || a.Device.Name is null)
                 {
-                    // return;
+                    return;
                 }
 
-                availableDevices.Add(new AvailableBTDevice()
+                AvailableBTDevice device = (new AvailableBTDevice()
                 {
                     Name = a.Device.Name,
                     Id = a.Device.Id,
                     Rssi = a.Device.Rssi
-                });               
+                });
 
-            };
+                if (!filter(device))
+                {
+                    availableDevices.Add(device);
+                }
+
+            };            
 
             adapter.ScanTimeout = scanTimeout;
             await adapter.StartScanningForDevicesAsync();

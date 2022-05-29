@@ -14,15 +14,18 @@ namespace FindMyBLEDevice.Services.Database
         /// <summary>
         /// Add a new device to the devices-store and local database
         /// </summary>
-        /// <param name="bt_id">
+        /// <param name="btGuid">
         ///     The identifying ID for the Bluetooth-Technology
         /// </param>
-        /// <param name="name">
+        /// /// <param name="advertisedName">
+        ///     The name of the device read from the bluetooth-signal
+        /// </param>
+        /// <param name="userLabel">
         ///     The name for the device given by the user
         /// </param>
         /// <returns></returns>
         /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
-        Task AddDevice(string bt_id, string name);
+        Task AddDevice(string btGuid, string advertisedName, string userLabel);
 
         /// <summary>
         /// Delete the device with given id from the devices-store and local database
@@ -86,13 +89,13 @@ namespace FindMyBLEDevice.Services.Database
         /// <param name="id">
         ///     ID of the concerned device
         /// </param>
-        /// <param name="name">
-        ///     New name for the device with given id
+        /// <param name="userLabel">
+        ///     New label for the device with given id
         /// </param>
         /// <returns></returns>
         /// <exception cref="ArgumentException">When no device with given id is saved</exception>
         /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
-        Task UpdateDeviceName(int id, string name);
+        Task UpdateDeviceUserLabel(int id, string userLabel);
 
     }
 }

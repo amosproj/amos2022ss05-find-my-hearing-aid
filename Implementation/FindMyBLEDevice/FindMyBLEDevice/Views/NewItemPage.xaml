@@ -8,10 +8,8 @@
              ios:Page.UseSafeArea="true">
     <ContentPage.Content>
         <StackLayout Spacing="3" Padding="15">
-            <Label Text="Device-Name" FontSize="Medium" />
-            <Entry Text="{Binding Name, Mode=TwoWay}" FontSize="Medium" />
-            <Label Text="Device-BT-ID" FontSize="Medium" />
-            <Editor Text="{Binding BT_id, Mode=TwoWay}" AutoSize="TextChanges" FontSize="Medium" Margin="0" />
+            <Label Text="User-Label" FontSize="Medium" />
+            <Entry Text="{Binding UserLabel, Mode=TwoWay}" FontSize="Medium" />
             <StackLayout Orientation="Horizontal">
                 <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
                 <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
