@@ -8,6 +8,8 @@
 > **Note:** The project is currently **ongoing** and will be completed in **early August 2022**. 
 
 
+
+
 ### 💭 Our Vision is ...
 ... to make the life of our customers more convenient by allowing users to locate their important bluetooth devices at any time. This not only saves our users´ time, it also allows them to spend more energy and nerves on things that really count. Because loosing important devices that are indispensable in daily life sucks!
 
