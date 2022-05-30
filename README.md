@@ -18,10 +18,15 @@
 
 
 ## Contributors
-Elias Werner
-Luis Meister
-asdfasdf
-asdfasdfasdf
+ - Xiangxiang Chen [SM]
+ - Luis Meister [PO]
+ - Elias Werner [PO]
+ - Marib Aldoais [SD]
+ - Leo Köberlein [SD]
+ - Dominik Pysch [SD]
+ - Jannik Schütz [SD]
+ - Nicolas Stellwag [SD]
+ - Adrian Wandinger [SD]
 
 
 
