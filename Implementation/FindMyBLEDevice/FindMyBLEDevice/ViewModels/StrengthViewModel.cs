@@ -9,11 +9,12 @@ using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    public class StrengthViewModel : BaseViewModel
+    public class StrengthViewModel : ContentPage
     {
         public StrengthViewModel()
         {
             Title = "StrengthSearch";
+
         }
     }
 }
