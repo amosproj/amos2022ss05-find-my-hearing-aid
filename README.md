@@ -17,7 +17,11 @@
 ... to create an app for our industry partner by providing the feature of locating BLE devices. The app should be able to detect BLE devices and assign labels to it. In addition it helps tracking the device and navigating to the exact location of the device no matter if in short or long distance. This ensures an overview of all relevant devices at all times. 
 
 
-
+## Contributors
+Elias Werner
+Luis Meister
+asdfasdf
+asdfasdfasdf
 
 
 
