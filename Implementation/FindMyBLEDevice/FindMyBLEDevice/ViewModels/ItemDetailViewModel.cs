@@ -1,7 +1,4 @@
 ﻿using FindMyBLEDevice.Models;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
@@ -12,6 +9,20 @@ namespace FindMyBLEDevice.ViewModels
         private int deviceId;
         private BTDevice device;
 
+        private int _currentRssi;
+        public int CurrentRssi
+        {
+            get
+            {
+                return _currentRssi;
+            }
+            set
+            {
+                _currentRssi = value;
+                OnPropertyChanged(nameof(CurrentRssi));
+            }
+        }
+
         public int DeviceId
         {
             get
@@ -21,7 +32,6 @@ namespace FindMyBLEDevice.ViewModels
             set
             {
                 deviceId = value;
-                LoadItemId(value);
             }
         }
 
@@ -33,17 +43,24 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        public async Task LoadItemId(int deviceId)
+        public async void OnAppearing()
         {
-            try
-            {
-                device = await App.DevicesStore.GetDevice(deviceId);
-                OnPropertyChanged("Device");
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Failed to Load Item");
-            }
+
+            device = await App.DevicesStore.GetDevice(deviceId);
+            OnPropertyChanged("Device");
+            
+            await App.Bluetooth.StartRssiPolling(device.BT_GUID, (int v) => {
+                CurrentRssi = v;
+                return 0;
+            });
+
         }
+
+
+        public void OnDisappearing()
+        {
+            App.Bluetooth.StopRssiPolling();
+        }
+
     }
 }

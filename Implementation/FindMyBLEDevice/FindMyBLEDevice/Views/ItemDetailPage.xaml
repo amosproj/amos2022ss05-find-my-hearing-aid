@@ -13,6 +13,11 @@
         
         <Label Text="BT-GUID:" FontSize="Medium" TextColor="Black" />
         <Label Text="{Binding Device.BT_GUID}" FontSize="Small" TextColor="Black"/>
+
+        <Label Text="CURRENT-RSSI:" FontSize="Medium" TextColor="Black" />
+        <Label Text="{Binding CurrentRssi}" FontSize="Small" TextColor="Black"/>
+
+
     </StackLayout>
     
 </ContentPage>

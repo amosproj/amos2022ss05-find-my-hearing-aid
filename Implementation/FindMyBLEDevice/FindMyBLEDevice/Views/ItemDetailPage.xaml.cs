@@ -6,10 +6,27 @@ namespace FindMyBLEDevice.Views
 {
     public partial class ItemDetailPage : ContentPage
     {
+
+        ItemDetailViewModel _viewModel;
+
         public ItemDetailPage()
         {
             InitializeComponent();
-            BindingContext = new ItemDetailViewModel();
+            BindingContext = _viewModel = new ItemDetailViewModel();
         }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _viewModel.OnDisappearing();
+        }
+
+
     }
 }

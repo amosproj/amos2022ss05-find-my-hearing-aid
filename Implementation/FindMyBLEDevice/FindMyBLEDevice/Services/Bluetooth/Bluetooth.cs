@@ -4,12 +4,12 @@
 
 using FindMyBLEDevice.Models;
 using Plugin.BLE;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
 using Plugin.BLE.Abstractions.Contracts;
 using System;
+using System.Threading;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
@@ -17,6 +17,8 @@ namespace FindMyBLEDevice.Services.Bluetooth
     {
         
         private readonly IAdapter adapter;
+
+        private Timer rssiPollingTimer;
 
         public Bluetooth(IAdapter adapter)
         {
@@ -70,5 +72,25 @@ namespace FindMyBLEDevice.Services.Bluetooth
             }
         }
         
+        public async Task StartRssiPolling(String btguid, Func<int, int> updateRssi)
+        {
+
+            IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
+
+            rssiPollingTimer = new Timer(async (o) => {
+
+                await device.UpdateRssiAsync();
+                updateRssi.Invoke(device.Rssi);
+
+            }, "", TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));           
+
+        }
+
+        public void StopRssiPolling()
+        {
+            rssiPollingTimer?.Dispose();
+        }
+
+
     }
 }
