@@ -13,6 +13,8 @@
             <Label Text="Show bluetooth connection strength" FontSize="Medium" TextColor="Black"/>
             <Label FontSize="16" Padding="0,0,0,0">
             </Label>
+            <Label Text="Currently selected device:" FontSize="Small" TextColor="Black"/>
+            <Label Text="{Binding BT_id}" FontSize="Small" TextColor="Black"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
