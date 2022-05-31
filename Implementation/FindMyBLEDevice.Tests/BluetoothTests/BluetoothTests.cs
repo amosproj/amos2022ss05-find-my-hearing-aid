@@ -46,5 +46,82 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             Assert.AreEqual(1, available.Count);
             Assert.AreEqual(id, available[0].Id);
         }
+
+        [TestMethod]
+        public async Task Search_IgnoresDevicesTooFarAway()
+        {
+            // arrange
+            Guid id = Guid.Empty;
+            const string name = "some name";
+            const int rssi = -100;
+            var device = new Mock<IDevice>();
+            device.SetupGet(mock => mock.Id).Returns(id);
+            device.SetupGet(mock => mock.Name).Returns(name);
+            device.SetupGet(mock => mock.Rssi).Returns(rssi);
+            DeviceEventArgs args = new DeviceEventArgs();
+            args.Device = device.Object;
+
+            var adapter = new Mock<IAdapter>();
+            var bt = new Bluetooth(adapter.Object);
+
+            ObservableCollection<AvailableBTDevice> available = new ObservableCollection<AvailableBTDevice>();
+
+            // act
+            await bt.Search(100, available, null);
+            adapter.Raise(mock => mock.DeviceDiscovered += null, args);
+
+            // assert
+            Assert.AreEqual(0, available.Count);
+        }
+
+        [TestMethod]
+        public async Task Search_IgnoresDevicesWithoutName()
+        {
+            // arrange
+            Guid id = Guid.Empty;
+            const int rssi = 0;
+            var device = new Mock<IDevice>();
+            device.SetupGet(mock => mock.Id).Returns(id);
+            device.SetupGet(mock => mock.Rssi).Returns(rssi);
+            DeviceEventArgs args = new DeviceEventArgs();
+            args.Device = device.Object;
+
+            var adapter = new Mock<IAdapter>();
+            var bt = new Bluetooth(adapter.Object);
+
+            ObservableCollection<AvailableBTDevice> available = new ObservableCollection<AvailableBTDevice>();
+
+            // act
+            await bt.Search(100, available, null);
+            adapter.Raise(mock => mock.DeviceDiscovered += null, args);
+
+            // assert
+            Assert.AreEqual(0, available.Count);
+        }
+
+        [TestMethod]
+        public async Task Search_IgnoresDevicesOnFilter()
+        {
+            // arrange
+            Guid id = Guid.Empty;
+            const int rssi = 0;
+            var device = new Mock<IDevice>();
+            device.SetupGet(mock => mock.Id).Returns(id);
+            device.SetupGet(mock => mock.Rssi).Returns(rssi);
+            DeviceEventArgs args = new DeviceEventArgs();
+            args.Device = device.Object;
+
+            var adapter = new Mock<IAdapter>();
+            var bt = new Bluetooth(adapter.Object);
+
+            ObservableCollection<AvailableBTDevice> available = new ObservableCollection<AvailableBTDevice>();
+
+            // act
+            await bt.Search(100, available, o => true);
+            adapter.Raise(mock => mock.DeviceDiscovered += null, args);
+
+            // assert
+            Assert.AreEqual(0, available.Count);
+        }
     }
 }
