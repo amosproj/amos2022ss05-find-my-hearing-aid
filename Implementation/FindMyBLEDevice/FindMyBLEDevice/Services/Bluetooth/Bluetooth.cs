@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
-    public class Bluetooth
+    public class Bluetooth : IBluetooth
     {
         
         private readonly IAdapter adapter;

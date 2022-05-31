@@ -7,7 +7,7 @@ using Moq;
 
 namespace FindMyBLEDevice.Tests.BluetoothTests
 {
-    internal class BluetoothTests
+    public class BluetoothTests
     {
     }
 }
