@@ -52,7 +52,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                     Rssi = a.Device.Rssi
                 });
 
-                if (!filter(device))
+                if (filter == null || !filter(device))
                 {
                     availableDevices.Add(device);
                 }
@@ -61,7 +61,6 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
             adapter.ScanTimeout = scanTimeout;
             await adapter.StartScanningForDevicesAsync();
-
         }
 
         public async Task StopSearch()
