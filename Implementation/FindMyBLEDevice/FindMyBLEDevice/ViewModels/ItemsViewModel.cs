@@ -16,61 +16,59 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private BTDevice _selectedPairedDevice;
+        private BTDevice _selectedSavedDevice;
 
         private AvailableBTDevice _selectedAvailableDevice;
 
-        public ObservableCollection<BTDevice> PairedDevices { get; }
-        public Command LoadPairedDevicesCommand { get; }
-        public Command AddPairedDeviceCommand { get; }
-        public Command<BTDevice> PairedDeviceTapped { get; }
-        public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
 
-        private ObservableCollection<AvailableBTDevice> _AvailableDevices;
+        private ObservableCollection<AvailableBTDevice> availableDevices;
+        public ObservableCollection<BTDevice> SavedDevices { get; }
+
+        public Command LoadSavedDevicesCommand { get; }
+        public Command<BTDevice> SavedDeviceTapped { get; }
+        public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
+        public Command LoadAvailableDevicesCommand { get; }
+        public Command SearchAvailableDevicesCommand { get; }
+
         public ObservableCollection<AvailableBTDevice> AvailableDevices {
             get { 
-                return _AvailableDevices; 
+                return availableDevices; 
             }
             set
             {
                 List<AvailableBTDevice> devices = value.ToList();
                 devices.Sort((x, y) => y.Rssi.CompareTo(x.Rssi));
-                _AvailableDevices = new ObservableCollection<AvailableBTDevice>(devices);                
+                availableDevices = new ObservableCollection<AvailableBTDevice>(devices);                
                 OnPropertyChanged("AvailableDevices");
             }
         }
-
-        public Command LoadAvailableDevicesCommand { get; }
-        public Command SearchAvailableDevicesCommand { get; }
 
         public ItemsViewModel()
         {
             Title = "Devices";
 
-            PairedDevices = new ObservableCollection<BTDevice>();
-            LoadPairedDevicesCommand = new Command(async () => await ExecuteLoadPairedDevicesCommand());
+            SavedDevices = new ObservableCollection<BTDevice>();
+            LoadSavedDevicesCommand = new Command(async () => await ExecuteLoadSavedDevicesCommand());
 
-            PairedDeviceTapped = new Command<BTDevice>(OnPairedDeviceSelected);
+            SavedDeviceTapped = new Command<BTDevice>(OnSavedDeviceSelected);
             AvailableDeviceTapped = new Command<AvailableBTDevice>(OnAvailableDeviceSelected);
-
-            AddPairedDeviceCommand = new Command(OnAddPairedDevice);
 
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
         }
 
-        async Task ExecuteLoadPairedDevicesCommand()
+        async Task ExecuteLoadSavedDevicesCommand()
         {
             IsBusy = true;
 
             try
             {
-                PairedDevices.Clear();
+                SavedDevices.Clear();
                 var devices = await App.DevicesStore.GetAllDevices();
                 foreach (var device in devices)
                 {
-                    PairedDevices.Add(device);
+                    SavedDevices.Add(device);
                 }
             }
             catch (Exception ex)
@@ -86,7 +84,7 @@ namespace FindMyBLEDevice.ViewModels
         public async void OnAppearing()
         {
             IsBusy = true;
-            SelectedPairedDevice = null;
+            SelectedSavedDevice = null;
 
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
             List<AvailableBTDevice> available = AvailableDevices.ToList();
@@ -94,13 +92,13 @@ namespace FindMyBLEDevice.ViewModels
             AvailableDevices = new ObservableCollection<AvailableBTDevice>(available);
         }
 
-        public BTDevice SelectedPairedDevice
+        public BTDevice SelectedSavedDevice
         {
-            get => _selectedPairedDevice;
+            get => _selectedSavedDevice;
             set
             {
-                SetProperty(ref _selectedPairedDevice, value);
-                OnPairedDeviceSelected(value);
+                SetProperty(ref _selectedSavedDevice, value);
+                OnSavedDeviceSelected(value);
             }
         }
 
@@ -114,16 +112,12 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        private async void OnAddPairedDevice(object obj)
-        {
-            await Shell.Current.GoToAsync(nameof(NewItemPage));
-        }
-
-        async void OnPairedDeviceSelected(BTDevice device)
+        async void OnSavedDeviceSelected(BTDevice device)
         {
             if (device == null)
                 return;
 
+            // await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?bt_id={device.Id}");
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceId)}={device.Id}");
         }
@@ -137,10 +131,10 @@ namespace FindMyBLEDevice.ViewModels
 
             // This will replace the navigation stack with StrengthPage:
             // TODO: find a way to just push the site onto the navigation stack
-            await Shell.Current.GoToAsync($"../StrengthPage?bt_id={device.Id}");
 
             // Alternative: open add item page instead of signal strength page
             // This will push the NewItemPage onto the navigation stack
+            await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
             //await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
         }
 

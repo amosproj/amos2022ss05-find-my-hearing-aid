@@ -13,7 +13,6 @@
              x:Name="BrowseItemsPage">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddItemCommand}" />
         <ToolbarItem Text="Scan" Command="{Binding SearchDevicesCommand}" />
     </ContentPage.ToolbarItems>
     <!--
@@ -26,14 +25,14 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <ScrollView Grid.Row="1">
-            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadPairedDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadSavedDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                 <StackLayout>
-                    <Label Text=" Paired Devices"
+                    <Label Text=" Saved Devices"
                        FontSize="Medium"
                        BackgroundColor="LightGray"
                        FontAttributes="Bold" />
                     <CollectionView x:Name="ItemsListView"
-                                ItemsSource="{Binding PairedDevices}"
+                                ItemsSource="{Binding SavedDevices}"
                                 SelectionMode="None">
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
@@ -51,7 +50,7 @@
                                     <StackLayout.GestureRecognizers>
                                         <TapGestureRecognizer 
                                 NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=PairedDeviceTapped}"		
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=SavedDeviceTapped}"		
                                 CommandParameter="{Binding .}">
                                         </TapGestureRecognizer>
                                     </StackLayout.GestureRecognizers>
