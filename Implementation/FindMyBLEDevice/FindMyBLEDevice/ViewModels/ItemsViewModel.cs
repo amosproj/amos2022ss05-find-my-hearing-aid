@@ -1,4 +1,7 @@
-﻿using FindMyBLEDevice.Models;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger<adrian.wandinger@fau.de>
+
+using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Views;
 using System;
 using System.Collections.Generic;
@@ -13,13 +16,15 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private BTDevice _selectedItem;
+        private BTDevice _selectedPairedDevice;
 
-        public ObservableCollection<BTDevice> SavedDevices { get; }
-        public Command LoadItemsCommand { get; }
-        public Command AddItemCommand { get; }
-        public Command<BTDevice> ItemTapped { get; }
-        public Command<AvailableBTDevice> FoundDeviceTapped { get; }
+        private AvailableBTDevice _selectedAvailableDevice;
+
+        public ObservableCollection<BTDevice> PairedDevices { get; }
+        public Command LoadPairedDevicesCommand { get; }
+        public Command AddPairedDeviceCommand { get; }
+        public Command<BTDevice> PairedDeviceTapped { get; }
+        public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
 
         private ObservableCollection<AvailableBTDevice> _AvailableDevices;
         public ObservableCollection<AvailableBTDevice> AvailableDevices {
@@ -35,35 +40,37 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        public Command LoadDevicesCommand { get; }
-        public Command SearchDevicesCommand { get; }
+        public Command LoadAvailableDevicesCommand { get; }
+        public Command SearchAvailableDevicesCommand { get; }
 
         public ItemsViewModel()
         {
             Title = "Devices";
-            SavedDevices = new ObservableCollection<BTDevice>();
-            LoadItemsCommand = new Command(async () => await ExecuteLoadItemsCommand());
 
-            ItemTapped = new Command<BTDevice>(OnItemSelected);
-            FoundDeviceTapped = new Command<AvailableBTDevice>(SelectFoundDevice);
+            PairedDevices = new ObservableCollection<BTDevice>();
+            LoadPairedDevicesCommand = new Command(async () => await ExecuteLoadPairedDevicesCommand());
 
-            AddItemCommand = new Command(OnAddItem);
+            PairedDeviceTapped = new Command<BTDevice>(OnPairedDeviceSelected);
+            AvailableDeviceTapped = new Command<AvailableBTDevice>(OnAvailableDeviceSelected);
+
+            AddPairedDeviceCommand = new Command(OnAddPairedDevice);
 
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
-            SearchDevicesCommand = new Command(() => ExecuteSearchDevicesCommand());
-
+            //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
+            SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
         }
-        async Task ExecuteLoadItemsCommand()
+
+        async Task ExecuteLoadPairedDevicesCommand()
         {
             IsBusy = true;
 
             try
             {
-                SavedDevices.Clear();
-                var items = await App.DevicesStore.GetAllDevices();
-                foreach (var item in items)
+                PairedDevices.Clear();
+                var devices = await App.DevicesStore.GetAllDevices();
+                foreach (var device in devices)
                 {
-                    SavedDevices.Add(item);
+                    PairedDevices.Add(device);
                 }
             }
             catch (Exception ex)
@@ -79,31 +86,40 @@ namespace FindMyBLEDevice.ViewModels
         public async void OnAppearing()
         {
             IsBusy = true;
-            SelectedItem = null;
+            SelectedPairedDevice = null;
 
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
             List<AvailableBTDevice> available = AvailableDevices.ToList();
             available.RemoveAll(availableDevice => savedDevices.Exists(saved => saved.BT_GUID == availableDevice.Id.ToString()));
             AvailableDevices = new ObservableCollection<AvailableBTDevice>(available);
-
         }
 
-        public BTDevice SelectedItem
+        public BTDevice SelectedPairedDevice
         {
-            get => _selectedItem;
+            get => _selectedPairedDevice;
             set
             {
-                SetProperty(ref _selectedItem, value);
-                OnItemSelected(value);
+                SetProperty(ref _selectedPairedDevice, value);
+                OnPairedDeviceSelected(value);
             }
         }
 
-        private async void OnAddItem(object obj)
+        public AvailableBTDevice SelectedAvailableDevice
+        {
+            get => _selectedAvailableDevice;
+            set
+            {
+                SetProperty(ref _selectedAvailableDevice, value);
+                OnAvailableDeviceSelected(value);
+            }
+        }
+
+        private async void OnAddPairedDevice(object obj)
         {
             await Shell.Current.GoToAsync(nameof(NewItemPage));
         }
 
-        async void OnItemSelected(BTDevice device)
+        async void OnPairedDeviceSelected(BTDevice device)
         {
             if (device == null)
                 return;
@@ -112,20 +128,23 @@ namespace FindMyBLEDevice.ViewModels
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceId)}={device.Id}");
         }
 
-        async void SelectFoundDevice(AvailableBTDevice device)
+        async void OnAvailableDeviceSelected(AvailableBTDevice device)
         {
             if (device == null)
                 return;
 
             await App.Bluetooth.StopSearch();
 
-            // This will push the NewItemPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
+            // This will replace the navigation stack with StrengthPage:
+            // TODO: find a way to just push the site onto the navigation stack
+            await Shell.Current.GoToAsync($"../StrengthPage?bt_id={device.Id}");
 
+            // Alternative: open add item page instead of signal strength page
+            // This will push the NewItemPage onto the navigation stack
+            //await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
         }
 
-
-        private async Task ExecuteSearchDevicesCommand()
+        private async Task ExecuteSearchAvailableDevicesCommand()
         {
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
             await App.Bluetooth.Search(20000, AvailableDevices, found => savedDevices.Exists(saved => saved.BT_GUID.Equals(found.Id.ToString())));
