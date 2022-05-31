@@ -5,10 +5,13 @@
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels"
              x:Class="FindMyBLEDevice.Views.StrengthPage"
+             x:DataType="viewmodels:StrengthViewModel"
              Title="{Binding Title}">
-    
-    <ContentPage.Content>
+
+
+<ContentPage.Content>
         <StackLayout Orientation="Vertical" Padding="20,0,20,10" Spacing="30" VerticalOptions="FillAndExpand" >
             <Label Text="Each circle increases the radius within one meter. Everything within the inner blue circle is within your one meter surrounding."
                        TextColor="Black"
@@ -30,8 +33,8 @@
                      Stroke="DarkBlue"
                      Fill="LightBlue"
                      StrokeThickness="4"
-                     WidthRequest="150"
-                     HeightRequest="150"
+                     WidthRequest="{Binding Radius}"
+                     HeightRequest="{Binding Radius}"
                      AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
                      AbsoluteLayout.LayoutFlags="PositionProportional"/>
                 <Ellipse x:Name="innerEllipse"         
@@ -74,7 +77,7 @@
                          AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
                          AbsoluteLayout.LayoutFlags="PositionProportional"/>
             </AbsoluteLayout>
-            
+
             <Slider ValueChanged="OnSliderValueChanged"
                     ThumbColor="#2196F3"                    
                     Maximum="400"
@@ -82,12 +85,18 @@
             <Frame BorderColor="DarkBlue"
                    CornerRadius="5"
                    Padding="5" >
-                <Label x:Name="sliderLabel"
-                       Text="Hot/Cold within ~0m"
+                <StackLayout>
+                    <Label x:Name="sliderLabel"
+                       Text="{Binding Meter, StringFormat='Hot/Cold within ~{0}m'}"
                        TextColor="Black"
                        FontSize="Subtitle"
                        HorizontalOptions="CenterAndExpand"
                        VerticalOptions="CenterAndExpand" />
+                    <BoxView Color="Black"
+                         HeightRequest="1"
+                         HorizontalOptions="Fill" />
+                    <Label Text="{Binding Name}" FontSize="Small" TextColor="Black" HorizontalOptions="Center"/>
+                </StackLayout>
             </Frame>
         </StackLayout>
     </ContentPage.Content>

@@ -19,6 +19,7 @@ namespace FindMyBLEDevice.Views
             InitializeComponent();
             BindingContext = new StrengthViewModel();
         }
+        
         void OnSliderValueChanged(object sender, ValueChangedEventArgs args)
         {
             double value = args.NewValue;
@@ -27,5 +28,6 @@ namespace FindMyBLEDevice.Views
             int output = ((int)value - 30) * 6 / 370 + 1;
             sliderLabel.Text = String.Format("Hot/Cold within ~{0}m", output);
         }
+
     }
 }
