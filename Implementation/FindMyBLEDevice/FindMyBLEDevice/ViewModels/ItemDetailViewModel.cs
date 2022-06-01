@@ -1,32 +1,29 @@
 ﻿using FindMyBLEDevice.Models;
-using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    [QueryProperty(nameof(DeviceID), nameof(DeviceID))]
+    [QueryProperty(nameof(DeviceId), nameof(DeviceId))]
     public class ItemDetailViewModel : BaseViewModel
     {
         private int deviceId;
-        private string name;
-        private string bt_id;
-        public int Id { get; set; }
+        private BTDevice device;
 
-        public string Name
+        private int _currentRssi;
+        public int CurrentRssi
         {
-            get => name;
-            set => SetProperty(ref name, value);
+            get
+            {
+                return _currentRssi;
+            }
+            set
+            {
+                _currentRssi = value;
+                OnPropertyChanged(nameof(CurrentRssi));
+            }
         }
 
-        public string BT_id
-        {
-            get => bt_id;
-            set => SetProperty(ref bt_id, value);
-        }
-
-        public int DeviceID
+        public int DeviceId
         {
             get
             {
@@ -35,23 +32,35 @@ namespace FindMyBLEDevice.ViewModels
             set
             {
                 deviceId = value;
-                LoadItemId(value);
             }
         }
 
-        public async void LoadItemId(int deviceId)
+        public BTDevice Device
         {
-            try
+            get
             {
-                BTDevice device = await App.DevicesStore.GetDevice(deviceId);
-                Id = device.Id;
-                Name = device.Name;
-                BT_id = device.BT_id;
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Failed to Load Item");
+                return device;
             }
         }
+
+        public async void OnAppearing()
+        {
+
+            device = await App.DevicesStore.GetDevice(deviceId);
+            OnPropertyChanged("Device");
+            
+            await App.Bluetooth.StartRssiPolling(device.BT_GUID, (int v) => {
+                CurrentRssi = v;
+                return 0;
+            });
+
+        }
+
+
+        public void OnDisappearing()
+        {
+            App.Bluetooth.StopRssiPolling();
+        }
+
     }
 }

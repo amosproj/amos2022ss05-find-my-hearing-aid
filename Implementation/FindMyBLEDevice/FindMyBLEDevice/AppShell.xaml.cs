@@ -1,7 +1,5 @@
-﻿using FindMyBLEDevice.ViewModels;
-using FindMyBLEDevice.Views;
+﻿using FindMyBLEDevice.Views;
 using System;
-using System.Collections.Generic;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice
@@ -15,6 +13,7 @@ namespace FindMyBLEDevice
             Routing.RegisterRoute(nameof(NewItemPage), typeof(NewItemPage));
             Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
             Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(StrengthPage), typeof(StrengthPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)

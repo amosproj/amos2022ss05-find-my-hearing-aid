@@ -17,7 +17,8 @@ namespace FindMyBLEDevice
 
         // Interface to stored BTDevices
         private static IDevicesStore devicesStore;
-        private static Bluetooth bluetooth;
+        // Encapsulation of bluetooth functionality
+        private static IBluetooth bluetooth;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -31,7 +32,7 @@ namespace FindMyBLEDevice
                 return devicesStore;
             }
         }
-        public static Bluetooth Bluetooth
+        public static IBluetooth Bluetooth
         {
             get
             {

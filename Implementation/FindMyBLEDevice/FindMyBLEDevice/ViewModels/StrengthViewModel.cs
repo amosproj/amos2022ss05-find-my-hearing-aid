@@ -1,5 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ using System.Diagnostics;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    [QueryProperty(nameof(DeviceID), nameof(DeviceID))]
+    [QueryProperty(nameof(BT_id), nameof(BT_id))]
     public class StrengthViewModel : BaseViewModel
     {
         private int _radius;
@@ -71,8 +72,8 @@ namespace FindMyBLEDevice.ViewModels
             {
                 BTDevice device = await App.DevicesStore.GetDevice(deviceId);
                 Id = device.Id;
-                Name = device.Name;
-                BT_id = device.BT_id;
+                Name = device.UserLabel;
+                BT_id = device.BT_GUID;
             }
             catch (Exception)
             {
