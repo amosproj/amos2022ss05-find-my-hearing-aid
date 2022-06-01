@@ -16,6 +16,21 @@
 ### 🎯 Our Mission is ...
 ... to create an app for our industry partner by providing the feature of locating BLE devices. The app should be able to detect BLE devices and assign labels to it. In addition it helps tracking the device and navigating to the exact location of the device no matter if in short or long distance. This ensures an overview of all relevant devices at all times. 
 
+### Start Developing ...
+#### You need the following Prerequesites
+- an IDE (recommended: Visual Studio)
+- Git
+- Xamarin >= 5.0
+- For building and testing the iOS App:
+  - Mac
+  - iOS Device
+  - Xcode
+- For building and testing the Android App:
+  - Android Device
+
+#### Setup project locally
+Just clone the repository and start developing
+
 
 ## Contributors
 |Name|Role  |
