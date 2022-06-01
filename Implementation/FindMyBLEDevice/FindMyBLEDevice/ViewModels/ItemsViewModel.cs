@@ -124,10 +124,8 @@ namespace FindMyBLEDevice.ViewModels
         }
         async void OnSavedButtonPressed(BTDevice device)
         {
-            Console.WriteLine("we are here");
             if (device == null)
                 return;
-            Console.WriteLine("device is here");
 
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={device.Id}");

@@ -60,7 +60,7 @@
                                             </TapGestureRecognizer>
                                         </StackLayout.GestureRecognizers>
                                     </StackLayout>
-                                    <Frame Grid.Column = "1" BorderColor="Black">
+                                    <Frame Grid.Column = "1" BorderColor="Black" x:DataType="model:BTDevice">
                                         <Label  Margin="0,0,0,0" Text="📶"
                                             BackgroundColor="{StaticResource Primary}"
                                             TextColor="White"
