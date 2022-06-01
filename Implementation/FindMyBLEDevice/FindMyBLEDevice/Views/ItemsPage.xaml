@@ -24,101 +24,101 @@
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
-        <ScrollView Grid.Row="1">
-            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadSavedDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-                <StackLayout>
-                    <Label Text=" Saved Devices"
-                       FontSize="Medium"
-                       BackgroundColor="LightGray"
-                       FontAttributes="Bold" />
-                    <CollectionView x:Name="ItemsListView"
-                                ItemsSource="{Binding SavedDevices}"
-                                SelectionMode="None">
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="50" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackLayout Grid.Column = "0" Padding="10" x:DataType="model:BTDevice">
-                                        <Label Text="{Binding UserLabel}" 
-                                            LineBreakMode="NoWrap" 
-                                            Style="{DynamicResource ListItemTextStyle}" 
-                                            FontSize="16" 
-                                            TextColor="Black" />
-                                        <Label Text="{Binding AdvertisedName}" 
-                                            LineBreakMode="NoWrap"
-                                            Style="{DynamicResource ListItemDetailTextStyle}"
-                                            FontSize="13" 
-                                            TextColor="Black" />
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer 
-                                                NumberOfTapsRequired="1"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=SavedDeviceTapped}"		
-                                                CommandParameter="{Binding .}">
-                                            </TapGestureRecognizer>
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                    <Frame Grid.Column = "1" BorderColor="Black" x:DataType="model:BTDevice">
-                                        <Label  Margin="0,0,0,0" Text="📶"
-                                            BackgroundColor="{StaticResource Primary}"
-                                            TextColor="White"
-                                            x:DataType="model:BTDevice"
-                                            VerticalOptions="Center">
-                                        </Label>
-                                        <Frame.GestureRecognizers>
-                                            <TapGestureRecognizer 
-                                                NumberOfTapsRequired="1"
-                                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=SavedDeviceButtonPressed}"		
-                                                CommandParameter="{Binding .}">
-                                            </TapGestureRecognizer>
-                                        </Frame.GestureRecognizers>
-                                    </Frame>
-                                </Grid>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </StackLayout>
-            </RefreshView>
-        </ScrollView>
-
-        <ScrollView Grid.Row="2">
-            <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadAvailableDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-                <StackLayout>
-                    <Label Text=" Available Devices"
-                       FontSize="Medium"
-                       BackgroundColor="LightGray"
-                       FontAttributes="Bold" />
-                    <Button Margin="0,0,0,0" Text="Scan for available devices"
-                          Command="{Binding SearchAvailableDevicesCommand}"
-                          BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
+        <StackLayout Grid.Row="1">
+            <Label Text=" Saved Devices"
+                   FontSize="Medium"
+                   BackgroundColor="LightGray"
+                   FontAttributes="Bold" />
+            <ScrollView>
+                <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadSavedDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                    <StackLayout>
+                        <CollectionView x:Name="ItemsListView"
+                                        ItemsSource="{Binding SavedDevices}"
+                                        SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid >
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="50" />
+                                        </Grid.ColumnDefinitions>
+                                        <StackLayout Grid.Column = "0" Padding="10" x:DataType="model:BTDevice">
+                                            <Label Text="{Binding UserLabel}" 
+                                                   LineBreakMode="NoWrap" 
+                                                   Style="{DynamicResource ListItemTextStyle}" 
+                                                   FontSize="16" 
+                                                   TextColor="Black" />
+                                            <Label Text="{Binding AdvertisedName}" 
+                                                   LineBreakMode="NoWrap"
+                                                   Style="{DynamicResource ListItemDetailTextStyle}"
+                                                   FontSize="13" 
+                                                   TextColor="Black" />
+                                            <StackLayout.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                    NumberOfTapsRequired="1"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=SavedDeviceTapped}"		
+                                                    CommandParameter="{Binding .}">
+                                                </TapGestureRecognizer>
+                                            </StackLayout.GestureRecognizers>
+                                        </StackLayout>
+                                        <Frame Grid.Column = "1" BorderColor="Black" x:DataType="model:BTDevice">
+                                            <Label  Margin="0,0,0,0" Text="📶"
+                                                    BackgroundColor="{StaticResource Primary}"
+                                                    TextColor="White"
+                                                    x:DataType="model:BTDevice"
+                                                    VerticalOptions="Center">
+                                            </Label>
+                                            <Frame.GestureRecognizers>
+                                                <TapGestureRecognizer 
+                                                    NumberOfTapsRequired="1"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=SavedDeviceButtonPressed}"		
+                                                    CommandParameter="{Binding .}">
+                                                </TapGestureRecognizer>
+                                            </Frame.GestureRecognizers>
+                                        </Frame>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                </RefreshView>
+            </ScrollView>
+        </StackLayout>
+        <StackLayout Grid.Row="2">
+            <Label Text=" Available Devices"
+                   FontSize="Medium"
+                   BackgroundColor="LightGray"
+                   FontAttributes="Bold" />
+            <Button Margin="0,0,0,0" Text="Scan for available devices"
+                    Command="{Binding SearchAvailableDevicesCommand}"
+                    BackgroundColor="{StaticResource Primary}"
+                    TextColor="White" />
+            <ScrollView>
+                <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadAvailableDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
                     <CollectionView x:Name="AvailableDevicesListView"
-                ItemsSource="{Binding AvailableDevices}"
-                SelectionMode="None">
+                                    ItemsSource="{Binding AvailableDevices}"
+                                    SelectionMode="None">   
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <StackLayout Padding="10" x:DataType="model:AvailableBTDevice">
-                                    <Label 
-                                        Text="{Binding Name}" 
-                                        LineBreakMode="NoWrap" 
-                                        Style="{DynamicResource ListItemTextStyle}" 
-                                        FontSize="16" 
-                                        TextColor="Black" />
+                                    <Label Text="{Binding Name}"
+                                           LineBreakMode="NoWrap" 
+                                           Style="{DynamicResource ListItemTextStyle}" 
+                                           FontSize="16" 
+                                           TextColor="Black" />
                                     <StackLayout.GestureRecognizers>
                                         <TapGestureRecognizer 
-                                NumberOfTapsRequired="1"
-                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=AvailableDeviceTapped}"		
-                                CommandParameter="{Binding .}">
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=AvailableDeviceTapped}"		
+                                            CommandParameter="{Binding .}">
                                         </TapGestureRecognizer>
                                     </StackLayout.GestureRecognizers>
                                 </StackLayout>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-                </StackLayout>
-            </RefreshView>
-        </ScrollView>
+                </RefreshView>
+            </ScrollView>
+        </StackLayout>
     </Grid>
 </ContentPage>
