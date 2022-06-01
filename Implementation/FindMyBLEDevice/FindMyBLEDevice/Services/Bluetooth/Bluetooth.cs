@@ -39,7 +39,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 {
                     return;
                 }
-                                
+
                 if (a.Device.Rssi < -80 || a.Device.Name is null)
                 {
                     return;

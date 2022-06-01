@@ -26,6 +26,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public Command LoadSavedDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
+        public Command<BTDevice> SavedDeviceButtonPressed { get; }
         public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
@@ -56,6 +57,7 @@ namespace FindMyBLEDevice.ViewModels
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
+            SavedDeviceButtonPressed = new Command<BTDevice>(OnSavedButtonPressed);
         }
 
         async Task ExecuteLoadSavedDevicesCommand()
@@ -117,9 +119,18 @@ namespace FindMyBLEDevice.ViewModels
             if (device == null)
                 return;
 
-            // await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?bt_id={device.Id}");
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceId)}={device.Id}");
+        }
+        async void OnSavedButtonPressed(BTDevice device)
+        {
+            Console.WriteLine("we are here");
+            if (device == null)
+                return;
+            Console.WriteLine("device is here");
+
+            // This will push the ItemDetailPage onto the navigation stack
+            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={device.Id}");
         }
 
         async void OnAvailableDeviceSelected(AvailableBTDevice device)
@@ -135,7 +146,6 @@ namespace FindMyBLEDevice.ViewModels
             // Alternative: open add item page instead of signal strength page
             // This will push the NewItemPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
-            //await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
         }
 
         private async Task ExecuteSearchAvailableDevicesCommand()

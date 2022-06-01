@@ -10,7 +10,7 @@ using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    [QueryProperty(nameof(BT_id), "bt_id")]
+    [QueryProperty(nameof(BT_id), nameof(BT_id))]
     public class StrengthViewModel : BaseViewModel
     {
         private string bt_id;
