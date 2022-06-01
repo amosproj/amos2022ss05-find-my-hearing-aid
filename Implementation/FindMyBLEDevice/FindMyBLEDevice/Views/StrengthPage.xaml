@@ -5,14 +5,101 @@
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels"
              x:Class="FindMyBLEDevice.Views.StrengthPage"
+             x:DataType="viewmodels:StrengthViewModel"
              Title="{Binding Title}">
-    
-    <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Padding="20,0,20,0" Spacing="0">
-            <Label Text="Show bluetooth connection strength" FontSize="Medium" TextColor="Black"/>
-            <Label FontSize="16" Padding="0,0,0,0">
-            </Label>
-        </StackLayout>
+
+
+<ContentPage.Content>
+        <ScrollView>
+            <StackLayout Orientation="Vertical" Padding="20,0,20,10" Spacing="30" VerticalOptions="FillAndExpand" >
+                <Label Text="Each circle increases the radius within one meter. Everything within the inner blue circle is within your one meter surrounding."
+                           TextColor="Black"
+                           HorizontalTextAlignment="Center"
+                           Padding="10"
+                           FontSize="14"
+                           />
+                <AbsoluteLayout HorizontalOptions="FillAndExpand"
+                                VerticalOptions="StartAndExpand">
+                    <Ellipse x:Name="outerEllipse" 
+                         Fill="LightGray"
+                         Stroke="#2196F3"
+                         StrokeThickness="4"
+                         WidthRequest="400"
+                         HeightRequest="400"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                    <Ellipse x:Name="ellipse" 
+                         Stroke="DarkBlue"
+                         Fill="LightBlue"
+                         StrokeThickness="4"
+                         WidthRequest="{Binding Radius}"
+                         HeightRequest="{Binding Radius}"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                    <Ellipse x:Name="innerEllipse"         
+                         Fill="#2196F3"
+                         StrokeThickness="4"
+                         WidthRequest="30"
+                         HeightRequest="30"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                    <Ellipse x:Name="fourthMeter"
+                             Stroke="Black"                         
+                             StrokeThickness="1"
+                             StrokeDashArray="5.0 5.0"
+                             WidthRequest="326"
+                             HeightRequest="326"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                             AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                    <Ellipse x:Name="thirdMeter" 
+                             Stroke="Black"
+                             StrokeThickness="1"
+                             StrokeDashArray="5.0 5.0"
+                             WidthRequest="252"
+                             HeightRequest="252"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                             AbsoluteLayout.LayoutFlags="PositionProportional" />
+                    <Ellipse x:Name="secondMeter"
+                             Stroke="Black"
+                             StrokeThickness="1"
+                             StrokeDashArray="5.0 5.0"
+                             WidthRequest="178"
+                             HeightRequest="178"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                             AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                    <Ellipse x:Name="firstMeter"
+                             Stroke="Black"
+                             StrokeThickness="1"
+                             StrokeDashArray="5.0 5.0"
+                             WidthRequest="104"
+                             HeightRequest="104"
+                             AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                             AbsoluteLayout.LayoutFlags="PositionProportional"/>
+                </AbsoluteLayout>
+
+                <Slider ValueChanged="OnSliderValueChanged"
+                        ThumbColor="#2196F3"                    
+                        Maximum="400"
+                        Minimum="30"/>
+                <Frame BorderColor="DarkBlue"
+                       CornerRadius="5"
+                       Padding="5" >
+                    <StackLayout>
+                        <Label x:Name="sliderLabel"
+                           Text="{Binding Meter, StringFormat='Hot/Cold within ~{0}m'}"
+                           TextColor="Black"
+                           FontSize="Subtitle"
+                           HorizontalOptions="CenterAndExpand"
+                           VerticalOptions="CenterAndExpand" />
+                        <BoxView Color="Black"
+                             HeightRequest="1"
+                             HorizontalOptions="Fill" />
+                        <Label Text="{Binding Name}" FontSize="Small" TextColor="Black" HorizontalOptions="Center"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>
