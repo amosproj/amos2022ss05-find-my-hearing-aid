@@ -26,7 +26,6 @@ namespace FindMyBLEDevice.ViewModels
 
         public Command LoadSavedDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
-        public Command<BTDevice> SavedDeviceButtonPressed { get; }
         public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
@@ -57,7 +56,6 @@ namespace FindMyBLEDevice.ViewModels
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
-            SavedDeviceButtonPressed = new Command<BTDevice>(OnSavedButtonPressed);
         }
 
         async Task ExecuteLoadSavedDevicesCommand()
@@ -122,14 +120,6 @@ namespace FindMyBLEDevice.ViewModels
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceId)}={device.Id}");
         }
-        async void OnSavedButtonPressed(BTDevice device)
-        {
-            if (device == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={device.Id}");
-        }
 
         async void OnAvailableDeviceSelected(AvailableBTDevice device)
         {
@@ -157,9 +147,24 @@ namespace FindMyBLEDevice.ViewModels
             {
                 return new Command(async (e) =>
                 {
-                    var selectedDevice = (e as Models.AvailableBTDevice);
                     await App.Bluetooth.StopSearch();
-                    await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={selectedDevice.Id}");
+
+                    String id = "";
+                    if (e is null)
+                    {
+                        return;
+                    }
+                    else if (e is Models.AvailableBTDevice)
+                    {
+                        var selectedDevice = (e as Models.AvailableBTDevice);
+                        id = selectedDevice.Id.ToString();
+                    } 
+                    else if (e is Models.BTDevice)
+                    {
+                        var selectedDevice = (e as Models.BTDevice);
+                        id = selectedDevice.BT_GUID;
+                    }
+                    await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={id}");
                 });
             }
         }
