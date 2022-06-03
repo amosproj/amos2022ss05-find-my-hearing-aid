@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
-
+using System.Windows.Input;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -138,9 +138,6 @@ namespace FindMyBLEDevice.ViewModels
 
             await App.Bluetooth.StopSearch();
 
-            // This will replace the navigation stack with StrengthPage:
-            // TODO: find a way to just push the site onto the navigation stack
-
             // Alternative: open add item page instead of signal strength page
             // This will push the NewItemPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
@@ -152,5 +149,19 @@ namespace FindMyBLEDevice.ViewModels
             await App.Bluetooth.Search(20000, AvailableDevices, found => savedDevices.Exists(saved => saved.BT_GUID.Equals(found.Id.ToString())));
         }
 
+
+
+        public ICommand RedirectToStrengthPage
+        {
+            get
+            {
+                return new Command(async (e) =>
+                {
+                    var selectedDevice = (e as Models.AvailableBTDevice);
+                    await App.Bluetooth.StopSearch();
+                    await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={selectedDevice.Id}");
+                });
+            }
+        }
     }
 }
