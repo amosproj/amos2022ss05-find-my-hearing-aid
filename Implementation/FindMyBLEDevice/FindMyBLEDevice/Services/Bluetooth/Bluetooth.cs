@@ -10,6 +10,8 @@ using System.Linq;
 using Plugin.BLE.Abstractions.Contracts;
 using System;
 using System.Threading;
+using Plugin.BLE.Abstractions;
+using FindMyBLEDevice.Exceptions;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
@@ -20,15 +22,14 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
         private Timer rssiPollingTimer;
 
+        public int RssiPollInterval { get; }
+
         public Bluetooth(IAdapter adapter)
         {
-            this.adapter = adapter; 
+            this.adapter = adapter;
+            RssiPollInterval = 1000;
         }
-
-        public Bluetooth()
-        {
-            adapter = CrossBluetoothLE.Current.Adapter;
-        }
+        public Bluetooth() : this(CrossBluetoothLE.Current.Adapter) {}
 
         public async Task Search(int scanTimeout, ObservableCollection<AvailableBTDevice> availableDevices, Predicate<AvailableBTDevice> filter)
         {
@@ -56,7 +57,6 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 {
                     availableDevices.Add(device);
                 }
-
             };            
 
             adapter.ScanTimeout = scanTimeout;
@@ -81,7 +81,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 await device.UpdateRssiAsync();
                 updateRssi.Invoke(device.Rssi);
 
-            }, "", TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(1));           
+            }, "", 0, RssiPollInterval);           
 
         }
 
@@ -90,6 +90,14 @@ namespace FindMyBLEDevice.Services.Bluetooth
             rssiPollingTimer?.Dispose();
         }
 
-
+        //public int GetMeasuredPower()
+        //{
+        //    Guid txPowerLevelKey = Guid.ParseExact("00002a07-0000-1000-8000-00805f9b34fb", "d");
+        //    KnownCharacteristic txPowerLevelCharacteristic = KnownCharacteristics.Lookup(txPowerLevelKey);
+        //    if (txPowerLevelCharacteristic.Id.Equals(Guid.Empty))
+        //    {
+        //        throw new BluetoothException("characteristic unknown");
+        //    }
+        //}
     }
 }

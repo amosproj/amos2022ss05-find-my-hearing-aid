@@ -128,7 +128,7 @@ namespace FindMyBLEDevice.ViewModels
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={device.Id}");
+            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.DeviceId)}={device.Id}");
         }
 
         async void OnAvailableDeviceSelected(AvailableBTDevice device)

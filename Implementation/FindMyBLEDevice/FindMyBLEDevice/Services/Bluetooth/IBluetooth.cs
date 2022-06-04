@@ -11,6 +11,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
 {
     public interface IBluetooth
     {
+        int RssiPollInterval { get; }
         Task Search(int scanTimeout, ObservableCollection<AvailableBTDevice> availableDevices, Predicate<AvailableBTDevice> filter);
         Task StartRssiPolling(string btguid, Func<int, int> updateRssi);
         void StopRssiPolling();
