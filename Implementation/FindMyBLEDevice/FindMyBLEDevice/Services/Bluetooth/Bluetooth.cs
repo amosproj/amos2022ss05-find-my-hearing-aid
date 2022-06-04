@@ -34,7 +34,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
         {
 
             adapter.DeviceDiscovered += (s, a) => {
-
+                Console.WriteLine(a.Device.Id);
                 if (availableDevices.ToList<AvailableBTDevice>().Exists(o => o.Id == a.Device.Id))
                 {
                     return;
