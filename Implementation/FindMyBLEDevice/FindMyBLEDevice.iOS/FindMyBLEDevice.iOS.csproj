@@ -138,7 +138,7 @@
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>
     <ProjectReference Include="..\FindMyBLEDevice\FindMyBLEDevice.csproj">
-      <Project>{4151FC67-CCF9-4D4B-9EE3-AF28F960DAA3}</Project>
+      <Project>{2AA1816C-8510-4B71-93E4-71FB927628C0}</Project>
       <Name>FindMyBLEDevice</Name>
     </ProjectReference>
   </ItemGroup>
