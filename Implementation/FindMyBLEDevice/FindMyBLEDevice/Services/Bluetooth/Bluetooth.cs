@@ -22,7 +22,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
         private Timer rssiPollingTimer;
 
-        public int RssiPollInterval { get; }
+        private int RssiPollInterval { get; }
 
         public Bluetooth(IAdapter adapter)
         {
@@ -89,15 +89,5 @@ namespace FindMyBLEDevice.Services.Bluetooth
         {
             rssiPollingTimer?.Dispose();
         }
-
-        //public int GetMeasuredPower()
-        //{
-        //    Guid txPowerLevelKey = Guid.ParseExact("00002a07-0000-1000-8000-00805f9b34fb", "d");
-        //    KnownCharacteristic txPowerLevelCharacteristic = KnownCharacteristics.Lookup(txPowerLevelKey);
-        //    if (txPowerLevelCharacteristic.Id.Equals(Guid.Empty))
-        //    {
-        //        throw new BluetoothException("characteristic unknown");
-        //    }
-        //}
     }
 }

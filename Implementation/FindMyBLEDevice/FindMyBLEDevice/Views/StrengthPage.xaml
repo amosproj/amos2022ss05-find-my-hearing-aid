@@ -79,16 +79,12 @@
                              AbsoluteLayout.LayoutFlags="PositionProportional"/>
                 </AbsoluteLayout>
 
-                <Slider ValueChanged="OnSliderValueChanged"
-                        ThumbColor="#2196F3"                    
-                        Maximum="400"
-                        Minimum="30"/>
                 <Frame BorderColor="DarkBlue"
                        CornerRadius="5"
                        Padding="5" >
                     <StackLayout>
                         <Label x:Name="sliderLabel"
-                           Text="{Binding Meter, StringFormat='Hot/Cold within ~{0}m'}"
+                           Text="{Binding Meter, StringFormat='Hot/Cold within ~{0:0}m'}"
                            TextColor="Black"
                            FontSize="Subtitle"
                            HorizontalOptions="CenterAndExpand"

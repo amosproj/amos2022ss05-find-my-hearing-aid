@@ -16,7 +16,6 @@ namespace FindMyBLEDevice.ViewModels
                 
         private BTDevice _device;
         private int _radius;
-        private int _radiusDrag;
         private double _meter;
         private int _currentRssi;
         private int _deviceId;
@@ -26,11 +25,6 @@ namespace FindMyBLEDevice.ViewModels
             Title = "StrengthSearch";
             meterScaleMin = rssiToMeter(0);
             meterScaleMax = rssiToMeter(-100);
-        }
-
-        public int RssiPollInterval
-        {
-            get => App.Bluetooth.RssiPollInterval;
         }
 
         public BTDevice Device
@@ -48,17 +42,7 @@ namespace FindMyBLEDevice.ViewModels
         public int Radius
         {
             get => _radius;
-            set
-            {
-                _radiusDrag = Radius;
-                SetProperty(ref _radius, value);
-            }
-        }
-
-        public int RadiusDrag
-        {
-            get => _radiusDrag;
-            set => SetProperty(ref _radiusDrag, value);
+            set => SetProperty(ref _radius, value);
         }
 
         public double Meter
