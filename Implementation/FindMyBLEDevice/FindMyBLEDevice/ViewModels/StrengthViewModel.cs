@@ -5,6 +5,7 @@
 using Xamarin.Forms;
 using FindMyBLEDevice.Models;
 using System;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -14,7 +15,7 @@ namespace FindMyBLEDevice.ViewModels
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
                 
-        private BTDevice _device;
+        private BTDevice _device = null;
         private int _radius;
         private double _meter;
         private int _currentRssi;
@@ -67,13 +68,15 @@ namespace FindMyBLEDevice.ViewModels
 
         public async void OnAppearing()
         {
-
-            Device = await App.DevicesStore.GetDevice(_deviceId);
-            await App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v) => {
-                CurrentRssi = v;
-                return 0;
-            });
-
+            if (_deviceId != 0)
+            {
+                Device = await App.DevicesStore.GetDevice(_deviceId);
+                await App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v) =>
+                {
+                    CurrentRssi = v;
+                    return 0;
+                });
+            }
         }
 
         public void OnDisappearing()

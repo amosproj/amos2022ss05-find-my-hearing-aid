@@ -83,8 +83,7 @@
                        CornerRadius="5"
                        Padding="5" >
                     <StackLayout>
-                        <Label x:Name="sliderLabel"
-                           Text="Currently selected device"
+                        <Label Text="Currently selected device"
                            TextColor="Black"
                            FontSize="Subtitle"
                            HorizontalOptions="CenterAndExpand"
@@ -92,7 +91,7 @@
                         <BoxView Color="Black"
                              HeightRequest="1"
                              HorizontalOptions="Fill" />
-                        <Label Text="{Binding Device.UserLabel}" FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
                     </StackLayout>
                 </Frame>
             </StackLayout>
