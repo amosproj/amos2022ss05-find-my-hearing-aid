@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
-
+using System.Windows.Input;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -26,7 +26,6 @@ namespace FindMyBLEDevice.ViewModels
 
         public Command LoadSavedDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
-        public Command<BTDevice> SavedDeviceButtonPressed { get; }
         public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
@@ -57,7 +56,6 @@ namespace FindMyBLEDevice.ViewModels
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
-            SavedDeviceButtonPressed = new Command<BTDevice>(OnSavedButtonPressed);
         }
 
         async Task ExecuteLoadSavedDevicesCommand()
@@ -122,14 +120,6 @@ namespace FindMyBLEDevice.ViewModels
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceId)}={device.Id}");
         }
-        async void OnSavedButtonPressed(BTDevice device)
-        {
-            if (device == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.DeviceId)}={device.Id}");
-        }
 
         async void OnAvailableDeviceSelected(AvailableBTDevice device)
         {
@@ -146,5 +136,34 @@ namespace FindMyBLEDevice.ViewModels
             await App.Bluetooth.Search(20000, AvailableDevices, found => savedDevices.Exists(saved => saved.BT_GUID.Equals(found.Id.ToString())));
         }
 
+
+
+        public ICommand RedirectToStrengthPage
+        {
+            get
+            {
+                return new Command(async (e) =>
+                {
+                    await App.Bluetooth.StopSearch();
+
+                    String id = "";
+                    if (e is null)
+                    {
+                        return;
+                    }
+                    else if (e is Models.AvailableBTDevice)
+                    {
+                        var selectedDevice = (e as Models.AvailableBTDevice);
+                        id = selectedDevice.Id.ToString();
+                    } 
+                    else if (e is Models.BTDevice)
+                    {
+                        var selectedDevice = (e as Models.BTDevice);
+                        id = selectedDevice.BT_GUID;
+                    }
+                    await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.DeviceId)}={id}");
+                });
+            }
+        }
     }
 }
