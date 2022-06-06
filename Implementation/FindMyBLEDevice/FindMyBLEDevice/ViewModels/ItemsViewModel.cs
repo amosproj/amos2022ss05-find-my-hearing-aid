@@ -10,7 +10,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
-
+using System.Windows.Input;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -26,7 +26,6 @@ namespace FindMyBLEDevice.ViewModels
 
         public Command LoadSavedDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
-        public Command<BTDevice> SavedDeviceButtonPressed { get; }
         public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
@@ -40,7 +39,7 @@ namespace FindMyBLEDevice.ViewModels
                 List<AvailableBTDevice> devices = value.ToList();
                 devices.Sort((x, y) => y.Rssi.CompareTo(x.Rssi));
                 availableDevices = new ObservableCollection<AvailableBTDevice>(devices);                
-                OnPropertyChanged("AvailableDevices");
+                OnPropertyChanged(nameof(AvailableDevices));
             }
         }
 
@@ -57,7 +56,6 @@ namespace FindMyBLEDevice.ViewModels
             AvailableDevices = new ObservableCollection<AvailableBTDevice>();
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
-            SavedDeviceButtonPressed = new Command<BTDevice>(OnSavedButtonPressed);
         }
 
         async Task ExecuteLoadSavedDevicesCommand()
@@ -122,14 +120,6 @@ namespace FindMyBLEDevice.ViewModels
             // This will push the ItemDetailPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceId)}={device.Id}");
         }
-        async void OnSavedButtonPressed(BTDevice device)
-        {
-            if (device == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={device.Id}");
-        }
 
         async void OnAvailableDeviceSelected(AvailableBTDevice device)
         {
@@ -137,12 +127,6 @@ namespace FindMyBLEDevice.ViewModels
                 return;
 
             await App.Bluetooth.StopSearch();
-
-            // This will replace the navigation stack with StrengthPage:
-            // TODO: find a way to just push the site onto the navigation stack
-
-            // Alternative: open add item page instead of signal strength page
-            // This will push the NewItemPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
         }
 
@@ -151,6 +135,34 @@ namespace FindMyBLEDevice.ViewModels
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
             await App.Location.CheckAndRequestLocationPermission();
             await App.Bluetooth.Search(20000, AvailableDevices, found => savedDevices.Exists(saved => saved.BT_GUID.Equals(found.Id.ToString())));
+        }
+
+        public ICommand RedirectToStrengthPage
+        {
+            get
+            {
+                return new Command(async (e) =>
+                {
+                    await App.Bluetooth.StopSearch();
+
+                    int id = 0;
+                    if (e is null)
+                    {
+                        return;
+                    }
+                    else if (e is Models.AvailableBTDevice)
+                    {
+                        var selectedDevice = (e as Models.AvailableBTDevice);
+                        //id = selectedDevice.Id.ToString();
+                    } 
+                    else if (e is Models.BTDevice)
+                    {
+                        var selectedDevice = (e as Models.BTDevice);
+                        id = selectedDevice.Id;
+                    }
+                    await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.DeviceId)}={id}");
+                });
+            }
         }
     }
 }
