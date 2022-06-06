@@ -1,40 +1,43 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+
 using Xamarin.Forms;
 using FindMyBLEDevice.Models;
-using System.Diagnostics;
+using System;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    [QueryProperty(nameof(BT_id), nameof(BT_id))]
+    [QueryProperty(nameof(DeviceId), nameof(DeviceId))]
     public class StrengthViewModel : BaseViewModel
     {
+        private readonly double meterScaleMin;
+        private readonly double meterScaleMax;
+                
+        private BTDevice _device;
         private int _radius;
-        private int _meter;
-        private string _name = "Someone's AirPods Pro";
+        private double _meter;
         private int _currentRssi;
-        private string _bt_id;
-        private int _deviceID;
-        public int Id { get; set; }
+        private int _deviceId;
+
         public StrengthViewModel()
         {
             Title = "StrengthSearch";
-        }
-        public string Name
-        {
-            get => _name;
-            set => SetProperty(ref _name, value);
+            meterScaleMin = rssiToMeter(0);
+            meterScaleMax = rssiToMeter(-100);
         }
 
-        public string BT_id
+        public BTDevice Device
         {
-            get => _bt_id;
-            set => SetProperty(ref _bt_id, value);
+            get => _device;
+            set => SetProperty(ref _device, value);
+        }
+
+        public int DeviceId
+        {
+            get => _deviceId;
+            set => SetProperty(ref _deviceId, value);
         }
 
         public int Radius
@@ -42,44 +45,73 @@ namespace FindMyBLEDevice.ViewModels
             get => _radius;
             set => SetProperty(ref _radius, value);
         }
-        public int Meter
+
+        public double Meter
         {
             get => _meter;
-            set => SetProperty(ref _meter, value);
+            set
+            {
+                SetProperty(ref _meter, value);
+                Radius = otherScaleToRadius(meterScaleMin, meterScaleMax, Meter);
+            }
         }
 
         public int CurrentRssi
         {
             get => _currentRssi;
-            set => SetProperty(ref _currentRssi, value);
-        }
-        public int DeviceID
-        {
-            get
-            {
-                return _deviceID;
-            }
             set
             {
-                _deviceID = value;
-                LoadItemId(value);
+                SetProperty(ref _currentRssi, value);
+                Meter = rssiToMeter(CurrentRssi);
             }
         }
 
-        public async void LoadItemId(int deviceId)
+        public async void OnAppearing()
         {
-            try
+            /// works since database id counts from 1 - might change to nullable int
+            if (_deviceId != 0)
             {
-                BTDevice device = await App.DevicesStore.GetDevice(deviceId);
-                Id = device.Id;
-                Name = device.UserLabel;
-                BT_id = device.BT_GUID;
-            }
-            catch (Exception)
-            {
-                Debug.WriteLine("Failed to Load Item");
+                Device = await App.DevicesStore.GetDevice(_deviceId);
+                await App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v) =>
+                {
+                    CurrentRssi = v;
+                    return 0;
+                });
             }
         }
 
+        public void OnDisappearing()
+        {
+            App.Bluetooth.StopRssiPolling();
+        }
+        
+        /// <summary>
+        /// Calculates the strengts views radius from any given input value and its scale.
+        /// </summary>
+        /// <param name="scaleMin">Min value of the input value's scale.</param>
+        /// <param name="scaleMax">Max value of the input value's scale.</param>
+        /// <param name="value">Input value</param>
+        /// <returns>circle radius</returns>
+        private int otherScaleToRadius(double scaleMin, double scaleMax, double value)
+        {
+            const int radiusMin = 30;
+            const int radiusMax = 400;
+            const int radiusScaleSize = radiusMax - radiusMin;
+            double inputScaleSize = scaleMax - scaleMin;
+
+            double relScalePosition = (double)(value - scaleMin) / inputScaleSize;
+            int resultingRadius = radiusMin + (int)(relScalePosition * radiusScaleSize);
+            return resultingRadius;
+        }
+
+        private double rssiToMeter(int rssi)
+        {
+            // https://medium.com/beingcoders/convert-rssi-value-of-the-ble-bluetooth-low-energy-beacons-to-meters-63259f307283 
+            // TODO replace the constants with polled values
+            const int measuredPower = -60;
+            const int environmentalFactor = 3;
+            double dist = Math.Pow(10, (double)(measuredPower - rssi) / (10 * environmentalFactor));
+            return dist;
+        }
     }
 }

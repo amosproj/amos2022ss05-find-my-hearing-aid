@@ -14,7 +14,7 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Orientation="Vertical" Padding="20,0,20,10" Spacing="30" VerticalOptions="FillAndExpand" >
-                <Label Text="Each circle increases the radius within one meter. Everything within the inner blue circle is within your one meter surrounding."
+                <Label Text="Everything within the inner blue circle is within your near surrounding."
                            TextColor="Black"
                            HorizontalTextAlignment="Center"
                            Padding="10"
@@ -79,16 +79,11 @@
                              AbsoluteLayout.LayoutFlags="PositionProportional"/>
                 </AbsoluteLayout>
 
-                <Slider ValueChanged="OnSliderValueChanged"
-                        ThumbColor="#2196F3"                    
-                        Maximum="400"
-                        Minimum="30"/>
                 <Frame BorderColor="DarkBlue"
                        CornerRadius="5"
                        Padding="5" >
                     <StackLayout>
-                        <Label x:Name="sliderLabel"
-                           Text="{Binding Meter, StringFormat='Hot/Cold within ~{0}m'}"
+                        <Label Text="Currently selected device"
                            TextColor="Black"
                            FontSize="Subtitle"
                            HorizontalOptions="CenterAndExpand"
@@ -96,7 +91,7 @@
                         <BoxView Color="Black"
                              HeightRequest="1"
                              HorizontalOptions="Fill" />
-                        <Label Text="{Binding Name}" FontSize="Small" TextColor="Black" HorizontalOptions="Center"/>
+                        <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
                     </StackLayout>
                 </Frame>
             </StackLayout>

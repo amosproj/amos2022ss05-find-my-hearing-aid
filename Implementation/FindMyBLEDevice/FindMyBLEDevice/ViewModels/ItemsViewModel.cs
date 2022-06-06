@@ -40,7 +40,7 @@ namespace FindMyBLEDevice.ViewModels
                 List<AvailableBTDevice> devices = value.ToList();
                 devices.Sort((x, y) => y.Rssi.CompareTo(x.Rssi));
                 availableDevices = new ObservableCollection<AvailableBTDevice>(devices);                
-                OnPropertyChanged("AvailableDevices");
+                OnPropertyChanged(nameof(AvailableDevices));
             }
         }
 
@@ -128,7 +128,7 @@ namespace FindMyBLEDevice.ViewModels
                 return;
 
             // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.BT_id)}={device.Id}");
+            await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.DeviceId)}={device.Id}");
         }
 
         async void OnAvailableDeviceSelected(AvailableBTDevice device)
@@ -137,12 +137,6 @@ namespace FindMyBLEDevice.ViewModels
                 return;
 
             await App.Bluetooth.StopSearch();
-
-            // This will replace the navigation stack with StrengthPage:
-            // TODO: find a way to just push the site onto the navigation stack
-
-            // Alternative: open add item page instead of signal strength page
-            // This will push the NewItemPage onto the navigation stack
             await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
         }
 
