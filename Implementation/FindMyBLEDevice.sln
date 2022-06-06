@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice.Android", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice.iOS", "FindMyBLEDevice\FindMyBLEDevice.iOS\FindMyBLEDevice.iOS.csproj", "{EC9259BD-A478-4199-BA86-D7630ACC7CC9}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FindMyBLEDevice", "FindMyBLEDevice\FindMyBLEDevice\FindMyBLEDevice.csproj", "{2AA1816C-8510-4B71-93E4-71FB927628C0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice", "FindMyBLEDevice\FindMyBLEDevice\FindMyBLEDevice.csproj", "{2AA1816C-8510-4B71-93E4-71FB927628C0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FindMyBLEDevice.Tests", "FindMyBLEDevice.Tests\FindMyBLEDevice.Tests.csproj", "{1E63D26D-33E5-4EED-AA85-4A97ED9CBA54}"
 EndProject
