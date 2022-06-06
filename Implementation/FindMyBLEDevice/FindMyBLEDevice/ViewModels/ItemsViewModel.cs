@@ -146,7 +146,7 @@ namespace FindMyBLEDevice.ViewModels
                 {
                     await App.Bluetooth.StopSearch();
 
-                    String id = "";
+                    int id = 0;
                     if (e is null)
                     {
                         return;
@@ -154,12 +154,12 @@ namespace FindMyBLEDevice.ViewModels
                     else if (e is Models.AvailableBTDevice)
                     {
                         var selectedDevice = (e as Models.AvailableBTDevice);
-                        id = selectedDevice.Id.ToString();
+                        //id = selectedDevice.Id.ToString();
                     } 
                     else if (e is Models.BTDevice)
                     {
                         var selectedDevice = (e as Models.BTDevice);
-                        id = selectedDevice.BT_GUID;
+                        id = selectedDevice.Id;
                     }
                     await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.DeviceId)}={id}");
                 });
