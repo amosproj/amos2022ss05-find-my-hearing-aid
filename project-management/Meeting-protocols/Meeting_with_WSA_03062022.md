@@ -24,7 +24,7 @@ Communicate our to-date progress to and gather feedback from the industry partne
 
 ### Discussion
 - No assistance from the University regarding Apple Dev Account
-- Explanation wy we did not choose MVVM
+- Explanation why we did not choose to extract Views into a separate project
 
 ### Action items
 - [ ] Collect BLE devices from WSA
