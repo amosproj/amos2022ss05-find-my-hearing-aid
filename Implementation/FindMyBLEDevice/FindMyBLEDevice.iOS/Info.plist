@@ -23,7 +23,7 @@
 	<key>MinimumOSVersion</key>
 	<string>8.0</string>
 	<key>CFBundleDisplayName</key>
-	<string>FindMyBLEDevice</string>
+	<string>Find My BLE Device</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.companyname.FindMyBLEDevice</string>
 	<key>CFBundleVersion</key>
