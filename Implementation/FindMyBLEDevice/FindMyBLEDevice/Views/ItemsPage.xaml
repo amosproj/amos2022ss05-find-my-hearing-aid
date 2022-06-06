@@ -120,6 +120,7 @@
                                             </TapGestureRecognizer>
                                         </StackLayout.GestureRecognizers>
                                     </StackLayout>
+                                    <!-- Will be added again after we decided on a global selected-device model
                                     <Button 
                                         x:DataType="model:AvailableBTDevice"
                                         Grid.Column = "1"
@@ -131,7 +132,7 @@
                                         Margin="3"
                                         Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.RedirectToStrengthPage}"
                                         CommandParameter="{Binding .}"
-                                     />
+                                     />-->
                                 </Grid >
 
                             </DataTemplate>
