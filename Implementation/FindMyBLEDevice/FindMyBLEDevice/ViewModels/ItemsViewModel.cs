@@ -133,10 +133,9 @@ namespace FindMyBLEDevice.ViewModels
         private async Task ExecuteSearchAvailableDevicesCommand()
         {
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
+            await App.Location.CheckAndRequestLocationPermission();
             await App.Bluetooth.Search(20000, AvailableDevices, found => savedDevices.Exists(saved => saved.BT_GUID.Equals(found.Id.ToString())));
         }
-
-
 
         public ICommand RedirectToStrengthPage
         {

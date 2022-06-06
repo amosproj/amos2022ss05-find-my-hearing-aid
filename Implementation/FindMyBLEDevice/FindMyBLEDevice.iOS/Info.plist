@@ -34,5 +34,20 @@
 	<string>FindMyBLEDevice</string>
 	<key>XSAppIconAssets</key>
 	<string>Assets.xcassets/AppIcon.appiconset</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>We need to scan for available Bluetooth Low Energy (BLE) devices.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need to scan for available BLE devices</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>location</string>
+	</array>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Need GPS for Bluetooth</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Need GPS for Bluetooth functionalities</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Need GPS for BLE</string>
 </dict>
 </plist>
