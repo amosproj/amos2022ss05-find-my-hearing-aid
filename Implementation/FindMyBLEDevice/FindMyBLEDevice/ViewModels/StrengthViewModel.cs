@@ -15,7 +15,7 @@ namespace FindMyBLEDevice.ViewModels
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
                 
-        private BTDevice _device = null;
+        private BTDevice _device;
         private int _radius;
         private double _meter;
         private int _currentRssi;
@@ -68,6 +68,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public async void OnAppearing()
         {
+            /// works since database id counts from 1 - might change to nullable int
             if (_deviceId != 0)
             {
                 Device = await App.DevicesStore.GetDevice(_deviceId);
