@@ -73,16 +73,21 @@ namespace FindMyBLEDevice.Services.Bluetooth
         
         public async Task StartRssiPolling(String btguid, Func<int, int> updateRssi)
         {
+            try
+            {
+                IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
 
-            IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
+                rssiPollingTimer = new Timer(async (o) => {
 
-            rssiPollingTimer = new Timer(async (o) => {
+                    await device.UpdateRssiAsync();
+                    updateRssi.Invoke(device.Rssi);
 
-                await device.UpdateRssiAsync();
-                updateRssi.Invoke(device.Rssi);
-
-            }, "", 0, RssiPollInterval);           
-
+                }, "", 0, RssiPollInterval);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
         }
 
         public void StopRssiPolling()
