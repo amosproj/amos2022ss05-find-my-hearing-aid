@@ -32,5 +32,5 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 |16|27/05/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner|XC, EW, ~~LM~~, ~~NS~~, DP, ~~JS~~, AW, MA, LK, MR(WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeting_with_WSA_27052022.md)|
 |17|01/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 5|~~XC~~, EW, LM, NS, DP, JS, AW, MA, LK||
 |18|03/06/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner|~~XC~~, EW, ~~DP~~, ~~NS~~, LM, ~~JS~~, AW, MA, LK, MR(WSA), SM (WSA), Guest: Cornelia (WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeting_with_WSA_03062022.md)|
-|19|08/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 6|XC, EW, LM, NS, DP, JS, AW, MA, LK||
+|19|08/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 6|XC, EW, LM, NS, DP, JS, AW, MA, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/AMOS_team_meeting_08062022.md)|
 _______________________
