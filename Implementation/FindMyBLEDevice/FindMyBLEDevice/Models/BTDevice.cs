@@ -30,9 +30,11 @@ namespace FindMyBLEDevice.Models
         [PrimaryKey, AutoIncrement]
         public int Id { get; set; }
 
-        public string BT_id { get; set; }
+        public string BT_GUID { get; set; }
 
-        public string Name { get; set; }
+        public string AdvertisedName { get; set; }
+
+        public string UserLabel { get; set; }
 
         public DateTime CreatedAt { get; set; }
 

@@ -20,4 +20,10 @@
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <None Remove="Services\Location\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Services\Location\" />
+  </ItemGroup>
 </Project>

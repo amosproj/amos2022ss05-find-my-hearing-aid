@@ -26,15 +26,21 @@ namespace FindMyBLEDevice.Services.Database
         }
 
 
-        public async Task AddDevice(string bt_id, string name)
+        public async Task AddDevice(string btGuid, string advertisedName, string userLabel)
         {
 
             Models.BTDevice device = new Models.BTDevice()
             {
-                BT_id = bt_id,
-                Name = name,
+                BT_GUID = btGuid,
+                AdvertisedName = advertisedName,
+                UserLabel = userLabel,
                 CreatedAt = DateTime.UtcNow,
             };
+
+            Console.WriteLine("DevicesStore.AddDevice:");
+            Console.WriteLine(btGuid);
+            Console.WriteLine(advertisedName);
+            Console.WriteLine(userLabel);
 
             int result = await _database.SaveDeviceAsync(device);
 
@@ -45,7 +51,7 @@ namespace FindMyBLEDevice.Services.Database
 
         }
 
-        public async Task UpdateDeviceName(int id, string name)
+        public async Task UpdateDeviceUserLabel(int id, string userLabel)
         {
             Models.BTDevice device = await _database.GetDeviceAsync(id);
 
@@ -54,7 +60,7 @@ namespace FindMyBLEDevice.Services.Database
                 throw new ArgumentException("Device with given id is not saved in database!");
             }
 
-            device.Name = name;
+            device.UserLabel = userLabel;
             int result = await _database.SaveDeviceAsync(device);
 
             if (result != 1)

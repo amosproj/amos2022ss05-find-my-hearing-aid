@@ -7,6 +7,7 @@
 using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Location;
 using System;
 using Xamarin.Forms;
 
@@ -17,7 +18,10 @@ namespace FindMyBLEDevice
 
         // Interface to stored BTDevices
         private static IDevicesStore devicesStore;
-        private static Bluetooth bluetooth;
+        // Encapsulation of bluetooth functionality
+        private static IBluetooth bluetooth;
+        // Interface to stored location Permission
+        private static ILocation location;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -31,7 +35,7 @@ namespace FindMyBLEDevice
                 return devicesStore;
             }
         }
-        public static Bluetooth Bluetooth
+        public static IBluetooth Bluetooth
         {
             get
             {
@@ -40,6 +44,18 @@ namespace FindMyBLEDevice
                     bluetooth = new Bluetooth();
                 }
                 return bluetooth;
+            }
+        }
+
+        public static ILocation Location
+        {
+            get
+            {
+                if (location == null)
+                {
+                    location = new Location();
+                }
+                return location;
             }
         }
 

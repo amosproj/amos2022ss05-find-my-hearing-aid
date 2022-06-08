@@ -20,19 +20,21 @@ namespace FindMyBLEDevice.Tests
         public void AddDevice_CallsDbMethodCorrectly()
         {
             // arrange
-            const string bt_id = "some bluetooth id";
-            const string name = "some name";
+            const string bt_guid = "some bluetooth id";
+            const string advertisedName = "some name";
+            const string userLabel = "some label";
             var db = new Mock<IDatabase>();
             db.Setup(mock => mock.SaveDeviceAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.AddDevice(bt_id, name);
+            Task result = store.AddDevice(bt_guid, advertisedName, userLabel);
 
             // assert
             db.Verify(mock => mock.SaveDeviceAsync(It.Is<BTDevice>(device =>
-                device.BT_id == bt_id
-                && device.Name == name
+                device.BT_GUID == bt_guid
+                && device.AdvertisedName == advertisedName
+                && device.UserLabel == userLabel
                 )), Times.Once);
             Assert.IsNull(result.Exception);
         }
@@ -41,59 +43,60 @@ namespace FindMyBLEDevice.Tests
         public void AddDevice_FailureThrowsCorrectException()
         {
             // arrange
-            const string bt_id = "some bluetooth id";
-            const string name = "some name";
+            const string bt_guid = "some bluetooth id";
+            const string advertisedName = "some name";
+            const string userLabel = "some label";
             var db = new Mock<IDatabase>();
             db.Setup(mock => mock.SaveDeviceAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(0));
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.AddDevice(bt_id, name);
+            Task result = store.AddDevice(bt_guid, advertisedName, userLabel);
 
             // assert
             Assert.IsTrue(result.Exception?.InnerException is DeviceStoreException);
         }
         
         [TestMethod]
-        public void UpdateDeviceName_CallsDbMethodsCorrectly()
+        public void UpdateDeviceUserLabel_CallsDbMethodsCorrectly()
         {
             // arrange
             const int id = 1;
-            const string oldName = "some name";
-            const string newName = "some other name";
+            const string oldLabel = "some label";
+            const string newLabel = "some other label";
             var db = new Mock<IDatabase>();
             db.Setup(mock => mock.GetDeviceAsync(It.IsAny<int>())).Returns(Task.FromResult(new BTDevice()
             {
                 Id = id,
-                Name = oldName
+                UserLabel = oldLabel
             }));
             db.Setup(mock => mock.SaveDeviceAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.UpdateDeviceName(id, newName);
+            Task result = store.UpdateDeviceUserLabel(id, newLabel);
 
             // assert
             db.Verify(mock => mock.GetDeviceAsync(It.Is<int>(arg => arg == id)), Times.Once);
             db.Verify(mock => mock.SaveDeviceAsync(It.Is<BTDevice>(device =>
                 device.Id == id
-                && device.Name.Equals(newName))),
+                && device.UserLabel.Equals(newLabel))),
                 Times.Once);
             Assert.IsNull(result.Exception);
         }
 
         [TestMethod]
-        public void UpdateDeviceName_NoDeviceWithIdThrowsCorrectException()
+        public void UpdateDeviceUserLabel_NoDeviceWithIdThrowsCorrectException()
         {
             // arrange
             const int id = 1;
-            const string newName = "some other name";
+            const string newLabel = "some other label";
             var db = new Mock<IDatabase>();
             db.Setup(mock => mock.GetDeviceAsync(It.IsAny<int>())).Returns(Task.FromResult<BTDevice?>(null));
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.UpdateDeviceName(id, newName);
+            Task result = store.UpdateDeviceUserLabel(id, newLabel);
 
             // assert
             Assert.IsTrue(result.Exception?.InnerException is ArgumentException);
@@ -101,23 +104,23 @@ namespace FindMyBLEDevice.Tests
         }
 
         [TestMethod]
-        public void UpdateDeviceName_UpdatingFailsThrowsCorrectException()
+        public void UpdateDeviceUserLabel_UpdatingFailsThrowsCorrectException()
         {
             // arrange
             const int id = 1;
-            const string oldName = "some name";
-            const string newName = "some other name";
+            const string oldLabel = "some label";
+            const string newLabel = "some other label";
             var db = new Mock<IDatabase>();
             db.Setup(mock => mock.GetDeviceAsync(It.IsAny<int>())).Returns(Task.FromResult(new BTDevice()
             {
                 Id = id,
-                Name = oldName
+                UserLabel = oldLabel
             }));
             db.Setup(mock => mock.SaveDeviceAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(0));
             var store = new DevicesStore(db.Object);
 
             // act
-            Task result = store.UpdateDeviceName(id, newName);
+            Task result = store.UpdateDeviceUserLabel(id, newLabel);
 
             // assert
             Assert.IsTrue(result.Exception?.InnerException is DeviceStoreException);
