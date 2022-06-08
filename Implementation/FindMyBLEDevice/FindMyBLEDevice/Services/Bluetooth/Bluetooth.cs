@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+
 
 using FindMyBLEDevice.Models;
 using Plugin.BLE;
@@ -93,6 +95,13 @@ namespace FindMyBLEDevice.Services.Bluetooth
         public void StopRssiPolling()
         {
             rssiPollingTimer?.Dispose();
+        }
+
+        public bool IsEnabled()
+        {
+            Plugin.BLE.Abstractions.Contracts.IBluetoothLE ble = CrossBluetoothLE.Current;
+
+            return ble.State == Plugin.BLE.Abstractions.Contracts.BluetoothState.On || ble.State == Plugin.BLE.Abstractions.Contracts.BluetoothState.TurningOn;
         }
     }
 }

@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
 using System.Windows.Input;
+using FindMyBLEDevice.Services;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -29,7 +30,7 @@ namespace FindMyBLEDevice.ViewModels
         public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
-
+        
         public ObservableCollection<AvailableBTDevice> AvailableDevices {
             get { 
                 return availableDevices; 
@@ -85,6 +86,8 @@ namespace FindMyBLEDevice.ViewModels
         {
             IsBusy = true;
             SelectedSavedDevice = null;
+
+            await CheckBluetoothAndLocation.Check();
 
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
             List<AvailableBTDevice> available = AvailableDevices.ToList();

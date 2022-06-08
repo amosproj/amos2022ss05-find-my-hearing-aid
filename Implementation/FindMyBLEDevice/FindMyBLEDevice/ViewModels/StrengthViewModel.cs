@@ -5,7 +5,8 @@
 using Xamarin.Forms;
 using FindMyBLEDevice.Models;
 using System;
-using FindMyBLEDevice.Views;
+using FindMyBLEDevice.Services;
+using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -66,8 +67,10 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        public async void OnAppearing()
+        public async Task OnAppearing()
         {
+            await CheckBluetoothAndLocation.Check();
+
             /// works since database id counts from 1 - might change to nullable int
             if (_deviceId != 0)
             {
