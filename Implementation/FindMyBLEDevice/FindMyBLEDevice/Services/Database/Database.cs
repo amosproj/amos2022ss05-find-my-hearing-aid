@@ -24,6 +24,12 @@ namespace FindMyBLEDevice.Services.Database
             _database.CreateTableAsync<Models.BTDevice>().Wait();
         }
 
+        public Database(SQLiteAsyncConnection database)
+        {
+            this._database = database;
+        }
+
+
 
         public Task<List<Models.BTDevice>> GetAllDevicesAsync()
         {
