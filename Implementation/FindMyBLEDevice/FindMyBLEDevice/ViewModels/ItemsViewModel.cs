@@ -16,29 +16,25 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class ItemsViewModel : BaseViewModel
     {
-        private BTDevice _selectedSavedDevice;
 
-        private AvailableBTDevice _selectedAvailableDevice;
-
-
-        private ObservableCollection<AvailableBTDevice> availableDevices;
+        private ObservableCollection<BTDevice> availableDevices;
         public ObservableCollection<BTDevice> SavedDevices { get; }
 
         public Command LoadSavedDevicesCommand { get; }
-        public Command<BTDevice> SavedDeviceTapped { get; }
-        public Command<AvailableBTDevice> AvailableDeviceTapped { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
+        public Command<BTDevice> SavedDeviceTapped { get; }
+        public Command<BTDevice> AvailableDeviceTapped { get; }
+        public Command<BTDevice> StrengthButtonTapped { get; }
 
-        public ObservableCollection<AvailableBTDevice> AvailableDevices {
+        public ObservableCollection<BTDevice> AvailableDevices {
             get { 
                 return availableDevices; 
             }
             set
             {
-                List<AvailableBTDevice> devices = value.ToList();
-                devices.Sort((x, y) => y.Rssi.CompareTo(x.Rssi));
-                availableDevices = new ObservableCollection<AvailableBTDevice>(devices);                
+                List<BTDevice> devices = value.ToList();
+                availableDevices = new ObservableCollection<BTDevice>(devices);                
                 OnPropertyChanged(nameof(AvailableDevices));
             }
         }
@@ -50,12 +46,19 @@ namespace FindMyBLEDevice.ViewModels
             SavedDevices = new ObservableCollection<BTDevice>();
             LoadSavedDevicesCommand = new Command(async () => await ExecuteLoadSavedDevicesCommand());
 
-            SavedDeviceTapped = new Command<BTDevice>(OnSavedDeviceSelected);
-            AvailableDeviceTapped = new Command<AvailableBTDevice>(OnAvailableDeviceSelected);
-
-            AvailableDevices = new ObservableCollection<AvailableBTDevice>();
+            AvailableDevices = new ObservableCollection<BTDevice>();
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
+#pragma warning disable CS4014
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
+#pragma warning restore CS4014
+            
+            SavedDeviceTapped = new Command<BTDevice>(
+                async (BTDevice device) => await SelectAndRedirectTo(device, nameof(ItemDetailPage)));
+            AvailableDeviceTapped = new Command<BTDevice>(
+                async (BTDevice device) => await SelectAndRedirectTo(device, nameof(NewItemPage)));
+
+            StrengthButtonTapped = new Command<BTDevice>(
+                async (BTDevice device) => await SelectAndRedirectTo(device, nameof(StrengthPage)));
         }
 
         async Task ExecuteLoadSavedDevicesCommand()
@@ -84,85 +87,31 @@ namespace FindMyBLEDevice.ViewModels
         public async void OnAppearing()
         {
             IsBusy = true;
-            SelectedSavedDevice = null;
 
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
-            List<AvailableBTDevice> available = AvailableDevices.ToList();
-            available.RemoveAll(availableDevice => savedDevices.Exists(saved => saved.BT_GUID == availableDevice.Id.ToString()));
-            AvailableDevices = new ObservableCollection<AvailableBTDevice>(available);
+            List<BTDevice> available = AvailableDevices.ToList();
+            available.RemoveAll(availableDevice => savedDevices.Exists(saved => (saved.BT_GUID.CompareTo(availableDevice.BT_GUID)) == 0));
+            AvailableDevices = new ObservableCollection<BTDevice>(available);
         }
 
-        public BTDevice SelectedSavedDevice
-        {
-            get => _selectedSavedDevice;
-            set
-            {
-                SetProperty(ref _selectedSavedDevice, value);
-                OnSavedDeviceSelected(value);
-            }
-        }
-
-        public AvailableBTDevice SelectedAvailableDevice
-        {
-            get => _selectedAvailableDevice;
-            set
-            {
-                SetProperty(ref _selectedAvailableDevice, value);
-                OnAvailableDeviceSelected(value);
-            }
-        }
-
-        async void OnSavedDeviceSelected(BTDevice device)
-        {
-            if (device == null)
-                return;
-
-            // This will push the ItemDetailPage onto the navigation stack
-            await Shell.Current.GoToAsync($"{nameof(ItemDetailPage)}?{nameof(ItemDetailViewModel.DeviceId)}={device.Id}");
-        }
-
-        async void OnAvailableDeviceSelected(AvailableBTDevice device)
+        async Task SelectAndRedirectTo(BTDevice device, string page)
         {
             if (device == null)
                 return;
 
             await App.Bluetooth.StopSearch();
-            await Shell.Current.GoToAsync($"{nameof(NewItemPage)}?{nameof(NewItemViewModel.BTGUID)}={device.Id}&{nameof(NewItemViewModel.AdvertisedName)}={device.Name}");
+
+            App.DevicesStore.SelectedDevice = device;
+            await Shell.Current.GoToAsync(page);
         }
 
         private async Task ExecuteSearchAvailableDevicesCommand()
         {
             List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
             await App.Location.CheckAndRequestLocationPermission();
-            await App.Bluetooth.Search(20000, AvailableDevices, found => savedDevices.Exists(saved => saved.BT_GUID.Equals(found.Id.ToString())));
+            await App.Bluetooth.Search(20000, AvailableDevices, 
+                found => !savedDevices.Exists(saved => saved.BT_GUID.Equals(found.BT_GUID)));
         }
 
-        public ICommand RedirectToStrengthPage
-        {
-            get
-            {
-                return new Command(async (e) =>
-                {
-                    await App.Bluetooth.StopSearch();
-
-                    int id = 0;
-                    if (e is null)
-                    {
-                        return;
-                    }
-                    else if (e is Models.AvailableBTDevice)
-                    {
-                        var selectedDevice = (e as Models.AvailableBTDevice);
-                        //id = selectedDevice.Id.ToString();
-                    } 
-                    else if (e is Models.BTDevice)
-                    {
-                        var selectedDevice = (e as Models.BTDevice);
-                        id = selectedDevice.Id;
-                    }
-                    await Shell.Current.GoToAsync($"{nameof(StrengthPage)}?{nameof(StrengthViewModel.DeviceId)}={id}");
-                });
-            }
-        }
     }
 }

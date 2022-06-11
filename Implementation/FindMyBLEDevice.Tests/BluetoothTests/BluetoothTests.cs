@@ -33,7 +33,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             var adapter = new Mock<IAdapter>();
             var bt = new Bluetooth(adapter.Object);
 
-            ObservableCollection<AvailableBTDevice> available = new ObservableCollection<AvailableBTDevice>();
+            ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
             // act
             await bt.Search(100, available, null);
@@ -44,7 +44,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
 
             // assert
             Assert.AreEqual(1, available.Count);
-            Assert.AreEqual(id, available[0].Id);
+            Assert.AreEqual(id, available[0].BT_GUID);
         }
 
         [TestMethod]
@@ -64,7 +64,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             var adapter = new Mock<IAdapter>();
             var bt = new Bluetooth(adapter.Object);
 
-            ObservableCollection<AvailableBTDevice> available = new ObservableCollection<AvailableBTDevice>();
+            ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
             // act
             await bt.Search(100, available, null);
@@ -89,7 +89,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             var adapter = new Mock<IAdapter>();
             var bt = new Bluetooth(adapter.Object);
 
-            ObservableCollection<AvailableBTDevice> available = new ObservableCollection<AvailableBTDevice>();
+            ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
             // act
             await bt.Search(100, available, null);
@@ -114,10 +114,10 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             var adapter = new Mock<IAdapter>();
             var bt = new Bluetooth(adapter.Object);
 
-            ObservableCollection<AvailableBTDevice> available = new ObservableCollection<AvailableBTDevice>();
+            ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
             // act
-            await bt.Search(100, available, o => true);
+            await bt.Search(100, available, o => false);
             adapter.Raise(mock => mock.DeviceDiscovered += null, args);
 
             // assert

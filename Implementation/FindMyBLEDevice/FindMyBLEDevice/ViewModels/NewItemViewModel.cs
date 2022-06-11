@@ -54,7 +54,11 @@ namespace FindMyBLEDevice.ViewModels
         private async void OnSave()
         {
 
-            await App.DevicesStore.AddDevice(btGuid, advertisedName, userLabel);
+            await App.DevicesStore.AddDevice(new Models.BTDevice {
+                BT_GUID = btGuid, 
+                AdvertisedName = advertisedName, 
+                UserLabel = userLabel, 
+            });
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");

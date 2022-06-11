@@ -65,7 +65,6 @@ namespace FindMyBLEDevice
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 
