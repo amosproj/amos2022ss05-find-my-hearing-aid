@@ -30,6 +30,7 @@ namespace FindMyBLEDevice.Tests
             };
             var db = new Mock<IDatabase>();
             db.Setup(mock => mock.SaveDeviceAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
+            db.Setup(mock => mock.GetDeviceByGUIDAsync(It.IsAny<string>())).Returns(Task.FromResult(device));
             var store = new DevicesStore(db.Object);
 
             // act
@@ -37,9 +38,9 @@ namespace FindMyBLEDevice.Tests
 
             // assert
             db.Verify(mock => mock.SaveDeviceAsync(It.Is<BTDevice>(savedDevice =>
-                device.BT_GUID == savedDevice.BT_GUID
-                && device.AdvertisedName == savedDevice.AdvertisedName
-                && device.UserLabel == savedDevice.UserLabel
+                device.BT_GUID.Equals(savedDevice.BT_GUID)
+                && device.AdvertisedName.Equals(savedDevice.AdvertisedName)
+                && device.UserLabel.Equals(savedDevice.UserLabel)
                 )), Times.Once);
             Assert.IsNull(result.Exception);
         }
@@ -96,8 +97,8 @@ namespace FindMyBLEDevice.Tests
             db.Verify(mock => mock.SaveDeviceAsync(It.Is<BTDevice>(savedDevice =>
                 savedDevice.ID == device.ID
                 && savedDevice.UserLabel.Equals(newDevice.UserLabel)
-                && device.LastGPSLongitude.Equals(newDevice.LastGPSLongitude)
-                && device.LastGPSLatitude.Equals(newDevice.LastGPSLatitude))),
+                && savedDevice.LastGPSLongitude.Equals(newDevice.LastGPSLongitude)
+                && savedDevice.LastGPSLatitude.Equals(newDevice.LastGPSLatitude))),
                 Times.Once);
             Assert.IsNull(result.Exception);
         }
