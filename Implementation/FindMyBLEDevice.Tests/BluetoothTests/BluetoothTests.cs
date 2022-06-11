@@ -5,10 +5,12 @@ using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Bluetooth;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
+using Plugin.BLE.Abstractions;
 using Plugin.BLE.Abstractions.Contracts;
 using Plugin.BLE.Abstractions.EventArgs;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.Tests.BluetoothTests
@@ -122,6 +124,69 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
 
             // assert
             Assert.AreEqual(0, available.Count);
+        }
+
+        [TestMethod]
+        public async Task StopSearch_MakesCorrectAdapterCall()
+        {
+            // arrange
+            var adapter = new Mock<IAdapter>();
+            adapter.SetupGet(mock => mock.IsScanning).Returns(true);
+            var bt = new Bluetooth(adapter.Object);
+
+            // act
+            await bt.StopSearch();
+
+            // assert
+            adapter.VerifyGet(mock => mock.IsScanning, Times.Once);
+            adapter.Verify(mock => mock.StopScanningForDevicesAsync(), Times.Once);
+        }
+
+        [TestMethod]
+        public async Task StartAndStopRssiPolling()
+        {
+            // arrange
+            const int fakeRssi = 1;
+            var device = new Mock<IDevice>();
+            device.SetupGet(mock => mock.Rssi).Returns(fakeRssi);
+            var adapter = new Mock<IAdapter>();
+            adapter
+                .Setup(mock => mock.ConnectToKnownDeviceAsync(It.IsAny<Guid>(), It.IsAny<ConnectParameters>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.FromResult(device.Object));
+            var bt = new Bluetooth(adapter.Object);
+
+            // act
+            int rssi = 0;
+            await bt.StartRssiPolling(Guid.Empty.ToString(), (int input) =>
+            {
+                rssi = input;
+            });
+            Thread.Sleep(200); // other thread should make the first poll instantaniously, so waiting 200ms should be more than enough
+            bt.StopRssiPolling();
+
+            // assert
+            device.Verify(mock => mock.UpdateRssiAsync(), Times.Once);
+            device.VerifyGet(mock => mock.Rssi, Times.Once);
+            Assert.AreEqual(fakeRssi, rssi);
+        }
+
+        [TestMethod]
+        public void StopRssiPolling_WithoutStartDoesNotBreakAnything()
+        {
+            // arrange
+            var bt = new Bluetooth(null);
+            Exception? exception = null;
+
+            // act
+            try
+            {
+                bt.StopRssiPolling();
+            } catch (Exception e) {
+                exception = e;
+            }
+
+            // assert
+            Assert.IsNull(exception);
         }
     }
 }
