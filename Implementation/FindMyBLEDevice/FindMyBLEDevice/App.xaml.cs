@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Bluetooth;
