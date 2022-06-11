@@ -51,7 +51,6 @@ namespace FindMyBLEDevice.ViewModels
             
             await App.Bluetooth.StartRssiPolling(device.BT_GUID, (int v) => {
                 CurrentRssi = v;
-                return 0;
             });
 
         }

@@ -12,7 +12,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
     public interface IBluetooth
     {
         Task Search(int scanTimeout, ObservableCollection<AvailableBTDevice> availableDevices, Predicate<AvailableBTDevice> filter);
-        Task StartRssiPolling(string btguid, Func<int, int> updateRssi);
+        Task StartRssiPolling(string btguid, Action<int> updateRssi);
         void StopRssiPolling();
         Task StopSearch();
     }

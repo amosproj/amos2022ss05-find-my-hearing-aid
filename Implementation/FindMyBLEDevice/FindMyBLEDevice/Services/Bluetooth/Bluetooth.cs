@@ -71,7 +71,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
             }
         }
         
-        public async Task StartRssiPolling(String btguid, Func<int, int> updateRssi)
+        public async Task StartRssiPolling(String btguid, Action<int> updateRssi)
         {
             try
             {
