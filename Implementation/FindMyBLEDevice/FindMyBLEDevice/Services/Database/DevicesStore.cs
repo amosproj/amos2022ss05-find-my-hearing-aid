@@ -1,12 +1,15 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.IO;
 using FindMyBLEDevice.Exceptions;
+using FindMyBLEDevice.Models;
 
 namespace FindMyBLEDevice.Services.Database
 {
@@ -14,6 +17,8 @@ namespace FindMyBLEDevice.Services.Database
     {
 
         private readonly IDatabase _database;
+
+        public BTDevice SelectedDevice { get; set; }
 
         public DevicesStore()
         {
@@ -26,22 +31,14 @@ namespace FindMyBLEDevice.Services.Database
         }
 
 
-        public async Task AddDevice(string btGuid, string advertisedName, string userLabel)
+        public async Task<BTDevice> AddDevice(Models.BTDevice device)
         {
-
-            Models.BTDevice device = new Models.BTDevice()
-            {
-                BT_GUID = btGuid,
-                AdvertisedName = advertisedName,
-                UserLabel = userLabel,
-                CreatedAt = DateTime.UtcNow,
-            };
-
             Console.WriteLine("DevicesStore.AddDevice:");
-            Console.WriteLine(btGuid);
-            Console.WriteLine(advertisedName);
-            Console.WriteLine(userLabel);
+            Console.WriteLine(device.BT_GUID);
+            Console.WriteLine(device.AdvertisedName);
+            Console.WriteLine(device.UserLabel);
 
+            device.ID = 0; //so that database adds instead of overwriting existing device
             int result = await _database.SaveDeviceAsync(device);
 
             if(result != 1)
@@ -49,58 +46,18 @@ namespace FindMyBLEDevice.Services.Database
                 throw new DeviceStoreException("Saving device failed!");
             }
 
+            return await GetDeviceByGUID(device.BT_GUID);
         }
 
-        public async Task UpdateDeviceUserLabel(int id, string userLabel)
+        public async Task UpdateDevice(Models.BTDevice device)
         {
-            Models.BTDevice device = await _database.GetDeviceAsync(id);
+            Models.BTDevice storedDevice = await _database.GetDeviceAsync(device.ID);
 
-            if (device is null)
+            if (storedDevice is null)
             {
                 throw new ArgumentException("Device with given id is not saved in database!");
             }
 
-            device.UserLabel = userLabel;
-            int result = await _database.SaveDeviceAsync(device);
-
-            if (result != 1)
-            {
-                throw new DeviceStoreException("Updating device failed!");
-            }
-
-        }
-
-        public async Task UpdateDeviceLocation(int id, double latitude, double longitude)
-        {
-            Models.BTDevice device = await _database.GetDeviceAsync(id);
-
-            if (device is null)
-            {
-                throw new ArgumentException("Device with given id is not saved in database!");
-            }
-
-            device.LastGPSLatitude = latitude;
-            device.LastGPSLongitude = longitude;
-            device.LastGPSTimestamp = DateTime.UtcNow;
-            int result = await _database.SaveDeviceAsync(device);
-
-            if (result != 1)
-            {
-                throw new DeviceStoreException("Updating device failed!");
-            }
-
-        }
-
-        public async Task UpdateDeviceActive(int id, bool active)
-        {
-            Models.BTDevice device = await _database.GetDeviceAsync(id);
-
-            if (device is null)
-            {
-                throw new ArgumentException("Device with given id is not saved in database!");
-            }
-
-            device.Active = active;
             int result = await _database.SaveDeviceAsync(device);
 
             if (result != 1)
@@ -140,12 +97,31 @@ namespace FindMyBLEDevice.Services.Database
             return device;
         }
 
+        public async Task<BTDevice> GetDeviceByGUID(string guid)
+        {
+            Models.BTDevice device = await _database.GetDeviceByGUIDAsync(guid);
+            if (device is null)
+            {
+                throw new ArgumentException("Device with given guid is not saved in database!");
+            }
+
+            return device;
+        }
+
         public async Task<List<Models.BTDevice>> GetAllDevices()
         {
             return await _database.GetAllDevicesAsync();
         }
 
+        public Task<BTDevice> GetSelectedDevice()
+        {
+            throw new NotImplementedException();
+        }
 
+        public Task SetSelectedDevice(BTDevice device)
+        {
+            throw new NotImplementedException();
+        }
     }
 
 }

@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Models;
 using Plugin.BLE;
@@ -31,12 +33,12 @@ namespace FindMyBLEDevice.Services.Bluetooth
         }
         public Bluetooth() : this(CrossBluetoothLE.Current.Adapter) {}
 
-        public async Task Search(int scanTimeout, ObservableCollection<AvailableBTDevice> availableDevices, Predicate<AvailableBTDevice> filter)
+        public async Task Search(int scanTimeout, ObservableCollection<BTDevice> availableDevices, Predicate<BTDevice> filter)
         {
 
             adapter.DeviceDiscovered += (s, a) => {
                 Console.WriteLine(a.Device.Id);
-                if (availableDevices.ToList<AvailableBTDevice>().Exists(o => o.Id == a.Device.Id))
+                if (availableDevices.ToList<BTDevice>().Exists(o => Guid.Parse(o.BT_GUID) == a.Device.Id))
                 {
                     return;
                 }
@@ -46,14 +48,13 @@ namespace FindMyBLEDevice.Services.Bluetooth
                     return;
                 }
 
-                AvailableBTDevice device = (new AvailableBTDevice()
+                BTDevice device = (new BTDevice()
                 {
-                    Name = a.Device.Name,
-                    Id = a.Device.Id,
-                    Rssi = a.Device.Rssi
+                    AdvertisedName = a.Device.Name,
+                    BT_GUID = a.Device.Id.ToString()
                 });
 
-                if (filter == null || !filter(device))
+                if (filter == null || filter(device))
                 {
                     availableDevices.Add(device);
                 }
