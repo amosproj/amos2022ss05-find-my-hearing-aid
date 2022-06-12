@@ -5,7 +5,6 @@
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Database;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using SQLite;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -13,26 +12,29 @@ using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.Tests
 {
+
     [TestClass]
-    class DatabaseTests
+    public class DatabaseTests
     {
 
         [TestMethod]
         public void GetAllDevicesAsync_CallsSQLitePackageMethodCorrectlyEmpty()
         {
             // arrange
-            var conn = new Mock<SQLiteAsyncConnection>();
-            conn.Setup(mock => mock.Table<BTDevice>().ToListAsync()).Returns(Task.FromResult(new List<BTDevice>()));
-            var database = new Database(conn.Object);
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();            
+            var database = new Database(connection);
 
             // act
             Task<List<BTDevice>> result = database.GetAllDevicesAsync();
             result.Wait();
 
             // assert
-            conn.Verify(mock => mock.Table<BTDevice>().ToListAsync(), Times.Once);
             Assert.IsNull(result.Exception);
             Assert.AreEqual(0, result.Result.Count);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
 
         }
 
@@ -40,33 +42,34 @@ namespace FindMyBLEDevice.Tests
         public void GetAllDevicesAsync_CallsSQLitePackageMethodCorrectlyWithResult()
         {
             // arrange
-            BTDevice a = new BTDevice()
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
             {
-                Id = 1,
-                BT_GUID = "a"
-            };
-            BTDevice b = new BTDevice()
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
             {
-                Id = 2,
-                BT_GUID = "b"
-            };
-
-            var conn = new Mock<SQLiteAsyncConnection>();
-            conn.Setup(mock => mock.Table<BTDevice>().ToListAsync()).Returns(Task.FromResult(new List<BTDevice>() { a, b }));
-            var database = new Database(conn.Object);
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
 
             // act
             Task<List<BTDevice>> result = database.GetAllDevicesAsync();
             result.Wait();
 
             // assert
-            conn.Verify(mock => mock.Table<BTDevice>().ToListAsync(), Times.Once);
             Assert.IsNull(result.Exception);
             Assert.AreEqual(2, result.Result.Count);
-            Assert.AreEqual(1, result.Result[0].Id);
-            Assert.AreEqual("a", result.Result[0].BT_GUID);
-            Assert.AreEqual(2, result.Result[1].Id);
-            Assert.AreEqual("b", result.Result[1].BT_GUID);
+            Assert.AreEqual("BTID1", result.Result[0].BT_GUID);
+            Assert.AreEqual("AdvName1", result.Result[0].AdvertisedName);
+            Assert.AreEqual("BTID2", result.Result[1].BT_GUID);
+            Assert.AreEqual("AdvName2", result.Result[1].AdvertisedName);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
 
         }
 
@@ -74,26 +77,61 @@ namespace FindMyBLEDevice.Tests
         public void GetDeviceAsync_CallsSQLitePackageMethodCorrectlyWithResult()
         {
             // arrange
-            BTDevice a = new BTDevice()
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
             {
-                Id = 1,
-                BT_GUID = "a"
-            };
-            int id = 1;
-
-            var conn = new Mock<SQLiteAsyncConnection>();
-            conn.Setup(mock => mock.Table<BTDevice>().Where(i => i.Id == id).FirstOrDefaultAsync()).Returns(Task.FromResult(a));
-            var database = new Database(conn.Object);
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
 
             // act
             Task<BTDevice> result = database.GetDeviceAsync(1);
             result.Wait();
 
             // assert
-            conn.Verify(mock => mock.Table<BTDevice>().Where(i => i.Id == id).FirstOrDefaultAsync(), Times.Once);
             Assert.IsNull(result.Exception);
             Assert.AreEqual(1, result.Result.Id);
-            Assert.AreEqual("a", result.Result.BT_GUID);
+            Assert.AreEqual("BTID1", result.Result.BT_GUID);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
+
+        }
+
+        [TestMethod]
+        public void GetDeviceAsync_CallsSQLitePackageMethodCorrectlyWithoutResult()
+        {
+            // arrange
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
+
+            // act
+            Task<BTDevice> result = database.GetDeviceAsync(4);
+            result.Wait();
+
+            // assert
+            Assert.IsNull(result.Exception);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
 
         }
 
@@ -104,35 +142,39 @@ namespace FindMyBLEDevice.Tests
             BTDevice a = new BTDevice()
             {
                 Id = 0,
-                BT_GUID = "a",
+                BT_GUID = "NEWBTGUID",
                 UserLabel = "userlabel",
                 AdvertisedName = "advname"
             };
 
-            var conn = new Mock<SQLiteAsyncConnection>();
-            conn.Setup(mock => mock.InsertAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
-            conn.Setup(mock => mock.UpdateAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
-            var database = new Database(conn.Object);
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
 
             // act
             Task<int> result = database.SaveDeviceAsync(a);
             result.Wait();
 
-            // assert
-            conn.Verify(mock => mock.InsertAsync(It.Is<BTDevice>(device =>
-                device.Id == 0
-                && device.BT_GUID.Equals("a")
-                && device.UserLabel.Equals("userlabel")
-                && device.AdvertisedName.Equals("advname"))),
-                Times.Once);
-            conn.Verify(mock => mock.UpdateAsync(It.Is<BTDevice>(device =>
-                device.Id == 0
-                && device.BT_GUID.Equals("a")
-                && device.UserLabel.Equals("userlabel")
-                && device.AdvertisedName.Equals("advname"))),
-                Times.Never);
+            // assert            
             Assert.IsNull(result.Exception);
             Assert.AreEqual(1, result.Result);
+            Task<BTDevice> check = database.GetDeviceAsync(3);
+            check.Wait();
+            Assert.AreEqual(3, check.Result.Id);
+            Assert.AreEqual("NEWBTGUID", check.Result.BT_GUID);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
 
         }
 
@@ -142,36 +184,41 @@ namespace FindMyBLEDevice.Tests
             // arrange
             BTDevice a = new BTDevice()
             {
-                Id = 3,
-                BT_GUID = "a",
+                Id = 1,
+                BT_GUID = "BTID1_UPDATED",
                 UserLabel = "userlabel",
-                AdvertisedName = "advname"
+                AdvertisedName = "AdvName1Updated"
             };
-
-            var conn = new Mock<SQLiteAsyncConnection>();
-            conn.Setup(mock => mock.InsertAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
-            conn.Setup(mock => mock.UpdateAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
-            var database = new Database(conn.Object);
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
 
             // act
             Task<int> result = database.SaveDeviceAsync(a);
             result.Wait();
 
-            // assert
-            conn.Verify(mock => mock.InsertAsync(It.Is<BTDevice>(device =>
-                device.Id == 3
-                && device.BT_GUID.Equals("a")
-                && device.UserLabel.Equals("userlabel")
-                && device.AdvertisedName.Equals("advname"))),
-                Times.Never);
-            conn.Verify(mock => mock.UpdateAsync(It.Is<BTDevice>(device =>
-                device.Id == 3
-                && device.BT_GUID.Equals("a")
-                && device.UserLabel.Equals("userlabel")
-                && device.AdvertisedName.Equals("advname"))),
-                Times.Once);
+            // assert            
             Assert.IsNull(result.Exception);
             Assert.AreEqual(1, result.Result);
+            Task<BTDevice> check = database.GetDeviceAsync(1);
+            check.Wait();
+            Assert.AreEqual(1, check.Result.Id);
+            Assert.AreEqual("BTID1_UPDATED", check.Result.BT_GUID);
+            Assert.AreEqual("userlabel", check.Result.UserLabel);
+            Assert.AreEqual("AdvName1Updated", check.Result.AdvertisedName);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
 
         }
 
@@ -181,29 +228,40 @@ namespace FindMyBLEDevice.Tests
             // arrange
             BTDevice a = new BTDevice()
             {
-                Id = 4,
-                BT_GUID = "a",
-                UserLabel = "userlabel",
-                AdvertisedName = "advname"
+                Id = 1,
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
             };
-
-            var conn = new Mock<SQLiteAsyncConnection>();
-            conn.Setup(mock => mock.DeleteAsync(It.IsAny<BTDevice>())).Returns(Task.FromResult(1));
-            var database = new Database(conn.Object);
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
 
             // act
             Task<int> result = database.DeleteDeviceAsync(a);
             result.Wait();
 
-            // assert
-            conn.Verify(mock => mock.DeleteAsync(It.Is<BTDevice>(device =>
-                device.Id == 4
-                && device.BT_GUID.Equals("a")
-                && device.UserLabel.Equals("userlabel")
-                && device.AdvertisedName.Equals("advname"))),
-                Times.Once);
+            // assert            
             Assert.IsNull(result.Exception);
             Assert.AreEqual(1, result.Result);
+            Task<BTDevice> check = database.GetDeviceAsync(1);
+            check.Wait();
+            Assert.IsNull(check.Result);
+            Task<List<BTDevice>> check2 = database.GetAllDevicesAsync();
+            check2.Wait();
+            Assert.AreEqual(1, check2.Result.Count);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
 
         }
 
