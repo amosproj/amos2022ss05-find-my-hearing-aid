@@ -45,7 +45,7 @@ namespace FindMyBLEDevice.Services.Database
         public Task<Models.BTDevice> GetDeviceByGUIDAsync(string guid)
         {
             return _database.Table<Models.BTDevice>()
-                            .Where(i => i.BT_GUID.CompareTo(guid) == 0)
+                            .Where(i => i.BT_GUID.Equals(guid))
                             .FirstOrDefaultAsync();
         }
 

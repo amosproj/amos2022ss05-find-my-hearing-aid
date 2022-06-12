@@ -9,17 +9,14 @@ using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    [QueryProperty(nameof(DeviceId), nameof(DeviceId))]
     public class StrengthViewModel : BaseViewModel
     {
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
-                
-        private BTDevice _device;
+        
         private int _radius;
         private double _meter;
         private int _currentRssi;
-        private int _deviceId;
 
         public StrengthViewModel()
         {
@@ -30,14 +27,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public BTDevice Device
         {
-            get => _device;
-            set => SetProperty(ref _device, value);
-        }
-
-        public int DeviceId
-        {
-            get => _deviceId;
-            set => SetProperty(ref _deviceId, value);
+            get => App.DevicesStore.SelectedDevice;
         }
 
         public int Radius
@@ -69,10 +59,9 @@ namespace FindMyBLEDevice.ViewModels
         public async void OnAppearing()
         {
             /// works since database id counts from 1 - might change to nullable int
-            if (_deviceId != 0)
+            if (!(App.DevicesStore.SelectedDevice is null))
             {
-                Device = await App.DevicesStore.GetDevice(_deviceId);
-                await App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v) =>
+                await App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
                 {
                     CurrentRssi = v;
                     return 0;
