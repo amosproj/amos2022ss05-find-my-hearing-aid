@@ -1,11 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
+using FindMyBLEDevice.Models;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -15,5 +11,12 @@ namespace FindMyBLEDevice.ViewModels
         {
             Title = "MapSearch";
         }
+        public BTDevice Device
+        {
+            get => App.DevicesStore.SelectedDevice;
+        }
+
+        public void OnAppearing() { }
+        public void OnDisappearing() { }
     }
 }
