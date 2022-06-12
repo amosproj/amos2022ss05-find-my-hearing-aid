@@ -135,6 +135,69 @@ namespace FindMyBLEDevice.Tests
 
         }
 
+
+        [TestMethod]
+        public void GetDeviceByGuidAsync_CallsSQLitePackageMethodCorrectlyWithResult()
+        {
+            // arrange
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
+
+            // act
+            Task<BTDevice> result = database.GetDeviceByGUIDAsync("BTID1");
+            result.Wait();
+
+            // assert
+            Assert.IsNull(result.Exception);
+            Assert.AreEqual(1, result.Result.ID);
+            Assert.AreEqual("BTID1", result.Result.BT_GUID);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
+
+        }
+
+        [TestMethod]
+        public void GetDeviceByGuidAsync_CallsSQLitePackageMethodCorrectlyWithoutResult()
+        {
+            // arrange
+            SQLiteAsyncConnection connection = new SQLiteAsyncConnection(":memory:");
+            connection.CreateTableAsync<Models.BTDevice>().Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID1",
+                AdvertisedName = "AdvName1"
+            }).Wait();
+            connection.InsertAsync(new BTDevice
+            {
+                BT_GUID = "BTID2",
+                AdvertisedName = "AdvName2"
+            }).Wait();
+            var database = new Database(connection);
+
+            // act
+            Task<BTDevice> result = database.GetDeviceByGUIDAsync("BTID5");
+            result.Wait();
+
+            // assert
+            Assert.IsNull(result.Exception);
+
+            // clean-up
+            connection.DropTableAsync<BTDevice>().Wait();
+
+        }
+
         [TestMethod]
         public void SaveDeviceAsync_Insert_CallsSQLitePackageMethodCorrectly()
         {
