@@ -22,14 +22,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
         
         private readonly IAdapter adapter;
 
-        private Timer rssiPollingTimer;
-
-        private int RssiPollInterval { get; }
+        private CancellationTokenSource rssiCancel;
 
         public Bluetooth(IAdapter adapter)
         {
             this.adapter = adapter;
-            RssiPollInterval = 1000;
         }
         public Bluetooth() : this(CrossBluetoothLE.Current.Adapter) {}
 
@@ -72,28 +69,46 @@ namespace FindMyBLEDevice.Services.Bluetooth
             }
         }
         
-        public async Task StartRssiPolling(String btguid, Func<int, int> updateRssi)
+        public void StartRssiPolling(String btguid, Action<int> updateRssi, Action connected = null, Action disconnected = null)
         {
-            try
+            StopRssiPolling();
+            rssiCancel = new CancellationTokenSource();
+            var token = rssiCancel.Token;
+            Task.Run(async () =>
             {
-                IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
+                while (!token.IsCancellationRequested)
+                {
+                    try
+                    {
+                        IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
 
-                rssiPollingTimer = new Timer(async (o) => {
+                        if (!(connected is null)) connected.Invoke();
 
-                    await device.UpdateRssiAsync();
-                    updateRssi.Invoke(device.Rssi);
-
-                }, "", 0, RssiPollInterval);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+                        try
+                        {
+                            while((!token.IsCancellationRequested) && device.State == DeviceState.Connected)
+                            {
+                                await device.UpdateRssiAsync();
+                                updateRssi.Invoke(device.Rssi);
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
+                        if (!(disconnected is null)) disconnected.Invoke();
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
+                }
+            }, token);
         }
 
         public void StopRssiPolling()
         {
-            rssiPollingTimer?.Dispose();
+            rssiCancel?.Cancel();
         }
     }
 }

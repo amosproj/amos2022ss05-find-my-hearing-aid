@@ -13,16 +13,23 @@ namespace FindMyBLEDevice.ViewModels
     {
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
+        private readonly double meterSmoothing;
+        private readonly double meterClosebyThreshold;
         
         private int _radius;
         private double _meter;
         private int _currentRssi;
+
+        private string _status;
 
         public StrengthViewModel()
         {
             Title = "StrengthSearch";
             meterScaleMin = rssiToMeter(0);
             meterScaleMax = rssiToMeter(-100);
+            meterSmoothing = 0.95;
+            meterClosebyThreshold = 1.5;
+            _status = "Uninitialized";
         }
 
         public BTDevice Device
@@ -52,19 +59,49 @@ namespace FindMyBLEDevice.ViewModels
             set
             {
                 SetProperty(ref _currentRssi, value);
-                Meter = rssiToMeter(CurrentRssi);
+                Meter = meterSmoothing*Meter + (1-meterSmoothing)*rssiToMeter(CurrentRssi);
             }
         }
 
-        public async void OnAppearing()
+        public string Status
         {
-            /// works since database id counts from 1 - might change to nullable int
-            if (!(App.DevicesStore.SelectedDevice is null))
+            get => _status;
+            set => SetProperty(ref _status, value);
+        }
+
+        public void OnAppearing()
+        {
+            if (App.DevicesStore.SelectedDevice is null)
             {
-                await App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
+                Status = "No device selected!\nPlease select a device to continue.";
+            }
+            else
+            {
+                Status = "Connecting to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\"...\n" +
+                    "If this takes longer than a few seconds, the device is probably out of range or turned off.";
+                App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
                 {
                     CurrentRssi = v;
-                    return 0;
+                    if(Meter <= meterClosebyThreshold)
+                    {
+                        Status = "\"" + App.DevicesStore.SelectedDevice.UserLabel + "\" is very close!\n"+
+                            "Try searching the vicinity to find it.";
+                    }
+                    else
+                    {
+                        Status = "Connected to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\".\n" +
+                            "Move around to see in which direction the signal gets better.";
+                    }
+                }, () =>
+                {
+                    Status = "Connected to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\".\n" +
+                        "Move around to see in which direction the signal gets better.";
+                }, () =>
+                {
+                    Status = "Disconnected! Trying to reconnect...\n" +
+                        "Please move back into range of the device.";
+                    CurrentRssi = -100;
+                    Meter = meterScaleMax;
                 });
             }
         }
