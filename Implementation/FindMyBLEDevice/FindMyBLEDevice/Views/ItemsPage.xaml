@@ -74,7 +74,7 @@
                                             BorderColor="Black"
                                             BorderWidth="1"
                                             Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.RedirectToStrengthPage}"
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"
                                             CommandParameter="{Binding .}"
                                         />
                                     </Grid>
