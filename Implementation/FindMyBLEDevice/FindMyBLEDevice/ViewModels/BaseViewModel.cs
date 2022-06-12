@@ -1,4 +1,7 @@
-﻿using FindMyBLEDevice.Models;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services;
 using System;
 using System.Collections.Generic;
@@ -10,8 +13,6 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class BaseViewModel : INotifyPropertyChanged
     {
-        public IDataStore<Item> DataStore => DependencyService.Get<IDataStore<Item>>();
-
         bool isBusy = false;
         public bool IsBusy
         {
@@ -27,7 +28,9 @@ namespace FindMyBLEDevice.ViewModels
         }
 
         protected bool SetProperty<T>(ref T backingStore, T value,
+#pragma warning disable S3343 // Caller information parameters should come at the end of the parameter list
             [CallerMemberName] string propertyName = "",
+#pragma warning restore S3343 // Caller information parameters should come at the end of the parameter list
             Action onChanged = null)
         {
             if (EqualityComparer<T>.Default.Equals(backingStore, value))

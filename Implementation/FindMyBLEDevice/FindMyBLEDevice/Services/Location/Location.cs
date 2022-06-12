@@ -32,7 +32,7 @@ namespace FindMyBLEDevice.Services.Location
 
             if (Permissions.ShouldShowRationale<Permissions.LocationWhenInUse>())
             {
-                
+                //comment to make linter happy
             }
 
             status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();

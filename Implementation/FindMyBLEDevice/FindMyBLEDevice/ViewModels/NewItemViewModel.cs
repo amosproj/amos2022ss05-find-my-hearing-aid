@@ -3,13 +3,9 @@ using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    [QueryProperty(nameof(BTGUID), nameof(BTGUID))]
-    [QueryProperty(nameof(AdvertisedName), nameof(AdvertisedName))]
     public class NewItemViewModel : BaseViewModel
     {
-        private string btGuid;
-        private string advertisedName;
-        private string userLabel;
+        private Models.BTDevice device;
 
         public NewItemViewModel()
         {
@@ -17,29 +13,39 @@ namespace FindMyBLEDevice.ViewModels
             CancelCommand = new Command(OnCancel);
             this.PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
+            device = new Models.BTDevice();
+        }
+
+        public void OnAppearing()
+        {
+            device = App.DevicesStore.SelectedDevice;
         }
 
         private bool ValidateSave()
         {
-            return !String.IsNullOrWhiteSpace(userLabel);
+            return !String.IsNullOrWhiteSpace(device.UserLabel);
         }
 
         public string BTGUID
         {
-            get => btGuid;
-            set => SetProperty(ref btGuid, value);
+            get => device.BT_GUID;
         }
 
         public string UserLabel
         {
-            get => userLabel;
-            set => SetProperty(ref userLabel, value);
+            get => device.UserLabel;
+            set {
+                if (device.UserLabel != value)
+                {
+                    device.UserLabel = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public string AdvertisedName
         {
-            get => advertisedName;
-            set => SetProperty(ref advertisedName, value);
+            get => device.AdvertisedName;
         }
 
         public Command SaveCommand { get; }
@@ -54,7 +60,7 @@ namespace FindMyBLEDevice.ViewModels
         private async void OnSave()
         {
 
-            await App.DevicesStore.AddDevice(btGuid, advertisedName, userLabel);
+            App.DevicesStore.SelectedDevice = await App.DevicesStore.AddDevice(device);
 
             // This will pop the current page off the navigation stack
             await Shell.Current.GoToAsync("..");
