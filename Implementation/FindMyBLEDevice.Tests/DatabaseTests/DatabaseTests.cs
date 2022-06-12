@@ -97,7 +97,7 @@ namespace FindMyBLEDevice.Tests
 
             // assert
             Assert.IsNull(result.Exception);
-            Assert.AreEqual(1, result.Result.Id);
+            Assert.AreEqual(1, result.Result.ID);
             Assert.AreEqual("BTID1", result.Result.BT_GUID);
 
             // clean-up
@@ -141,7 +141,7 @@ namespace FindMyBLEDevice.Tests
             // arrange
             BTDevice a = new BTDevice()
             {
-                Id = 0,
+                ID = 0,
                 BT_GUID = "NEWBTGUID",
                 UserLabel = "userlabel",
                 AdvertisedName = "advname"
@@ -170,7 +170,7 @@ namespace FindMyBLEDevice.Tests
             Assert.AreEqual(1, result.Result);
             Task<BTDevice> check = database.GetDeviceAsync(3);
             check.Wait();
-            Assert.AreEqual(3, check.Result.Id);
+            Assert.AreEqual(3, check.Result.ID);
             Assert.AreEqual("NEWBTGUID", check.Result.BT_GUID);
 
             // clean-up
@@ -184,7 +184,7 @@ namespace FindMyBLEDevice.Tests
             // arrange
             BTDevice a = new BTDevice()
             {
-                Id = 1,
+                ID = 1,
                 BT_GUID = "BTID1_UPDATED",
                 UserLabel = "userlabel",
                 AdvertisedName = "AdvName1Updated"
@@ -212,7 +212,7 @@ namespace FindMyBLEDevice.Tests
             Assert.AreEqual(1, result.Result);
             Task<BTDevice> check = database.GetDeviceAsync(1);
             check.Wait();
-            Assert.AreEqual(1, check.Result.Id);
+            Assert.AreEqual(1, check.Result.ID);
             Assert.AreEqual("BTID1_UPDATED", check.Result.BT_GUID);
             Assert.AreEqual("userlabel", check.Result.UserLabel);
             Assert.AreEqual("AdvName1Updated", check.Result.AdvertisedName);
@@ -228,7 +228,7 @@ namespace FindMyBLEDevice.Tests
             // arrange
             BTDevice a = new BTDevice()
             {
-                Id = 1,
+                ID = 1,
                 BT_GUID = "BTID1",
                 AdvertisedName = "AdvName1"
             };
