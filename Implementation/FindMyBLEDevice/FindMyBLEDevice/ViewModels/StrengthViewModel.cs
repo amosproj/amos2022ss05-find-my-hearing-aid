@@ -15,7 +15,6 @@ namespace FindMyBLEDevice.ViewModels
     {
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
-        private readonly double meterSmoothing;
         private readonly double meterClosebyThreshold;
         private readonly List<int> rssiBuff;
         
