@@ -83,13 +83,10 @@ namespace FindMyBLEDevice.ViewModels
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
                 App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
                 {
-                    const int buffSize = 10;
+                    const int buffSize = 40;
                     rssiBuff.Add(v);
-                    if (rssiBuff.Count == buffSize)
-                    {
-                        CurrentRssi = (int)rssiBuff.Average();
-                        rssiBuff.Clear();
-                    }
+                    if (rssiBuff.Count > buffSize) rssiBuff.RemoveAt(0);
+                    CurrentRssi = (int)rssiBuff.Average();
 
                     if(Meter <= meterClosebyThreshold)
                     {
