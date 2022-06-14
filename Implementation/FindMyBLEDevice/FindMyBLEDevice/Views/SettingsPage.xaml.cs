@@ -10,12 +10,12 @@ using Xamarin.Forms.Xaml;
 namespace FindMyBLEDevice.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
+    public partial class SettingsPage : ContentPage
     {
-        public LoginPage()
+        public SettingsPage()
         {
             InitializeComponent();
-            this.BindingContext = new LoginViewModel();
+            this.BindingContext = new SettingsViewModel();
         }
     }
 }

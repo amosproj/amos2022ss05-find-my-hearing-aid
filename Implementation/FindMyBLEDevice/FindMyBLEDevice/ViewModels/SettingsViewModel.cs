@@ -6,16 +6,16 @@ using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
-    public class LoginViewModel : BaseViewModel
+    public class SettingsViewModel : BaseViewModel
     {
-        public Command LoginCommand { get; }
+        public Command SettingsCommand { get; }
 
-        public LoginViewModel()
+        public SettingsViewModel()
         {
-            LoginCommand = new Command(OnLoginClicked);
+            SettingsCommand = new Command(OnSettingsClicked);
         }
 
-        private async void OnLoginClicked(object obj)
+        private async void OnSettingsClicked(object obj)
         {
             // Prefixing with `//` switches to a different navigation stack instead of pushing to the active one
             await Shell.Current.GoToAsync($"//{nameof(AboutPage)}");
