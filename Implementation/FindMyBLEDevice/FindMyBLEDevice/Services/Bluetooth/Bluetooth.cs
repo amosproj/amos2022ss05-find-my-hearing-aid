@@ -19,6 +19,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
 {
     public class Bluetooth : IBluetooth
     {
+        private const int PollDelay = 25;
         
         private readonly IAdapter adapter;
 
@@ -90,7 +91,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                             {
                                 await device.UpdateRssiAsync();
                                 updateRssi.Invoke(device.Rssi);
-                                await Task.Delay(25);
+                                await Task.Delay(PollDelay);
                             }
                         }
                         catch (Exception e)
