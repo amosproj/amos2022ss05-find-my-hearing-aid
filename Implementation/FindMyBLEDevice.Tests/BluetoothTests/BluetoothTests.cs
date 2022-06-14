@@ -167,7 +167,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             () => { },
             () => { }
             );
-            Thread.Sleep(100); // polling interval is 25ms
+            await Task.Delay(100); // polling interval is 25ms
             bt.StopRssiPolling();
 
             // assert
