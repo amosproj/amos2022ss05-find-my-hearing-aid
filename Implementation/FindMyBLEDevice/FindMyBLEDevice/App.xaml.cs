@@ -68,32 +68,5 @@ namespace FindMyBLEDevice
 
             MainPage = new AppShell();
         }
-
-        protected override void OnStart()
-        {
-            // comment to make the linter happy
-        }
-
-        protected override void OnSleep()
-        {
-            // comment to make the linter happy
-        }
-
-        protected override void OnResume()
-        {
-            // comment to make the linter happy
-        }
-
-        /// <summary>
-        /// This method was created for setting up unit tests. 
-        /// It may be deleted in the future.
-        /// </summary>
-        /// <param name="a">A number</param>
-        /// <param name="b">Another number</param>
-        /// <returns>The sum of those numbers</returns>
-        public int Add(int a, int b)
-        {
-            return a + b;
-        }
     }
 }

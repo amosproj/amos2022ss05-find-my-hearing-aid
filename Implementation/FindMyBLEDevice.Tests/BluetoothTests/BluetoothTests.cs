@@ -151,6 +151,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             const int fakeRssi = 1;
             var device = new Mock<IDevice>();
             device.SetupGet(mock => mock.Rssi).Returns(fakeRssi);
+            device.SetupGet(mock => mock.State).Returns(DeviceState.Connected);
             var adapter = new Mock<IAdapter>();
             adapter
                 .Setup(mock => mock.ConnectToKnownDeviceAsync(It.IsAny<Guid>(), It.IsAny<ConnectParameters>(), It.IsAny<CancellationToken>()))
@@ -159,16 +160,19 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
 
             // act
             int rssi = 0;
-            await bt.StartRssiPolling(Guid.Empty.ToString(), (int input) =>
+            bt.StartRssiPolling(Guid.Empty.ToString(), (int input) =>
             {
                 rssi = input;
-            });
-            Thread.Sleep(200); // other thread should make the first poll instantaniously, so waiting 200ms should be more than enough
+            },
+            () => { },
+            () => { }
+            );
+            Thread.Sleep(100); // polling interval is 25ms
             bt.StopRssiPolling();
 
             // assert
-            device.Verify(mock => mock.UpdateRssiAsync(), Times.Once);
-            device.VerifyGet(mock => mock.Rssi, Times.Once);
+            device.Verify(mock => mock.UpdateRssiAsync(), Times.Between(1, 4, Moq.Range.Inclusive));
+            device.VerifyGet(mock => mock.Rssi, Times.Between(1, 4, Moq.Range.Inclusive));
             Assert.AreEqual(fakeRssi, rssi);
         }
 

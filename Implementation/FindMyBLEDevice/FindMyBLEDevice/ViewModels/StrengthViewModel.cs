@@ -6,23 +6,32 @@ using Xamarin.Forms;
 using FindMyBLEDevice.Models;
 using System;
 using FindMyBLEDevice.Views;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class StrengthViewModel : BaseViewModel
     {
+        private const double MeterClosebyThreshold = 1.5;
+
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
+        private readonly List<int> rssiBuff;
         
         private int _radius;
         private double _meter;
         private int _currentRssi;
+
+        private string _status;
 
         public StrengthViewModel()
         {
             Title = "StrengthSearch";
             meterScaleMin = rssiToMeter(0);
             meterScaleMax = rssiToMeter(-100);
+            rssiBuff = new List<int>();
+            _status = "Uninitialized";
         }
 
         public BTDevice Device
@@ -56,14 +65,49 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        public async void OnAppearing()
+        public string Status
         {
-            /// works since database id counts from 1 - might change to nullable int
-            if (!(App.DevicesStore.SelectedDevice is null))
+            get => _status;
+            set => SetProperty(ref _status, value);
+        }
+
+        public void OnAppearing()
+        {
+            if (App.DevicesStore.SelectedDevice is null)
             {
-                await App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
+                Status = "No device selected!\nPlease select a device to continue.";
+            }
+            else
+            {
+                Status = "Connecting to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\"...\n" +
+                    "If this takes longer than a few seconds, the device is probably out of range or turned off.";
+                App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
                 {
-                    CurrentRssi = v;
+                    const int buffSize = 40;
+                    rssiBuff.Add(v);
+                    if (rssiBuff.Count > buffSize) rssiBuff.RemoveAt(0);
+                    CurrentRssi = (int)rssiBuff.Average();
+
+                    if(Meter <= MeterClosebyThreshold)
+                    {
+                        Status = "\"" + App.DevicesStore.SelectedDevice.UserLabel + "\" is very close!\n"+
+                            "Try searching the vicinity to find it.";
+                    }
+                    else
+                    {
+                        Status = "Connected to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\".\n" +
+                            "Move around to see in which direction the signal gets better.";
+                    }
+                }, () =>
+                {
+                    Status = "Connected to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\".\n" +
+                        "Move around to see in which direction the signal gets better.";
+                }, () =>
+                {
+                    Status = "Disconnected! Trying to reconnect...\n" +
+                        "Please move back into range of the device.";
+                    CurrentRssi = -100;
+                    Meter = meterScaleMax;
                 });
             }
         }
@@ -87,7 +131,7 @@ namespace FindMyBLEDevice.ViewModels
             const int radiusScaleSize = radiusMax - radiusMin;
             double inputScaleSize = scaleMax - scaleMin;
 
-            double relScalePosition = (double)(value - scaleMin) / inputScaleSize;
+            double relScalePosition = (value - scaleMin) / inputScaleSize;
             int resultingRadius = radiusMin + (int)(relScalePosition * radiusScaleSize);
             return resultingRadius;
         }

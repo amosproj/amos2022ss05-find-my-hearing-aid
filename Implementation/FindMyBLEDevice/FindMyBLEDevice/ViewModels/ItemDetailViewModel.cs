@@ -17,9 +17,9 @@ namespace FindMyBLEDevice.ViewModels
             get => App.DevicesStore.SelectedDevice;
         }
 
-        public async void OnAppearing()
+        public void OnAppearing()
         {
-            await App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v) => {
+            App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v) => {
                 CurrentRssi = v;
             });
 
