@@ -13,9 +13,10 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class StrengthViewModel : BaseViewModel
     {
+        private const double MeterClosebyThreshold = 1.5;
+
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
-        private readonly double meterClosebyThreshold;
         private readonly List<int> rssiBuff;
         
         private int _radius;
@@ -29,7 +30,6 @@ namespace FindMyBLEDevice.ViewModels
             Title = "StrengthSearch";
             meterScaleMin = rssiToMeter(0);
             meterScaleMax = rssiToMeter(-100);
-            meterClosebyThreshold = 1.5;
             rssiBuff = new List<int>();
             _status = "Uninitialized";
         }
@@ -88,7 +88,7 @@ namespace FindMyBLEDevice.ViewModels
                     if (rssiBuff.Count > buffSize) rssiBuff.RemoveAt(0);
                     CurrentRssi = (int)rssiBuff.Average();
 
-                    if(Meter <= meterClosebyThreshold)
+                    if(Meter <= MeterClosebyThreshold)
                     {
                         Status = "\"" + App.DevicesStore.SelectedDevice.UserLabel + "\" is very close!\n"+
                             "Try searching the vicinity to find it.";
