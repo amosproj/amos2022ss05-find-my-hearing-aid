@@ -6,6 +6,8 @@ using Xamarin.Forms;
 using FindMyBLEDevice.Models;
 using System;
 using FindMyBLEDevice.Views;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -15,6 +17,7 @@ namespace FindMyBLEDevice.ViewModels
         private readonly double meterScaleMax;
         private readonly double meterSmoothing;
         private readonly double meterClosebyThreshold;
+        private readonly List<int> rssiBuff;
         
         private int _radius;
         private double _meter;
@@ -27,8 +30,8 @@ namespace FindMyBLEDevice.ViewModels
             Title = "StrengthSearch";
             meterScaleMin = rssiToMeter(0);
             meterScaleMax = rssiToMeter(-100);
-            meterSmoothing = 0.95;
             meterClosebyThreshold = 1.5;
+            rssiBuff = new List<int>();
             _status = "Uninitialized";
         }
 
@@ -59,7 +62,7 @@ namespace FindMyBLEDevice.ViewModels
             set
             {
                 SetProperty(ref _currentRssi, value);
-                Meter = meterSmoothing*Meter + (1-meterSmoothing)*rssiToMeter(CurrentRssi);
+                Meter = rssiToMeter(CurrentRssi);
             }
         }
 
@@ -81,7 +84,14 @@ namespace FindMyBLEDevice.ViewModels
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
                 App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
                 {
-                    CurrentRssi = v;
+                    const int buffSize = 10;
+                    rssiBuff.Add(v);
+                    if (rssiBuff.Count == buffSize)
+                    {
+                        CurrentRssi = (int)rssiBuff.Average();
+                        rssiBuff.Clear();
+                    }
+
                     if(Meter <= meterClosebyThreshold)
                     {
                         Status = "\"" + App.DevicesStore.SelectedDevice.UserLabel + "\" is very close!\n"+
@@ -125,7 +135,7 @@ namespace FindMyBLEDevice.ViewModels
             const int radiusScaleSize = radiusMax - radiusMin;
             double inputScaleSize = scaleMax - scaleMin;
 
-            double relScalePosition = (double)(value - scaleMin) / inputScaleSize;
+            double relScalePosition = (value - scaleMin) / inputScaleSize;
             int resultingRadius = radiusMin + (int)(relScalePosition * radiusScaleSize);
             return resultingRadius;
         }

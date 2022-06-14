@@ -90,7 +90,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                             {
                                 await device.UpdateRssiAsync();
                                 updateRssi.Invoke(device.Rssi);
-                                await Task.Delay(20);
+                                await Task.Delay(30);
                             }
                         }
                         catch (Exception e)
