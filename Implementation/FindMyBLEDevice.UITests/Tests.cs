@@ -19,6 +19,7 @@ namespace FindMyBLEDevice.UITests
             this.platform = platform;
         }
 
+
         [SetUp]
         public void BeforeEachTest()
         {
