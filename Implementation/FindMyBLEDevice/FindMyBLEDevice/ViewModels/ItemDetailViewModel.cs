@@ -24,11 +24,7 @@ namespace FindMyBLEDevice.ViewModels
         }
         async Task SelectAndRedirectTo(string page)
         {
-            Console.WriteLine("Hello from my side");
-
             App.Bluetooth.StopRssiPolling();
-
-            Console.WriteLine("../" + page);
             await Shell.Current.GoToAsync(page);
         }
         public int CurrentRssi
