@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SDPX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SDPX-FileCopyrightText: 2022 Leo K?berlein <leo@wolfgang-koeberlein.de>
 // SDPX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -19,6 +19,7 @@ namespace FindMyBLEDevice.Tests
             Xamarin.Forms.Mocks.MockForms.Init();
         }
 
+        // TODO: kill
         /// <summary>
         /// This test was created for setting up unit tests. 
         /// It may be deleted in the future.

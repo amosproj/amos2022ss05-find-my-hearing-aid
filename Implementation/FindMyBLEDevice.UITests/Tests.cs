@@ -19,6 +19,7 @@ namespace FindMyBLEDevice.UITests
             this.platform = platform;
         }
 
+
         [SetUp]
         public void BeforeEachTest()
         {
@@ -52,12 +53,14 @@ namespace FindMyBLEDevice.UITests
         public void OpenDevicesPage()
         {
 
+            // app.Repl();
+
             // Assert "About"-Screen is shown
             AppResult[] results = app.Query(c => c.Marked("Btn_LearnMore"));
             Assert.IsTrue(results.Any());
 
             // Tap on menu drawer (named "ok" for some reason..)
-            app.Tap(c => c.Marked("OK"));
+            app.Tap(c => c.Marked("Open navigation drawer"));
 
             // Wait for drawer
             AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_Devices"));
