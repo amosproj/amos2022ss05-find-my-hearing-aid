@@ -21,7 +21,8 @@ Communicate our to-date progress to and gather feedback from the industry partne
 - Find an appropriate threshold value of RSSI.
 - GPS functionality
   - Used to remember the last location of the device so that the users know where to find if they lost the device.
-  - Background service is quite complicated on iOS and is not the top priority. 
+  - Background service is not the top priority.
+  - Background service solution is complicated on iOS. 
 - UI test, the View Models should also be covered in unittest.
 - Prioritization of Tasks as done by POs was confirmed by Markus.
 
