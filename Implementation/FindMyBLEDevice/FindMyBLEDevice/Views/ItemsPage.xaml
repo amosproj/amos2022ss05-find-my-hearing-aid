@@ -69,19 +69,6 @@
                                         </StackLayout>
                                         <Button 
                                             x:DataType="model:BTDevice"
-                                            Text="📶"
-                                            Grid.Row="0"
-                                            Grid.Column="2"
-                                            BackgroundColor="White"
-                                            TextColor="Black"
-                                            BorderColor="Black"
-                                            BorderWidth="1"
-                                            Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"
-                                            CommandParameter="{Binding .}"
-                                            />
-                                        <Button 
-                                            x:DataType="model:BTDevice"
                                             Grid.Row="0"
                                             Grid.Column="3"
                                             Text="📌"                                          
@@ -95,7 +82,7 @@
                                             />
                                         <Button 
                                             x:DataType="model:BTDevice"
-                                            Text="ℹ️"
+                                            Text="📶"
                                             Grid.Row="0"
                                             Grid.Column="4"
                                             BackgroundColor="White"
@@ -103,7 +90,7 @@
                                             BorderColor="Black"
                                             BorderWidth="1"                                            
                                             Margin="3"
-                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=SavedDeviceTapped}"		
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"		
                                             CommandParameter="{Binding .}"
                                             />
                                     </Grid>
