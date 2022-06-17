@@ -30,6 +30,7 @@
         </Grid.RowDefinitions>
         <StackLayout Grid.Row="1">
             <Label Text=" Saved Devices"
+                   AutomationId="Label_SavedDevices"
                    FontSize="Medium"
                    BackgroundColor="LightGray"
                    FontAttributes="Bold" />
