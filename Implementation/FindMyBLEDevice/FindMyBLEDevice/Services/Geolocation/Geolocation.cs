@@ -31,15 +31,8 @@ namespace FindMyBLEDevice.Services.Geolocation
                 cts = new CancellationTokenSource();
                 var location = await _geolocationAccess.GetLocationAsync(request, cts.Token);
 
-                if (location != null)
-                {
-                    Console.WriteLine($"Latitude: {location.Latitude}, Longitude: {location.Longitude}, Altitude: {location.Altitude}");
-                    return location;
-                }
-                else
-                {
-                    return null;
-                }
+                Console.WriteLine($"Latitude: {location?.Latitude}, Longitude: {location?.Longitude}, Altitude: {location?.Altitude}");
+                return location;
             }
             catch (FeatureNotSupportedException fnsEx)
             {
