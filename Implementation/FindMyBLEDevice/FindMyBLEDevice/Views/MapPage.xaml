@@ -15,8 +15,8 @@
     <ContentPage.Content>
  
         <StackLayout Orientation="Vertical">
-            <Label Text="Latitude {Binding CurrentLocation.Latitude}" TextColor="Black"></Label>
-            <Label Text="Longitude {Binding CurrentLocation.Longitude}" TextColor="Black"></Label>
+            <Label Text="{Binding CurrentLocation.Latitude}" TextColor="Black"></Label>
+            <Label Text="{Binding CurrentLocation.Longitude}" TextColor="Black"></Label>
             <maps:Map x:Name="map"/>
         </StackLayout>
     </ContentPage.Content>

@@ -21,7 +21,7 @@ namespace FindMyBLEDevice.Views
         public MapPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new MapViewModel();
+            BindingContext = _viewModel = new MapViewModel(map);
         }
 
         protected override void OnAppearing()
