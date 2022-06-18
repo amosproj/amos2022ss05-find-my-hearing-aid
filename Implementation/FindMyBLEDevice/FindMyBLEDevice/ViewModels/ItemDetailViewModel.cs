@@ -18,11 +18,11 @@ namespace FindMyBLEDevice.ViewModels
         public ItemDetailViewModel()
         {
             StrengthButtonTapped = new Command(
-                   async () => await SelectAndRedirectTo(nameof(StrengthPage)));
+                   async () => await RedirectTo(nameof(StrengthPage)));
             MapButtonTapped = new Command(
-                async () => await SelectAndRedirectTo(nameof(MapPage)));
+                async () => await RedirectTo(nameof(MapPage)));
         }
-        async Task SelectAndRedirectTo(string page)
+        async Task RedirectTo(string page)
         {
             App.Bluetooth.StopRssiPolling();
             await Shell.Current.GoToAsync(page);
