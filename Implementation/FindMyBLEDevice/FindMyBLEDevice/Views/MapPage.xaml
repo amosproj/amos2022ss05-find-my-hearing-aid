@@ -2,13 +2,23 @@
 <!--
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="local:MapViewModel"
              x:Class="FindMyBLEDevice.Views.MapPage"
-             Title="{Binding Title}"
-             >
-    <maps:Map x:Name="map"/>
+             Title="{Binding Title}">
+
+    <ContentPage.Content>
+ 
+        <StackLayout Orientation="Vertical">
+            <Label Text="Latitude {Binding CurrentLocation.Latitude}" TextColor="Black"></Label>
+            <Label Text="Longitude {Binding CurrentLocation.Longitude}" TextColor="Black"></Label>
+            <maps:Map x:Name="map"/>
+        </StackLayout>
+    </ContentPage.Content>
+
 </ContentPage>

@@ -1,5 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,10 +17,17 @@ namespace FindMyBLEDevice.Views
 {
     public partial class MapPage : ContentPage
     {
+        private MapViewModel _viewModel;
         public MapPage()
         {
             InitializeComponent();
-            BindingContext = new MapViewModel();
+            BindingContext = _viewModel = new MapViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }
