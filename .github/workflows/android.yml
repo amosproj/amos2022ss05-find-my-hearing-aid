@@ -24,10 +24,13 @@ jobs:
         dotnet-version: '6.0.x'
 
     - name: print and delete NuGet.Config and restore dotnet
-      run: cat /Users/runner/.config/NuGet/NuGet.Config && rm -f /Users/runner/.config/NuGet/NuGet.Config; dotnet restore Implementation/FindMyBLEDevice.sln && cat /Users/runner/.config/NuGet/NuGet.Config
+      run: cat /Users/runner/.config/NuGet/NuGet.Config && rm -f /Users/runner/.config/NuGet/NuGet.Config; dotnet restore Implementation/FindMyBLEDevice.sln
 
     - name: Install dependencies
       run: nuget restore Implementation/FindMyBLEDevice.sln
+
+    - name: print new NuGet.Config
+      run: cat /Users/runner/.config/NuGet/NuGet.Config
 
     - name: Build
       run: msbuild Implementation/FindMyBLEDevice/FindMyBLEDevice.Android/FindMyBLEDevice.Android.csproj /t:PackageForAndroid /t:SignAndroidPackage /p:Configuration=Release
