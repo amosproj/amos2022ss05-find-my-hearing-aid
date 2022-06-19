@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 
 using Xamarin.Forms;
 using FindMyBLEDevice.Models;
@@ -8,13 +9,12 @@ using System;
 using FindMyBLEDevice.Views;
 using System.Collections.Generic;
 using System.Linq;
+using Xamarin.Essentials;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class StrengthViewModel : BaseViewModel
     {
-        private const double MeterClosebyThreshold = 1.5;
-
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
         private readonly List<int> rssiBuff;
@@ -83,12 +83,15 @@ namespace FindMyBLEDevice.ViewModels
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
                 App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
                 {
-                    const int buffSize = 40;
+                    int rssiInterval = Preferences.Get(PreferenceNames.RssiInterval, Constants.RssiIntervalDefault);
+                    int buffSize = rssiInterval > 0 
+                        ? Math.Min(Constants.RssiBufferDuration / rssiInterval, Constants.RssiBufferMaxSize)
+                        : Constants.RssiBufferMaxSize;
                     rssiBuff.Add(v);
-                    if (rssiBuff.Count > buffSize) rssiBuff.RemoveAt(0);
+                    while (rssiBuff.Count > buffSize) rssiBuff.RemoveAt(0);
                     CurrentRssi = (int)rssiBuff.Average();
 
-                    if(Meter <= MeterClosebyThreshold)
+                    if(Meter <= Constants.MeterClosebyThreshold)
                     {
                         Status = "\"" + App.DevicesStore.SelectedDevice.UserLabel + "\" is very close!\n"+
                             "Try searching the vicinity to find it.";
