@@ -18,21 +18,5 @@ namespace FindMyBLEDevice.Tests
         {
             Xamarin.Forms.Mocks.MockForms.Init();
         }
-
-        /// <summary>
-        /// This test was created for setting up unit tests. 
-        /// It may be deleted in the future.
-        /// </summary>
-        [TestMethod]
-        public void TestAdd()
-        {
-            int a = 1;
-            int b = 2;
-            int expected = 3;
-            App app = new();
-
-            int result = app.Add(a, b);
-            Assert.AreEqual(expected, result);
-        }
     }
 }
