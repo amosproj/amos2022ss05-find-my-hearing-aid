@@ -8,17 +8,21 @@ using System;
 using FindMyBLEDevice.Views;
 using System.Collections.Generic;
 using System.Linq;
+using Xamarin.Essentials;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class StrengthViewModel : BaseViewModel
     {
+        private const int MinRadiusSize = 30;      
         private const double MeterClosebyThreshold = 1.5;
+        private readonly int MaxRadiusSize;
 
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
         private readonly List<int> rssiBuff;
-        
+
+        private List<int> _circleSizes; 
         private int _radius;
         private double _meter;
         private int _currentRssi;
@@ -32,6 +36,27 @@ namespace FindMyBLEDevice.ViewModels
             meterScaleMax = rssiToMeter(-100);
             rssiBuff = new List<int>();
             _status = "Uninitialized";
+
+            // Width (in xamarin.forms units)
+            var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
+            int xamarinWidth = (int)Math.Round(mainDisplayInfo.Width / mainDisplayInfo.Density);
+            MaxRadiusSize = (int)Math.Round(xamarinWidth * 0.94);
+            initializeCircleSizes();
+        }
+
+        private void initializeCircleSizes()
+        {            
+            // This list contains the sizes of the circles displayed on the device, ordered DESC.
+            _circleSizes = new List<int>();
+            _circleSizes.Add(MaxRadiusSize);
+            for (int i = 1; i <= 4; i++)
+            {
+                double circleSize = MaxRadiusSize - (((MaxRadiusSize - MinRadiusSize) / 5) * i);
+                // Make sure the circle an even size
+                int circleSizeAsInt = Math.Floor(circleSize) % 2 == 0 ? (int) Math.Floor(circleSize) : (int) Math.Ceiling(circleSize);
+                _circleSizes.Add(circleSizeAsInt);
+            }
+            _circleSizes.Add(MinRadiusSize);
         }
 
         public BTDevice Device
@@ -43,6 +68,11 @@ namespace FindMyBLEDevice.ViewModels
         {
             get => _radius;
             set => SetProperty(ref _radius, value);
+        }
+
+        public List<int> CircleSizes
+        {
+            get => _circleSizes;
         }
 
         public double Meter
@@ -126,13 +156,11 @@ namespace FindMyBLEDevice.ViewModels
         /// <returns>circle radius</returns>
         private int otherScaleToRadius(double scaleMin, double scaleMax, double value)
         {
-            const int radiusMin = 30;
-            const int radiusMax = 400;
-            const int radiusScaleSize = radiusMax - radiusMin;
+            int radiusScaleSize = MaxRadiusSize - MinRadiusSize;
             double inputScaleSize = scaleMax - scaleMin;
 
             double relScalePosition = (value - scaleMin) / inputScaleSize;
-            int resultingRadius = radiusMin + (int)(relScalePosition * radiusScaleSize);
+            int resultingRadius = MinRadiusSize + (int)(relScalePosition * radiusScaleSize);
             return resultingRadius;
         }
 
