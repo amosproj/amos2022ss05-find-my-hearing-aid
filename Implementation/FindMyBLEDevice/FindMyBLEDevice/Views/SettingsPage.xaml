@@ -6,9 +6,17 @@
              x:Class="FindMyBLEDevice.Views.SettingsPage"
              Title="Settings">
     <ContentPage.Content>
-        <StackLayout Padding="20,0,20,0" Orientation="Horizontal" VerticalOptions="Center" >
-            <Label Text="Whenn toggling this switch, the scan for all devices on the device page will also show devices with unkown names in the search list." FontSize="Medium" TextColor="Black" />
-            <Switch IsToggled="{Binding DisplayAllDevices}" OnColor="LightGray" ThumbColor="{StaticResource Primary}" HorizontalOptions="End" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Padding="20,0,20,0" Orientation="Vertical" VerticalOptions="Start">
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="List devices without an advertised name in the devices scan." FontSize="Medium" TextColor="Black" />
+                    <Switch IsToggled="{Binding DisplayNamelessDevices}" OnColor="LightSkyBlue" ThumbColor="{StaticResource Primary}" HorizontalOptions="End" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="List devices with a very weak connection in the devices scan." FontSize="Medium" TextColor="Black" />
+                    <Switch IsToggled="{Binding DisplayWeakDevices}" OnColor="LightSkyBlue" ThumbColor="{StaticResource Primary}" HorizontalOptions="End" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

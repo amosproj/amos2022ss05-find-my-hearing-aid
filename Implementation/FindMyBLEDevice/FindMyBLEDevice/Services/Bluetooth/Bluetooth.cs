@@ -42,7 +42,12 @@ namespace FindMyBLEDevice.Services.Bluetooth
                     return;
                 }
 
-                if (a.Device.Rssi < -80 || (a.Device.Name is null && !Preferences.Get(PreferenceNames.DisplayAllDevices, false)))
+                if (a.Device.Rssi < -80 && !Preferences.Get(PreferenceNames.DisplayWeakDevices, false))
+                {
+                    return;
+                }
+
+                if (a.Device.Name is null && !Preferences.Get(PreferenceNames.DisplayNamelessDevices, false))
                 {
                     return;
                 }

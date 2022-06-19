@@ -6,13 +6,23 @@ namespace FindMyBLEDevice.ViewModels
     public class SettingsViewModel : BaseViewModel
     {
         public SettingsViewModel() { }
-        public bool DisplayAllDevices
+        
+        public bool DisplayNamelessDevices
         {
-            get => Preferences.Get(PreferenceNames.DisplayAllDevices, false);
+            get => Preferences.Get(PreferenceNames.DisplayNamelessDevices, false);
             set
             {
-                Preferences.Set(PreferenceNames.DisplayAllDevices, value);
-                OnPropertyChanged(nameof(DisplayAllDevices));
+                Preferences.Set(PreferenceNames.DisplayNamelessDevices, value);
+                OnPropertyChanged(nameof(DisplayNamelessDevices));
+            }
+        }
+        public bool DisplayWeakDevices
+        {
+            get => Preferences.Get(PreferenceNames.DisplayWeakDevices, false);
+            set
+            {
+                Preferences.Set(PreferenceNames.DisplayWeakDevices, value);
+                OnPropertyChanged(nameof(DisplayWeakDevices));
             }
         }
     }

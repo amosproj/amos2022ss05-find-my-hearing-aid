@@ -6,6 +6,8 @@ namespace FindMyBLEDevice.Models
 {
     public class PreferenceNames
     {
-        public const string DisplayAllDevices = "DisplayAllDevices";
+        public const string DisplayNamelessDevices = "DisplayNamelessDevices";
+        public const string DisplayWeakDevices = "DisplayWeakDevices";
+
     }
 }
