@@ -14,6 +14,7 @@ using System;
 using System.Threading;
 using Plugin.BLE.Abstractions;
 using FindMyBLEDevice.Exceptions;
+using Xamarin.Essentials;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
@@ -41,7 +42,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                     return;
                 }
 
-                if (a.Device.Rssi < -80 || a.Device.Name is null)
+                if (a.Device.Rssi < -80 || (a.Device.Name is null && !Preferences.Get(PreferenceNames.DisplayAllDevices, false)))
                 {
                     return;
                 }

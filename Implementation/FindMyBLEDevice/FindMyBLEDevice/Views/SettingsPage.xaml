@@ -6,8 +6,9 @@
              x:Class="FindMyBLEDevice.Views.SettingsPage"
              Title="Settings">
     <ContentPage.Content>
-        <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-            <Label VerticalOptions="Center" HorizontalOptions="Center" Text="Settings" FontSize="Medium" TextColor="Black" />
+        <StackLayout Padding="20,0,20,0" Orientation="Horizontal" VerticalOptions="Center" >
+            <Label Text="Whenn toggling this switch, the scan for all devices on the device page will also show devices with unkown names in the search list." FontSize="Medium" TextColor="Black" />
+            <Switch IsToggled="{Binding DisplayAllDevices}" OnColor="LightGray" ThumbColor="{StaticResource Primary}" HorizontalOptions="End" />
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
