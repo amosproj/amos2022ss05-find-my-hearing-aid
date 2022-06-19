@@ -14,6 +14,7 @@ namespace FindMyBLEDevice
             Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StrengthPage), typeof(StrengthPage));
+            Routing.RegisterRoute(nameof(MapPage), typeof(MapPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
