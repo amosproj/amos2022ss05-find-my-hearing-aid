@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz<jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger<adrian.wandinger@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -26,7 +27,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />            
         </Grid.RowDefinitions>
         <StackLayout Grid.Row="1">
             <Label Text=" Saved Devices"
@@ -43,10 +44,11 @@
                                 <DataTemplate>
                                     <Grid >
                                         <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="50" />
+                                            <ColumnDefinition Width="*" />
                                         </Grid.ColumnDefinitions>
-                                        <StackLayout Grid.Column = "0" Padding="10" x:DataType="model:BTDevice">
+                                        <StackLayout Grid.Column="0" Padding="5" x:DataType="model:BTDevice">
                                             <Label Text="{Binding UserLabel}" 
                                                    LineBreakMode="NoWrap" 
                                                    Style="{DynamicResource ListItemTextStyle}" 
@@ -67,16 +69,30 @@
                                         </StackLayout>
                                         <Button 
                                             x:DataType="model:BTDevice"
-                                            Grid.Column = "1"
-                                            Text="📶"
+                                            Grid.Row="0"
+                                            Grid.Column="3"
+                                            Text="📌"                                          
                                             BackgroundColor="White"
                                             TextColor="Black"
                                             BorderColor="Black"
                                             BorderWidth="1"
                                             Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.MapButtonTapped}"
                                             CommandParameter="{Binding .}"
-                                        />
+                                            />
+                                        <Button 
+                                            x:DataType="model:BTDevice"
+                                            Text="📶"
+                                            Grid.Row="0"
+                                            Grid.Column="4"
+                                            BackgroundColor="White"
+                                            TextColor="Black"
+                                            BorderColor="Black"
+                                            BorderWidth="1"                                            
+                                            Margin="3"
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"		
+                                            CommandParameter="{Binding .}"
+                                            />
                                     </Grid>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>

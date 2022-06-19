@@ -1,4 +1,10 @@
-﻿using FindMyBLEDevice.Models;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+using FindMyBLEDevice.Models;
+using FindMyBLEDevice.Views;
+using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
@@ -6,6 +12,21 @@ namespace FindMyBLEDevice.ViewModels
     public class ItemDetailViewModel : BaseViewModel
     {
         private int _currentRssi;
+        public Command StrengthButtonTapped { get; }
+        public Command MapButtonTapped { get; }
+
+        public ItemDetailViewModel()
+        {
+            StrengthButtonTapped = new Command(
+                   async () => await RedirectTo(nameof(StrengthPage)));
+            MapButtonTapped = new Command(
+                async () => await RedirectTo(nameof(MapPage)));
+        }
+        async Task RedirectTo(string page)
+        {
+            App.Bluetooth.StopRssiPolling();
+            await Shell.Current.GoToAsync(page);
+        }
         public int CurrentRssi
         {
             get => _currentRssi;
@@ -24,11 +45,9 @@ namespace FindMyBLEDevice.ViewModels
             });
 
         }
-
         public void OnDisappearing()
         {
             App.Bluetooth.StopRssiPolling();
         }
-
     }
 }

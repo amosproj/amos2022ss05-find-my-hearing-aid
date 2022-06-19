@@ -1,14 +1,12 @@
 ﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
+using FindMyBLEDevice.Models;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -30,6 +28,11 @@ namespace FindMyBLEDevice.ViewModels
         }
 
 
+        public BTDevice Device
+        {
+            get => App.DevicesStore.SelectedDevice;
+        }
+
         public async void OnAppearing()
         {
             CurrentLocation = await App.Geolocation.GetCurrentLocation();
@@ -44,5 +47,8 @@ namespace FindMyBLEDevice.ViewModels
             map.MoveToRegion(MapSpan.FromCenterAndRadius(pin.Position, Distance.FromKilometers(1)));
         }
 
+        public void OnDisappearing() {
+            // comment to make linter happy, method will be used in the future
+        }
     }
 }

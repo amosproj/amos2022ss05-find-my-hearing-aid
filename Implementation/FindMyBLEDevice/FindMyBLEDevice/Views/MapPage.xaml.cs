@@ -1,15 +1,10 @@
 ﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 using FindMyBLEDevice.ViewModels;
 
 
@@ -17,17 +12,22 @@ namespace FindMyBLEDevice.Views
 {
     public partial class MapPage : ContentPage
     {
-        private MapViewModel _viewModel;
+        private MapViewModel viewModel;
         public MapPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new MapViewModel(map);
+            BindingContext = viewModel = new MapViewModel(map);
         }
-
         protected override void OnAppearing()
         {
             base.OnAppearing();
-            _viewModel.OnAppearing();
+            viewModel.OnAppearing();
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            viewModel.OnDisappearing();
         }
     }
 }
