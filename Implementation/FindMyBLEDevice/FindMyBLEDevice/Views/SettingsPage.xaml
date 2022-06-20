@@ -24,7 +24,7 @@
                 <StackLayout Orientation="Vertical">
                     <StackLayout Orientation="Horizontal">
                         <Label Text="The time between RSSI / signal strength updates in milliseconds." FontSize="Medium" TextColor="Black" />
-                        <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" />
+                        <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" TextColor="Black" PlaceholderColor="LightGray" />
                     </StackLayout>
                     <Slider Maximum="{Binding RssiIntervalMax}" Minimum="{Binding RssiIntervalMin}" Value="{Binding RssiInterval}" ThumbColor="{StaticResource Primary}" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="{StaticResource Primary}" />
                 </StackLayout>

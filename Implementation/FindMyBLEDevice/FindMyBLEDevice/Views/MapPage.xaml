@@ -1,17 +1,25 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--
 // SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
+             xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="local:MapViewModel"
              x:Class="FindMyBLEDevice.Views.MapPage"
              Title="{Binding Title}">
+
     <ContentPage.Content>
-        <StackLayout Orientation="Vertical" Padding="20,0,20,0" Spacing="0">
-            <Label Text="Show the underlying Map Application Window" FontSize="Medium" TextColor="Black"/>
-            <Label FontSize="16" Padding="0,0,0,0">
-            </Label>
+ 
+        <StackLayout Orientation="Vertical">
+            <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+            <Label Text="{Binding CurrentLocation.Latitude}" TextColor="Black"></Label>
+            <Label Text="{Binding CurrentLocation.Longitude}" TextColor="Black"></Label>
+            <maps:Map x:Name="map"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
