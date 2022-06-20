@@ -24,10 +24,10 @@ jobs:
         echo "MD_APPLE_SDK_ROOT=$XCODE_ROOT" >> $GITHUB_ENV
         sudo xcode-select -s $XCODE_ROOT
 
-    - name: Setup .NET Core SDK 5.0.x
+    - name: Setup .NET Core SDK 6.0.x
       uses: actions/setup-dotnet@v2
       with:
-        dotnet-version: '5.0.x'
+        dotnet-version: '6.0.x'
 
     - name: Install dependencies
       run: nuget restore Implementation/FindMyBLEDevice.sln
