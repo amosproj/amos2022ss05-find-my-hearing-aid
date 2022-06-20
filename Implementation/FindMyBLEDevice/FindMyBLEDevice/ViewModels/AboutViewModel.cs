@@ -13,8 +13,8 @@ namespace FindMyBLEDevice.ViewModels
         {
             Title = "About";
             
-            OpenMapPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(MapPage)}"));
-            OpenStrengthPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(StrengthPage)}"));
+            OpenMapPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(MapPage)}"));
+            OpenStrengthPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(StrengthPage)}"));
         }
 
         public ICommand OpenMapPageCommand { get; }
