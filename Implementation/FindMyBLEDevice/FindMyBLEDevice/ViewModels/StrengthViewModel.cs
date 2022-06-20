@@ -10,6 +10,7 @@ using FindMyBLEDevice.Views;
 using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
+using FindMyBLEDevice.Services.Settings;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -83,7 +84,7 @@ namespace FindMyBLEDevice.ViewModels
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
                 App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
                 {
-                    int rssiInterval = Preferences.Get(PreferenceNames.RssiInterval, Constants.RssiIntervalDefault);
+                    int rssiInterval = Preferences.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault);
                     int buffSize = rssiInterval > 0 
                         ? Math.Min(Constants.RssiBufferDuration / rssiInterval, Constants.RssiBufferMaxSize)
                         : Constants.RssiBufferMaxSize;

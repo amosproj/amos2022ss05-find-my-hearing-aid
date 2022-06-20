@@ -3,6 +3,7 @@
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 
 using FindMyBLEDevice.Models;
+using FindMyBLEDevice.Services.Settings;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -17,30 +18,30 @@ namespace FindMyBLEDevice.ViewModels
         
         public bool DisplayNamelessDevices
         {
-            get => Preferences.Get(PreferenceNames.DisplayNamelessDevices, false);
+            get => Preferences.Get(SettingsNames.DisplayNamelessDevices, false);
             set
             {
-                Preferences.Set(PreferenceNames.DisplayNamelessDevices, value);
+                Preferences.Set(SettingsNames.DisplayNamelessDevices, value);
                 OnPropertyChanged(nameof(DisplayNamelessDevices));
             }
         }
 
         public bool DisplayWeakDevices
         {
-            get => Preferences.Get(PreferenceNames.DisplayWeakDevices, false);
+            get => Preferences.Get(SettingsNames.DisplayWeakDevices, false);
             set
             {
-                Preferences.Set(PreferenceNames.DisplayWeakDevices, value);
+                Preferences.Set(SettingsNames.DisplayWeakDevices, value);
                 OnPropertyChanged(nameof(DisplayWeakDevices));
             }
         }
 
         public int RssiInterval
         {
-            get => Preferences.Get(PreferenceNames.RssiInterval, Constants.RssiIntervalDefault);
+            get => Preferences.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault);
             set
             {
-                Preferences.Set(PreferenceNames.RssiInterval, value);
+                Preferences.Set(SettingsNames.RssiInterval, value);
                 OnPropertyChanged(nameof(RssiInterval));
                 _rssiIntervalString = value.ToString();
                 OnPropertyChanged(nameof(RssiIntervalString));
