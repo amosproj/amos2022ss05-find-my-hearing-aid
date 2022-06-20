@@ -6,9 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace FindMyBLEDevice.Models
+namespace FindMyBLEDevice.Services.Settings
 {
-    public static class PreferenceNames
+    public static class SettingsNames
     {
         public const string DisplayNamelessDevices = "DisplayNamelessDevices";
         public const string DisplayWeakDevices = "DisplayWeakDevices";

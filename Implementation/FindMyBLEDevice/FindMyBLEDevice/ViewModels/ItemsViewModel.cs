@@ -46,6 +46,7 @@ namespace FindMyBLEDevice.ViewModels
         public Command<BTDevice> SavedDeviceTapped { get; }
         public Command<BTDevice> AvailableDeviceTapped { get; }
         public Command<BTDevice> StrengthButtonTapped { get; }
+        public Command<BTDevice> MapButtonTapped { get; }
 
         public ItemsViewModel()
         {
@@ -62,9 +63,10 @@ namespace FindMyBLEDevice.ViewModels
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(ItemDetailPage)));
             AvailableDeviceTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(NewItemPage)));
-
             StrengthButtonTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(StrengthPage)));
+            MapButtonTapped = new Command<BTDevice>(
+                async (BTDevice device) => await SelectAndRedirectTo(device, nameof(MapPage)));
         }
 
         public async void OnAppearing()

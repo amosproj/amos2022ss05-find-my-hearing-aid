@@ -5,6 +5,7 @@
 
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Bluetooth;
+using FindMyBLEDevice.Services.Settings;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using Plugin.BLE.Abstractions;
@@ -35,7 +36,8 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             args.Device = device.Object;
 
             var adapter = new Mock<IAdapter>();
-            var bt = new Bluetooth(adapter.Object);
+            var settings = new Mock<ISettings>();
+            var bt = new Bluetooth(adapter.Object, settings.Object);
 
             ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
@@ -57,7 +59,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             // arrange
             Guid id = Guid.Empty;
             const string name = "some name";
-            const int rssi = -100;
+            const int rssi = Constants.RssiTooFarThreshold - 1;
             var device = new Mock<IDevice>();
             device.SetupGet(mock => mock.Id).Returns(id);
             device.SetupGet(mock => mock.Name).Returns(name);
@@ -66,7 +68,14 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             args.Device = device.Object;
 
             var adapter = new Mock<IAdapter>();
-            var bt = new Bluetooth(adapter.Object);
+            var settings = new Mock<ISettings>();
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayWeakDevices)), It.IsAny<bool>()))
+                .Returns(false);
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayNamelessDevices)), It.IsAny<bool>()))
+                .Returns(false);
+            var bt = new Bluetooth(adapter.Object, settings.Object);
 
             ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
@@ -76,6 +85,41 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
 
             // assert
             Assert.AreEqual(0, available.Count);
+        }
+
+        [TestMethod]
+        public async Task Search_DoesntIgnoreDevicesTooFarAway()
+        {
+            // arrange
+            Guid id = Guid.Empty;
+            const string name = "some name";
+            const int rssi = Constants.RssiTooFarThreshold - 1;
+            var device = new Mock<IDevice>();
+            device.SetupGet(mock => mock.Id).Returns(id);
+            device.SetupGet(mock => mock.Name).Returns(name);
+            device.SetupGet(mock => mock.Rssi).Returns(rssi);
+            DeviceEventArgs args = new DeviceEventArgs();
+            args.Device = device.Object;
+
+            var adapter = new Mock<IAdapter>();
+            var settings = new Mock<ISettings>();
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayWeakDevices)), It.IsAny<bool>()))
+                .Returns(true);
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayNamelessDevices)), It.IsAny<bool>()))
+                .Returns(false);
+            var bt = new Bluetooth(adapter.Object, settings.Object);
+
+            ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
+
+            // act
+            await bt.Search(100, available, null);
+            adapter.Raise(mock => mock.DeviceDiscovered += null, args);
+
+            // assert
+            Assert.AreEqual(1, available.Count);
+            Assert.AreEqual(id.ToString(), available[0].BT_GUID);
         }
 
         [TestMethod]
@@ -91,7 +135,14 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             args.Device = device.Object;
 
             var adapter = new Mock<IAdapter>();
-            var bt = new Bluetooth(adapter.Object);
+            var settings = new Mock<ISettings>();
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayWeakDevices)), It.IsAny<bool>()))
+                .Returns(false);
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayNamelessDevices)), It.IsAny<bool>()))
+                .Returns(false);
+            var bt = new Bluetooth(adapter.Object, settings.Object);
 
             ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
@@ -101,6 +152,39 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
 
             // assert
             Assert.AreEqual(0, available.Count);
+        }
+
+        [TestMethod]
+        public async Task Search_DoesntIgnoreDevicesWithoutName()
+        {
+            // arrange
+            Guid id = Guid.Empty;
+            const int rssi = 0;
+            var device = new Mock<IDevice>();
+            device.SetupGet(mock => mock.Id).Returns(id);
+            device.SetupGet(mock => mock.Rssi).Returns(rssi);
+            DeviceEventArgs args = new DeviceEventArgs();
+            args.Device = device.Object;
+
+            var adapter = new Mock<IAdapter>();
+            var settings = new Mock<ISettings>();
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayWeakDevices)), It.IsAny<bool>()))
+                .Returns(false);
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.DisplayNamelessDevices)), It.IsAny<bool>()))
+                .Returns(true);
+            var bt = new Bluetooth(adapter.Object, settings.Object);
+
+            ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
+
+            // act
+            await bt.Search(100, available, null);
+            adapter.Raise(mock => mock.DeviceDiscovered += null, args);
+
+            // assert
+            Assert.AreEqual(1, available.Count);
+            Assert.AreEqual(id.ToString(), available[0].BT_GUID);
         }
 
         [TestMethod]
@@ -116,7 +200,8 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             args.Device = device.Object;
 
             var adapter = new Mock<IAdapter>();
-            var bt = new Bluetooth(adapter.Object);
+            var settings = new Mock<ISettings>();
+            var bt = new Bluetooth(adapter.Object, settings.Object);
 
             ObservableCollection<BTDevice> available = new ObservableCollection<BTDevice>();
 
@@ -134,7 +219,8 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             // arrange
             var adapter = new Mock<IAdapter>();
             adapter.SetupGet(mock => mock.IsScanning).Returns(true);
-            var bt = new Bluetooth(adapter.Object);
+            var settings = new Mock<ISettings>();
+            var bt = new Bluetooth(adapter.Object, settings.Object);
 
             // act
             await bt.StopSearch();
@@ -156,7 +242,11 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             adapter
                 .Setup(mock => mock.ConnectToKnownDeviceAsync(It.IsAny<Guid>(), It.IsAny<ConnectParameters>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(device.Object));
-            var bt = new Bluetooth(adapter.Object);
+            var settings = new Mock<ISettings>();
+            settings
+                .Setup(mock => mock.Get(It.Is<string>(name => name.Equals(SettingsNames.RssiInterval)), It.IsAny<int>()))
+                .Returns(Constants.RssiIntervalDefault);
+            var bt = new Bluetooth(adapter.Object, settings.Object);
 
             // act
             int rssi = 0;
@@ -180,7 +270,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
         public void StopRssiPolling_WithoutStartDoesNotBreakAnything()
         {
             // arrange
-            var bt = new Bluetooth(null);
+            var bt = new Bluetooth(null, null);
             Exception? exception = null;
 
             // act

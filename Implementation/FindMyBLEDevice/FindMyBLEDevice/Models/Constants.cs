@@ -17,6 +17,8 @@ namespace FindMyBLEDevice.Models
         public const int RssiBufferDuration = 2000;
         public const int RssiBufferMaxSize = 50;
 
+        public const int RssiTooFarThreshold = -80;
+
         public const double MeterClosebyThreshold = 1.5;
     }
 }
