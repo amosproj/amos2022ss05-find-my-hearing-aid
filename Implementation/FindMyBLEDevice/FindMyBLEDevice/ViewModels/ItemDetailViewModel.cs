@@ -40,7 +40,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public void OnAppearing()
         {
-            App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v) => {
+            App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v, int txPower) => {
                 CurrentRssi = v;
             });
 

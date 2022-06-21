@@ -23,14 +23,15 @@ namespace FindMyBLEDevice.ViewModels
         private int _radius;
         private double _meter;
         private int _currentRssi;
+        private int _txPower;
 
         private string _status;
 
         public StrengthViewModel()
         {
             Title = "StrengthSearch";
-            meterScaleMin = rssiToMeter(0);
-            meterScaleMax = rssiToMeter(-100);
+            meterScaleMin = rssiToMeter(0, Constants.TxPowerDefault);
+            meterScaleMax = rssiToMeter(-100, Constants.TxPowerDefault);
             rssiBuff = new List<int>();
             _status = "Uninitialized";
         }
@@ -62,7 +63,16 @@ namespace FindMyBLEDevice.ViewModels
             set
             {
                 SetProperty(ref _currentRssi, value);
-                Meter = rssiToMeter(CurrentRssi);
+                Meter = rssiToMeter(CurrentRssi, CurrentTxPower);
+            }
+        }
+
+        public int CurrentTxPower
+        {
+            get => _txPower;
+            set
+            {
+                SetProperty(ref _txPower, value);
             }
         }
 
@@ -82,8 +92,9 @@ namespace FindMyBLEDevice.ViewModels
             {
                 Status = "Connecting to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\"...\n" +
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
-                App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v) =>
+                App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v, int txPower) =>
                 {
+                    CurrentTxPower = txPower;
                     int rssiInterval = Preferences.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault);
                     int buffSize = rssiInterval > 0 
                         ? Math.Min(Constants.RssiBufferDuration / rssiInterval, Constants.RssiBufferMaxSize)
@@ -100,7 +111,7 @@ namespace FindMyBLEDevice.ViewModels
                     else
                     {
                         Status = "Connected to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\".\n" +
-                            "Move around to see in which direction the signal gets better.";
+                            "The current distance is about " + Meter.ToString("0.0") + " m.";
                     }
                 }, () =>
                 {
@@ -140,14 +151,10 @@ namespace FindMyBLEDevice.ViewModels
             return resultingRadius;
         }
 
-        private double rssiToMeter(int rssi)
+        private double rssiToMeter(int rssi, int measuredPower, int environmentalFactor = Constants.RssiEnvironmentalDefault)
         {
             // https://medium.com/beingcoders/convert-rssi-value-of-the-ble-bluetooth-low-energy-beacons-to-meters-63259f307283 
-            // TODO replace the constants with polled values
-            const int measuredPower = -60;
-            const int environmentalFactor = 3;
-            double dist = Math.Pow(10, (double)(measuredPower - rssi) / (10 * environmentalFactor));
-            return dist;
+            return Math.Pow(10, (double)(measuredPower - rssi) / (10 * environmentalFactor));
         }
     }
 }
