@@ -10,21 +10,35 @@
              x:DataType="viewmodels:StrengthViewModel"
              Title="{Binding Title}">
 
-
     <ContentPage.Content>
         <ScrollView>
-            <StackLayout Orientation="Vertical" Padding="20,10,20,10" Spacing="30" VerticalOptions="FillAndExpand" >
-                
+
+            <Grid
+                Padding="10"
+                >
+
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="3*" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
                 <Label Text="{Binding Status}"
-                    HeightRequest="60"
+                    Grid.Row="0"
                     TextColor="Black"
-                    HorizontalTextAlignment="Center"
+                    HorizontalTextAlignment="Center"                    
                     FontSize="16"
+                    VerticalOptions="Center"
                     />
 
                 <AbsoluteLayout HorizontalOptions="FillAndExpand"
-                    VerticalOptions="StartAndExpand">
-                    
+                    VerticalOptions="StartAndExpand"
+                    Grid.Row="1"
+                    >
+
                     <Ellipse x:Name="outerEllipse" 
                          Fill="LightGray"
                          Stroke="#2196F3"
@@ -80,28 +94,39 @@
                              HeightRequest="{Binding CircleSizes[4]}"
                              AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
                              AbsoluteLayout.LayoutFlags="PositionProportional"/>
-                    
+
                 </AbsoluteLayout>
 
                 <Frame BorderColor="DarkBlue"
-                       CornerRadius="5"
-                       Padding="5" >
-                    
-                    <StackLayout>
+                    CornerRadius="5"
+                    Padding="5" 
+                    Grid.Row="2"
+                    VerticalOptions="End"
+                       >
+
+                    <StackLayout
+                        >
                         <Label Text="Currently selected device"
                            TextColor="Black"
                            FontSize="Subtitle"
                            HorizontalOptions="CenterAndExpand"
-                           VerticalOptions="CenterAndExpand" />
+                           />
                         <BoxView Color="Black"
                              HeightRequest="1"
-                             HorizontalOptions="Fill" />
-                        <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+                             HorizontalOptions="Fill" 
+                             />
+                        <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  
+                            FontSize="Medium" 
+                            FontAttributes="Bold" 
+                            TextColor="Black" 
+                            HorizontalOptions="Center"
+                            />
                     </StackLayout>
-                    
+
                 </Frame>
 
-            </StackLayout>
+            </Grid>
+
         </ScrollView>
     </ContentPage.Content>
 </ContentPage>
