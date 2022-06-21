@@ -25,13 +25,161 @@ namespace FindMyBLEDevice.UITests
             app = AppInitializer.StartApp(platform);
         }
 
-        [Test]
-        public void WelcomeTextIsDisplayed()
-        {
-            AppResult[] results = app.WaitForElement(c => c.Marked("Welcome to Xamarin.Forms!"));
-            app.Screenshot("Welcome screen.");
 
+        /*
+            
+            Important sources:
+                https://docs.microsoft.com/en-us/appcenter/test-cloud/frameworks/uitest/xamarin-forms?tabs=windows
+                https://docs.microsoft.com/en-us/appcenter/test-cloud/frameworks/uitest/
+                
+            Important Notes: 
+                Mind that you always have to have installed the latest version of the app!
+                Running tests does NOT push the app to the running emulator, it justs starts the existing version.
+                Set the following system environment-variables:
+                    ANDROID_HOME: <your path to your android sdk> (e.g. "C:\Program Files (x86)\Android\android-sdk")
+                    JAVA_HOME: <your path to your jdk> (e.g. "C:\Program Files\Java\jdk-17.0.2")
+                Set "AutomationId" on the UI-elements in .xaml-files when developing tests
+                
+            Some examples:
+
+            Interactive mode: useful for setting up tests.
+            `app.Repl();`
+
+            Search ("query") (until it shows up, in case of animations etc.) for UI-Elements via their "AutomationId". 
+            `AppResult[] results = app.WaitForElement(c => c.Marked("Page_About"));`
+
+            Search ("query") for UI-Elements via their "AutomationId". 
+            `appResult[] results2 = app.Query(c => c.Marked("Page_About"));`
+            `Assert.IsTrue(results.Any());`
+
+            Mimick user actions
+            `app.Tap(c => c.Marked("Btn_ID"));`
+
+         */
+
+
+
+        [Test]
+        public void OpenAboutPage()
+        {
+
+            // Assert "About"-Screen is shown
+            AppResult[] results = app.Query(c => c.Marked("Page_About"));
             Assert.IsTrue(results.Any());
+
+            // Open navigation drawer
+            app.SwipeLeftToRight(0.99);
+
+            // Wait for drawer
+            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_About"));
+            Assert.IsTrue(results2.Any());
+
+            // Open devices page
+            app.Tap(c => c.Marked("FlyoutItem_About"));
+
+            // Assert that devices page (or at least one element from the page) is visible
+            AppResult[] results3 = app.WaitForElement(c => c.Marked("Page_About"));
+            Assert.IsTrue(results3.Any());
+
         }
+
+
+        [Test]
+        public void OpenDevicesPage()
+        {
+
+            // Assert "About"-Screen is shown
+            AppResult[] results = app.Query(c => c.Marked("Page_About"));
+            Assert.IsTrue(results.Any());
+
+            // Open navigation drawer
+            app.SwipeLeftToRight(0.99);
+
+            // Wait for drawer
+            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_Devices"));
+            Assert.IsTrue(results2.Any());
+
+            // Open devices page
+            app.Tap(c => c.Marked("FlyoutItem_Devices"));
+
+            // Assert that devices page (or at least one element from the page) is visible
+            AppResult[] results3 = app.WaitForElement(c => c.Marked("Page_Devices"));
+            Assert.IsTrue(results3.Any());
+
+        }
+
+        [Test]
+        public void OpenStrengthPage()
+        {
+
+            // Assert "About"-Screen is shown
+            AppResult[] results = app.Query(c => c.Marked("Page_About"));
+            Assert.IsTrue(results.Any());
+
+            // Open navigation drawer
+            app.SwipeLeftToRight(0.99);
+
+            // Wait for drawer
+            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_Strength"));
+            Assert.IsTrue(results2.Any());
+
+            // Open devices page
+            app.Tap(c => c.Marked("FlyoutItem_Strength"));
+
+            // Assert that devices page (or at least one element from the page) is visible
+            AppResult[] results3 = app.WaitForElement(c => c.Marked("Page_Strength"));
+            Assert.IsTrue(results3.Any());
+
+        }
+
+
+        [Test]
+        public void OpenMapsPage()
+        {
+
+            // Assert "About"-Screen is shown
+            AppResult[] results = app.Query(c => c.Marked("Page_About"));
+            Assert.IsTrue(results.Any());
+
+            // Open navigation drawer
+            app.SwipeLeftToRight(0.99);
+
+            // Wait for drawer
+            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_Map"));
+            Assert.IsTrue(results2.Any());
+
+            // Open devices page
+            app.Tap(c => c.Marked("FlyoutItem_Map"));
+
+            // Assert that devices page (or at least one element from the page) is visible
+            AppResult[] results3 = app.WaitForElement(c => c.Marked("Page_Map"));
+            Assert.IsTrue(results3.Any());
+
+        }
+
+        [Test]
+        public void OpenSettingsPage()
+        {
+
+            // Assert "About"-Screen is shown
+            AppResult[] results = app.Query(c => c.Marked("Page_About"));
+            Assert.IsTrue(results.Any());
+
+            // Open navigation drawer
+            app.SwipeLeftToRight(0.99);
+
+            // Wait for drawer
+            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_Settings"));
+            Assert.IsTrue(results2.Any());
+
+            // Open devices page
+            app.Tap(c => c.Marked("FlyoutItem_Settings"));
+
+            // Assert that devices page (or at least one element from the page) is visible
+            AppResult[] results3 = app.WaitForElement(c => c.Marked("Page_Settings"));
+            Assert.IsTrue(results3.Any());
+
+        }
+
     }
 }

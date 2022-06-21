@@ -10,7 +10,8 @@ namespace FindMyBLEDevice.UITests
         {
             if (platform == Platform.Android)
             {
-                return ConfigureApp.Android.StartApp();
+                return ConfigureApp.Android.InstalledApp("com.amos.findmybledevice").StartApp();
+                // return ConfigureApp.Android.StartApp();
             }
 
             return ConfigureApp.iOS.StartApp();
