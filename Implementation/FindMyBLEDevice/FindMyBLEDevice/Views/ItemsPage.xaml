@@ -44,9 +44,9 @@
                                 <DataTemplate>
                                     <Grid >
                                         <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="60" />
+                                            <ColumnDefinition Width="60" />
                                         </Grid.ColumnDefinitions>
                                         <StackLayout Grid.Column="0" Padding="5" x:DataType="model:BTDevice">
                                             <Label Text="{Binding UserLabel}" 
@@ -69,8 +69,7 @@
                                         </StackLayout>
                                         <Button 
                                             x:DataType="model:BTDevice"
-                                            Grid.Row="0"
-                                            Grid.Column="3"
+                                            Grid.Column="1"
                                             Text="📌"                                          
                                             BackgroundColor="White"
                                             TextColor="Black"
@@ -83,8 +82,7 @@
                                         <Button 
                                             x:DataType="model:BTDevice"
                                             Text="📶"
-                                            Grid.Row="0"
-                                            Grid.Column="4"
+                                            Grid.Column="2"
                                             BackgroundColor="White"
                                             TextColor="Black"
                                             BorderColor="Black"
