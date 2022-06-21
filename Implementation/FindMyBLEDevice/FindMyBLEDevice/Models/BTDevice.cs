@@ -35,7 +35,11 @@ namespace FindMyBLEDevice.Models
         [Unique, NotNull]
         public string BT_GUID { get; set; }
 
-        public string AdvertisedName { get; set; }
+        private string _advertisedName;
+        public string AdvertisedName { 
+            get => _advertisedName ?? BT_GUID; 
+            set { _advertisedName = value; } 
+        }
 
         public string UserLabel { get; set; }
 
