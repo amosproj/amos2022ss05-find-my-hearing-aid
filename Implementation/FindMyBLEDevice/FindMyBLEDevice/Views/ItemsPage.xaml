@@ -35,12 +35,11 @@
                    BackgroundColor="LightGray"
                    FontAttributes="Bold" />
             <ScrollView>
-                <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadSavedDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-                    <StackLayout>
-                        <CollectionView x:Name="ItemsListView"
+                <StackLayout>
+                    <CollectionView x:Name="ItemsListView"
                                         ItemsSource="{Binding SavedDevices}"
                                         SelectionMode="None">
-                            <CollectionView.ItemTemplate>
+                        <CollectionView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid >
                                         <Grid.ColumnDefinitions>
@@ -54,20 +53,20 @@
                                                    Style="{DynamicResource ListItemTextStyle}" 
                                                    FontSize="16" 
                                                    TextColor="Black" />
-                                            <Label Text="{Binding AdvertisedName}" 
+                                        <Label Text="{Binding AdvertisedName}" 
                                                    LineBreakMode="NoWrap"
                                                    Style="{DynamicResource ListItemDetailTextStyle}"
                                                    FontSize="13" 
                                                    TextColor="Black" />
-                                            <StackLayout.GestureRecognizers>
-                                                <TapGestureRecognizer 
+                                        <StackLayout.GestureRecognizers>
+                                            <TapGestureRecognizer 
                                                     NumberOfTapsRequired="1"
                                                     Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=SavedDeviceTapped}"		
                                                     CommandParameter="{Binding .}">
-                                                </TapGestureRecognizer>
-                                            </StackLayout.GestureRecognizers>
-                                        </StackLayout>
-                                        <Button 
+                                            </TapGestureRecognizer>
+                                        </StackLayout.GestureRecognizers>
+                                    </StackLayout>
+                                    <Button 
                                             x:DataType="model:BTDevice"
                                             Grid.Column="1"
                                             Text="📌"                                          
@@ -90,13 +89,12 @@
                                             Margin="3"
                                             Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"		
                                             CommandParameter="{Binding .}"
-                                            />
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-                    </StackLayout>
-                </RefreshView>
+                                        />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
             </ScrollView>
         </StackLayout>
         <StackLayout Grid.Row="2">
@@ -109,32 +107,31 @@
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White" />
             <ScrollView>
-                <RefreshView x:DataType="local:ItemsViewModel" Command="{Binding LoadAvailableDevicesCommand}" IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
-                    <CollectionView x:Name="AvailableDevicesListView"
+                <CollectionView x:Name="AvailableDevicesListView"
                                     ItemsSource="{Binding AvailableDevices}"
-                                    SelectionMode="None">   
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid >
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="50" />
-                                    </Grid.ColumnDefinitions>
-                                    <StackLayout Grid.Column = "0" Padding="10" x:DataType="model:BTDevice">
-                                        <Label Text="{Binding AdvertisedName}"
+                                    SelectionMode="None">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="50" />
+                                </Grid.ColumnDefinitions>
+                                <StackLayout Grid.Column = "0" Padding="10" x:DataType="model:BTDevice">
+                                    <Label Text="{Binding AdvertisedName}"
                                                 LineBreakMode="NoWrap" 
                                                 Style="{DynamicResource ListItemTextStyle}" 
                                                 FontSize="16" 
                                                 TextColor="Black" />
-                                        <StackLayout.GestureRecognizers>
-                                            <TapGestureRecognizer 
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer 
                                                 NumberOfTapsRequired="1"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type local:ItemsViewModel}}, Path=AvailableDeviceTapped}"		
                                                 CommandParameter="{Binding .}">
-                                            </TapGestureRecognizer>
-                                        </StackLayout.GestureRecognizers>
-                                    </StackLayout>
-                                    <!-- Will be added again after we decided on a global selected-device model
+                                        </TapGestureRecognizer>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                                <!-- Will be added again after we decided on a global selected-device model
                                     <Button 
                                         x:DataType="model:AvailableBTDevice"
                                         Grid.Column = "1"
@@ -147,12 +144,11 @@
                                         Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.RedirectToStrengthPage}"
                                         CommandParameter="{Binding .}"
                                      />-->
-                                </Grid >
+                            </Grid >
 
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                </RefreshView>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
             </ScrollView>
         </StackLayout>
     </Grid>
