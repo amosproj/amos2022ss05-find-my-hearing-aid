@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Models;
 using System.Collections.Generic;
@@ -10,6 +12,11 @@ namespace FindMyBLEDevice.Services.Database
 {
     public interface IDevicesStore
     {
+        /// <summary>
+        /// The currently selected device. 
+        /// Note that this value is uninitialized when the app starts.
+        /// </summary>
+        BTDevice SelectedDevice { get; set; }
 
         /// <summary>
         /// Add a new device to the devices-store and local database
@@ -23,9 +30,9 @@ namespace FindMyBLEDevice.Services.Database
         /// <param name="userLabel">
         ///     The name for the device given by the user
         /// </param>
-        /// <returns></returns>
+        /// <returns>The device as stored within the database</returns>
         /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
-        Task AddDevice(string btGuid, string advertisedName, string userLabel);
+        Task<BTDevice> AddDevice(BTDevice device);
 
         /// <summary>
         /// Delete the device with given id from the devices-store and local database
@@ -49,22 +56,20 @@ namespace FindMyBLEDevice.Services.Database
         Task<BTDevice> GetDevice(int id);
 
         /// <summary>
+        /// Get the device with the given guid from the devices-store
+        /// </summary>
+        /// <param name="guid">GUID of the requested device</param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException">When no device with given guid is saved</exception>
+        Task<BTDevice> GetDeviceByGUID(string guid);
+
+        /// <summary>
         /// Get all saved devices from the devices store
         /// </summary>
         /// <returns>
         /// List of all saved devices saved in the local database
         /// </returns>
         Task<List<BTDevice>> GetAllDevices();
-
-        /// <summary>
-        /// Update the active-flag of the device with given id
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="active"></param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException">When no device with given id is saved</exception>
-        /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
-        Task UpdateDeviceActive(int id, bool active);
 
         /// <summary>
         /// Update the GPS-coordinates of the device with given id
@@ -81,21 +86,20 @@ namespace FindMyBLEDevice.Services.Database
         /// <returns></returns>
         /// <exception cref="ArgumentException">When no device with given id is saved</exception>
         /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
-        Task UpdateDeviceLocation(int id, double latitude, double longitude);
+        Task UpdateDevice(BTDevice device);
 
         /// <summary>
-        /// Change the name of device with given id
+        /// Get the currently selected device
         /// </summary>
-        /// <param name="id">
-        ///     ID of the concerned device
-        /// </param>
-        /// <param name="userLabel">
-        ///     New label for the device with given id
-        /// </param>
-        /// <returns></returns>
-        /// <exception cref="ArgumentException">When no device with given id is saved</exception>
-        /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
-        Task UpdateDeviceUserLabel(int id, string userLabel);
+        /// <returns>the currently selected device</returns>
+        Task<BTDevice> GetSelectedDevice();
 
+        /// <summary>
+        /// Set this device as the currently selected device. 
+        /// This device does not have to exist in the database, yet.
+        /// </summary>
+        /// <param name="device">the device to select</param>
+        /// <returns></returns>
+        Task SetSelectedDevice(BTDevice device);
     }
 }

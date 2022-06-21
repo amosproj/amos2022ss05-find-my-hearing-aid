@@ -44,10 +44,10 @@
 		<string>location</string>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Need GPS for Bluetooth</string>
+	<string>Need GPS for Bluetooth and Map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Need GPS for Bluetooth functionalities</string>
+	<string>Need GPS for Bluetooth and Location functionalities</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Need GPS for BLE</string>
+	<string>Need GPS for BLE and Geolocation</string>
 </dict>
 </plist>

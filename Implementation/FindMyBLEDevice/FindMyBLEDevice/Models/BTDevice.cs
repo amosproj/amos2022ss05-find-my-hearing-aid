@@ -1,6 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using System;
 using SQLite;
@@ -12,14 +14,14 @@ namespace FindMyBLEDevice.Models
      * 
      *  SCHEMA FOR TABLE: BTDevice
      *  
-     *      Id                  | int         | Identifier of the device, set by local database (auto-increment) | (PRIMARY KEY)
-     *      BT_id               | string      | Technical identifier of the device used by BLUETOOTH
-     *      Name                | string      | Display-name of the device set by the user
+     *      ID                  | int         | Identifier of the device, set by local database (auto-increment) | (PRIMARY KEY)
+     *      BT_GUID             | string      | Technical identifier of the device used by BLUETOOTH
+     *      AdvertisedName      | string      | Name of the device as advertised by itself
+     *      UserLabel           | string      | Display-name of the device set by the user
      *      CreatedAt           | DateTime    | Timestamp of when the device has been registered (in UTC)
      *      LastGPSLatitude     | double      | Latitude-value of the GPS-Coordinates of the last updated devices' location
      *      LastGPSLongitude    | double      | Longitude-value of the GPS-Coordinates of the last updated devices' location
      *      LastGPSTimestamp    | DateTime    | Timestamp of when the devices' location has been updated the last time (in UTC)
-     *      Active              | boolean     | TODO: sicher, dass wir das haben wollen?
      *      
      */
 
@@ -28,11 +30,16 @@ namespace FindMyBLEDevice.Models
     {
 
         [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+        public int ID { get; set; }
 
+        [Unique, NotNull]
         public string BT_GUID { get; set; }
 
-        public string AdvertisedName { get; set; }
+        private string _advertisedName;
+        public string AdvertisedName { 
+            get => _advertisedName ?? BT_GUID; 
+            set { _advertisedName = value; } 
+        }
 
         public string UserLabel { get; set; }
 
@@ -43,8 +50,6 @@ namespace FindMyBLEDevice.Models
         public double LastGPSLongitude { get; set; }
 
         public DateTime LastGPSTimestamp { get; set; }
-
-        public bool Active { get; set; }
 
     }
 }

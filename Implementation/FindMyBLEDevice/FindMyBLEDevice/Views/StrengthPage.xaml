@@ -14,11 +14,12 @@
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Orientation="Vertical" Padding="20,0,20,10" Spacing="30" VerticalOptions="FillAndExpand" >
-                <Label Text="Everything within the inner blue circle is within your near surrounding."
+                <Label Text="{Binding Status}"
                            TextColor="Black"
                            HorizontalTextAlignment="Center"
+                           HeightRequest="100"
                            Padding="10"
-                           FontSize="14"
+                           FontSize="20"
                            />
                 <AbsoluteLayout HorizontalOptions="FillAndExpand"
                                 VerticalOptions="StartAndExpand">
@@ -78,6 +79,7 @@
                              AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
                              AbsoluteLayout.LayoutFlags="PositionProportional"/>
                 </AbsoluteLayout>
+                
 
                 <Frame BorderColor="DarkBlue"
                        CornerRadius="5"

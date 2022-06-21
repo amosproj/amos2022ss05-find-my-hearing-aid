@@ -3,11 +3,15 @@
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
 using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Location;
+using FindMyBLEDevice.Services.Geolocation;
+using FindMyBLEDevice.Services.Settings;
 using System;
 using Xamarin.Forms;
 
@@ -22,6 +26,10 @@ namespace FindMyBLEDevice
         private static IBluetooth bluetooth;
         // Interface to stored location Permission
         private static ILocation location;
+        // Interface to access Geolocation
+        private static IGeolocation geolocation;
+        // Interface to stored settings 
+        private static ISettings settings;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -59,41 +67,37 @@ namespace FindMyBLEDevice
             }
         }
 
+        public static IGeolocation Geolocation
+        {
+            get
+            {
+                if (geolocation == null)
+                {
+                    geolocation = new Geolocation();
+                }
+                return geolocation;
+            }
+        }
+
+        public static ISettings Settings
+        {
+            get
+            {
+                if(settings == null)
+                {
+                    settings = new Settings();
+                }
+                return settings;
+            }
+        }
+
 
 
         public App()
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
-        }
-
-        protected override void OnStart()
-        {
-            // comment to make the linter happy
-        }
-
-        protected override void OnSleep()
-        {
-            // comment to make the linter happy
-        }
-
-        protected override void OnResume()
-        {
-            // comment to make the linter happy
-        }
-
-        /// <summary>
-        /// This method was created for setting up unit tests. 
-        /// It may be deleted in the future.
-        /// </summary>
-        /// <param name="a">A number</param>
-        /// <param name="b">Another number</param>
-        /// <returns>The sum of those numbers</returns>
-        public int Add(int a, int b)
-        {
-            return a + b;
         }
     }
 }

@@ -1,21 +1,23 @@
-﻿using FindMyBLEDevice.Models;
-using FindMyBLEDevice.ViewModels;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using FindMyBLEDevice.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace FindMyBLEDevice.Views
 {
     public partial class NewItemPage : ContentPage
     {
-        public Item Item { get; set; }
+        NewItemViewModel _viewModel;
 
         public NewItemPage()
         {
             InitializeComponent();
-            BindingContext = new NewItemViewModel();
+
+            BindingContext = _viewModel = new NewItemViewModel();
+        }
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            _viewModel.OnAppearing();
         }
     }
 }

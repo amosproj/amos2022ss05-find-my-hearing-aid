@@ -1,9 +1,12 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using FindMyBLEDevice.Models;
 using SQLite;
 
 namespace FindMyBLEDevice.Services.Database
@@ -24,6 +27,12 @@ namespace FindMyBLEDevice.Services.Database
             _database.CreateTableAsync<Models.BTDevice>().Wait();
         }
 
+        public Database(SQLiteAsyncConnection database)
+        {
+            this._database = database;
+        }
+
+
 
         public Task<List<Models.BTDevice>> GetAllDevicesAsync()
         {
@@ -34,14 +43,22 @@ namespace FindMyBLEDevice.Services.Database
         public Task<Models.BTDevice> GetDeviceAsync(int id)
         {
             return _database.Table<Models.BTDevice>()
-                            .Where(i => i.Id == id)
+                            .Where(i => i.ID == id)
                             .FirstOrDefaultAsync();
         }
 
-        
+
+        public Task<Models.BTDevice> GetDeviceByGUIDAsync(string guid)
+        {
+            return _database.Table<Models.BTDevice>()
+                            .Where(i => i.BT_GUID.Equals(guid))
+                            .FirstOrDefaultAsync();
+        }
+
+
         public Task<int> SaveDeviceAsync(Models.BTDevice device)
         {
-            if (device.Id != 0)
+            if (device.ID != 0)
             {
                 return _database.UpdateAsync(device);
             }
@@ -56,6 +73,5 @@ namespace FindMyBLEDevice.Services.Database
         {
             return _database.DeleteAsync(device);
         }
-
     }
 }
