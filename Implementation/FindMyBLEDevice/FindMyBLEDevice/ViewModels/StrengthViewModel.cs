@@ -14,6 +14,7 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class StrengthViewModel : BaseViewModel
     {
+        public const double MaxRadiusRelativeToScreen = 0.9;
         private const int MinRadiusSize = 30;      
         private const double MeterClosebyThreshold = 1.5;
         private readonly int MaxRadiusSize;
@@ -40,7 +41,7 @@ namespace FindMyBLEDevice.ViewModels
             // Width (in xamarin.forms units)
             var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
             int xamarinWidth = (int)Math.Round(mainDisplayInfo.Width / mainDisplayInfo.Density);
-            MaxRadiusSize = (int)Math.Round(xamarinWidth * 0.94);
+            MaxRadiusSize = (int)Math.Round(xamarinWidth * MaxRadiusRelativeToScreen);
             initializeCircleSizes();
         }
 
