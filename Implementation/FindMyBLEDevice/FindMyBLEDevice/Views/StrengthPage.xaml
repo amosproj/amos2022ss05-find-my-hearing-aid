@@ -8,7 +8,9 @@
              xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels"
              x:Class="FindMyBLEDevice.Views.StrengthPage"
              x:DataType="viewmodels:StrengthViewModel"
-             Title="{Binding Title}">
+             Title="{Binding Title}"
+             AutomationId="Page_Strength"
+             >
 
     <ContentPage.Content>
         <ScrollView>

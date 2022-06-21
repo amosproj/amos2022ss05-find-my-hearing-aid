@@ -11,7 +11,9 @@
              Title="{Binding Title}"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels"  
              xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
-             x:Name="BrowseItemsPage">
+             x:Name="BrowseItemsPage"
+             AutomationId="Page_Devices"
+             >
 
     <ContentPage.BindingContext>
         <local:ItemsViewModel/>
