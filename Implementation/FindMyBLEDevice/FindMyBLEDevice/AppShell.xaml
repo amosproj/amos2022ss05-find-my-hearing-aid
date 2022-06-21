@@ -88,10 +88,10 @@
     <FlyoutItem Title="Devices" Icon="icon_feed.png">
         <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="StrengthSearch" Icon="icon_about.png">
+    <FlyoutItem Title="StrengthSearch" Icon="signal_strength.png">
         <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}" />
     </FlyoutItem>
-    <FlyoutItem Title="MapSearch" Icon="icon_about.png">
+    <FlyoutItem Title="MapSearch" Icon="geolocation.png">
         <ShellContent Route="MapPage" ContentTemplate="{DataTemplate local:MapPage}" />
     </FlyoutItem>
     <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
