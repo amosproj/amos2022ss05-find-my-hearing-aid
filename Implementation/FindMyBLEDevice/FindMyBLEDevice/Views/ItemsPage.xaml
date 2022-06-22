@@ -64,28 +64,26 @@
                                             </TapGestureRecognizer>
                                         </StackLayout.GestureRecognizers>
                                     </StackLayout>
-                                    <Button 
+                                    <ImageButton 
                                             x:DataType="model:BTDevice"
                                             Grid.Column="1"
-                                            Text="📌"                                          
-                                            BackgroundColor="White"
-                                            TextColor="Black"
+                                            Source="signal_strength.png"
+                                            HeightRequest="55"
                                             BorderColor="Black"
                                             BorderWidth="1"
                                             Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.MapButtonTapped}"
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"
                                             CommandParameter="{Binding .}"
                                             />
-                                        <Button 
+                                    <ImageButton 
                                             x:DataType="model:BTDevice"
-                                            Text="📶"
-                                            Grid.Column="2"
-                                            BackgroundColor="White"
-                                            TextColor="Black"
+                                            Grid.Column="2"   
+                                            Source="geolocation.png"
+                                            HeightRequest="55"                                        
                                             BorderColor="Black"
-                                            BorderWidth="1"                                            
+                                            BorderWidth="1"         
                                             Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"		
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.MapButtonTapped}"		
                                             CommandParameter="{Binding .}"
                                         />
                                 </Grid>
