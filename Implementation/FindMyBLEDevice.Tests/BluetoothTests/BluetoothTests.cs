@@ -250,7 +250,7 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
 
             // act
             int rssi = 0;
-            bt.StartRssiPolling(Guid.Empty.ToString(), (int input) =>
+            bt.StartRssiPolling(Guid.Empty.ToString(), (int input, int txPower) =>
             {
                 rssi = input;
             },

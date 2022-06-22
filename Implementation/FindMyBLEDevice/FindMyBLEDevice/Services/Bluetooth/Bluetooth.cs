@@ -78,7 +78,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
             }
         }
         
-        public void StartRssiPolling(String btguid, Action<int> updateRssi, Action connected = null, Action disconnected = null)
+        public void StartRssiPolling(String btguid, Action<int, int> updateRssi, Action connected = null, Action disconnected = null)
         {
             StopRssiPolling();
             rssiCancel = new CancellationTokenSource();
@@ -93,12 +93,35 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
                         if (!(connected is null)) connected.Invoke();
 
+                        int txPower = Constants.TxPowerDefault;
+                        try
+                        {
+                            var service = await device.GetServiceAsync(Guid.ParseExact("00001804-0000-1000-8000-00805f9b34fb", "d"), token);
+                            if(service != null)
+                            {
+                                var characteristic = await service.GetCharacteristicAsync(Guid.ParseExact("00002a07-0000-1000-8000-00805f9b34fb", "d"));
+                                if(characteristic != null)
+                                {
+                                    var value = await characteristic.ReadAsync(token);
+                                    if(value != null)
+                                    {
+                                        txPower = Convert.ToInt32((sbyte) value[0]);
+                                        Console.WriteLine("Device provided its txPower value: " + txPower);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
+
                         try
                         {
                             while((!token.IsCancellationRequested) && device.State == DeviceState.Connected)
                             {
                                 await device.UpdateRssiAsync();
-                                updateRssi.Invoke(device.Rssi);
+                                updateRssi.Invoke(device.Rssi, txPower);
                                 await Task.Delay(settings.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault));
                             }
                         }

@@ -8,6 +8,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services;
+using System;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -39,15 +40,20 @@ namespace FindMyBLEDevice.ViewModels
             await CheckBluetoothAndLocation.Check();
 
             CurrentLocation = await App.Geolocation.GetCurrentLocation();
-            Pin pin = new Pin
+            if (CurrentLocation == null)
             {
-                Label = "Your Smartphone",
-                Address = "",
-                Type = PinType.Place,
-                Position = new Position(CurrentLocation.Latitude, CurrentLocation.Longitude)
-        };
-            map.Pins.Add(pin);
-            map.MoveToRegion(MapSpan.FromCenterAndRadius(pin.Position, Distance.FromKilometers(1)));
+                Console.WriteLine("No Location found!");
+            } else {
+                Pin pin = new Pin
+                {
+                    Label = "Your Smartphone",
+                    Address = "",
+                    Type = PinType.Place,
+                    Position = new Position(CurrentLocation.Latitude, CurrentLocation.Longitude)
+                };
+                map.Pins.Add(pin);
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(pin.Position, Distance.FromKilometers(1)));
+            }
         }
 
         public void OnDisappearing() {

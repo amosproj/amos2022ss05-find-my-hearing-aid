@@ -2,6 +2,8 @@
 using System.Windows.Input;
 using Xamarin.Essentials;
 using Xamarin.Forms;
+using FindMyBLEDevice.Models;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -10,9 +12,15 @@ namespace FindMyBLEDevice.ViewModels
         public AboutViewModel()
         {
             Title = "About";
-            OpenWebCommand = new Command(async () => await Browser.OpenAsync("https://aka.ms/xamarin-quickstart"));
+            
+            OpenMapPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(MapPage)}"));
+            OpenStrengthPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(StrengthPage)}"));
         }
 
-        public ICommand OpenWebCommand { get; }
+        public ICommand OpenMapPageCommand { get; }
+
+        public ICommand OpenStrengthPageCommand { get; }
+
+        
     }
 }

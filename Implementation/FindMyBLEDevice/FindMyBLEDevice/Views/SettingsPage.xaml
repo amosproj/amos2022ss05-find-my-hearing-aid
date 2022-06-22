@@ -9,7 +9,9 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="FindMyBLEDevice.Views.SettingsPage"
-             Title="Settings">
+             Title="Settings"
+             AutomationId="Page_Settings"
+                 >
     <ContentPage.Content>
         <ScrollView>
             <StackLayout Padding="20,20,20,20" Spacing="20" Orientation="Vertical" VerticalOptions="Start">
