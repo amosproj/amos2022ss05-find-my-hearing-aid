@@ -19,15 +19,7 @@ namespace FindMyBLEDevice.ViewModels
             this.map = map;
         }
 
-        private Xamarin.Forms.Maps.Map map;
-        private Location currentLocation;
-        public Location CurrentLocation { 
-            get { return currentLocation; } 
-            set { 
-                SetProperty(ref currentLocation, value);
-            } 
-        }
-
+        private readonly Xamarin.Forms.Maps.Map map;
 
         public BTDevice Device
         {
@@ -36,13 +28,13 @@ namespace FindMyBLEDevice.ViewModels
 
         public async void OnAppearing()
         {
-            CurrentLocation = await App.Geolocation.GetCurrentLocation();
-            if (CurrentLocation == null)
+            var currentLocation = await App.Geolocation.GetCurrentLocation();
+            if (currentLocation == null)
             {
                 Console.WriteLine("No Location found!");
             } else {
                 map.IsShowingUser = true;
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(CurrentLocation.Latitude, CurrentLocation.Longitude), Distance.FromKilometers(1)));
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(currentLocation.Latitude, currentLocation.Longitude), Distance.FromKilometers(1)));
             }
         }
 
