@@ -1,13 +1,36 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+<!--
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+-->
+    <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              x:Class="FindMyBLEDevice.Views.SettingsPage"
-             Title="Settings">
+             Title="Settings"
+             AutomationId="Page_Settings"
+                 >
     <ContentPage.Content>
-        <StackLayout Padding="10,0,10,0" VerticalOptions="Center">
-            <Label VerticalOptions="Center" HorizontalOptions="Center" Text="Settings" FontSize="Medium" TextColor="Black" />
-        </StackLayout>
+        <ScrollView>
+            <StackLayout Padding="20,20,20,20" Spacing="20" Orientation="Vertical" VerticalOptions="Start">
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="List devices without an advertised name in the devices scan." FontSize="Medium" TextColor="Black" />
+                    <Switch IsToggled="{Binding DisplayNamelessDevices}" OnColor="LightSkyBlue" ThumbColor="{StaticResource Primary}" HorizontalOptions="End" />
+                </StackLayout>
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="List devices with a very weak connection in the devices scan." FontSize="Medium" TextColor="Black" />
+                    <Switch IsToggled="{Binding DisplayWeakDevices}" OnColor="LightSkyBlue" ThumbColor="{StaticResource Primary}" HorizontalOptions="End" />
+                </StackLayout>
+                <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="The time between RSSI / signal strength updates in milliseconds." FontSize="Medium" TextColor="Black" />
+                        <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" TextColor="Black" PlaceholderColor="LightGray" />
+                    </StackLayout>
+                    <Slider Maximum="{Binding RssiIntervalMax}" Minimum="{Binding RssiIntervalMin}" Value="{Binding RssiInterval}" ThumbColor="{StaticResource Primary}" MinimumTrackColor="{StaticResource Primary}" MaximumTrackColor="{StaticResource Primary}" />
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
     </ContentPage.Content>
 </ContentPage>

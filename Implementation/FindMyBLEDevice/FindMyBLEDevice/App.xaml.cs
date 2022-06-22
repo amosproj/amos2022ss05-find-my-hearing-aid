@@ -4,11 +4,14 @@
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
 using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Location;
+using FindMyBLEDevice.Services.Geolocation;
+using FindMyBLEDevice.Services.Settings;
 using System;
 using Xamarin.Forms;
 
@@ -23,6 +26,10 @@ namespace FindMyBLEDevice
         private static IBluetooth bluetooth;
         // Interface to stored location Permission
         private static ILocation location;
+        // Interface to access Geolocation
+        private static IGeolocation geolocation;
+        // Interface to stored settings 
+        private static ISettings settings;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -57,6 +64,30 @@ namespace FindMyBLEDevice
                     location = new Location();
                 }
                 return location;
+            }
+        }
+
+        public static IGeolocation Geolocation
+        {
+            get
+            {
+                if (geolocation == null)
+                {
+                    geolocation = new Geolocation();
+                }
+                return geolocation;
+            }
+        }
+
+        public static ISettings Settings
+        {
+            get
+            {
+                if(settings == null)
+                {
+                    settings = new Settings();
+                }
+                return settings;
             }
         }
 

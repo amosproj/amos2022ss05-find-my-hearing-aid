@@ -19,8 +19,26 @@ namespace FindMyBLEDevice.ViewModels
     public class ItemsViewModel : BaseViewModel
     {
 
-        private ObservableCollection<BTDevice> availableDevices;
-        public ObservableCollection<BTDevice> SavedDevices { get; }
+        private ObservableCollection<BTDevice> savedDevices, availableDevices;
+        public ObservableCollection<BTDevice> SavedDevices 
+        { 
+            get => savedDevices; 
+            set
+            {
+                savedDevices = value;
+                OnPropertyChanged(nameof(SavedDevices));
+            }
+        }
+        public ObservableCollection<BTDevice> AvailableDevices {
+            get { 
+                return availableDevices; 
+            }
+            set
+            {
+                availableDevices = value;
+                OnPropertyChanged(nameof(AvailableDevices));
+            }
+        }
 
         public Command LoadSavedDevicesCommand { get; }
         public Command LoadAvailableDevicesCommand { get; }
@@ -28,26 +46,13 @@ namespace FindMyBLEDevice.ViewModels
         public Command<BTDevice> SavedDeviceTapped { get; }
         public Command<BTDevice> AvailableDeviceTapped { get; }
         public Command<BTDevice> StrengthButtonTapped { get; }
-
-        public ObservableCollection<BTDevice> AvailableDevices {
-            get { 
-                return availableDevices; 
-            }
-            set
-            {
-                List<BTDevice> devices = value.ToList();
-                availableDevices = new ObservableCollection<BTDevice>(devices);                
-                OnPropertyChanged(nameof(AvailableDevices));
-            }
-        }
+        public Command<BTDevice> MapButtonTapped { get; }
 
         public ItemsViewModel()
         {
             Title = "Devices";
 
             SavedDevices = new ObservableCollection<BTDevice>();
-            LoadSavedDevicesCommand = new Command(async () => await ExecuteLoadSavedDevicesCommand());
-
             AvailableDevices = new ObservableCollection<BTDevice>();
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
 #pragma warning disable CS4014
@@ -58,23 +63,18 @@ namespace FindMyBLEDevice.ViewModels
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(ItemDetailPage)));
             AvailableDeviceTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(NewItemPage)));
-
             StrengthButtonTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(StrengthPage)));
+            MapButtonTapped = new Command<BTDevice>(
+                async (BTDevice device) => await SelectAndRedirectTo(device, nameof(MapPage)));
         }
 
-        async Task ExecuteLoadSavedDevicesCommand()
+        public async void OnAppearing()
         {
             IsBusy = true;
-
             try
             {
-                SavedDevices.Clear();
-                var devices = await App.DevicesStore.GetAllDevices();
-                foreach (var device in devices)
-                {
-                    SavedDevices.Add(device);
-                }
+                SavedDevices = new ObservableCollection<BTDevice>(await App.DevicesStore.GetAllDevices());
             }
             catch (Exception ex)
             {
@@ -84,24 +84,19 @@ namespace FindMyBLEDevice.ViewModels
             {
                 IsBusy = false;
             }
+
+            AvailableDevices = new ObservableCollection<BTDevice>();
         }
 
-        public async void OnAppearing()
+        public async void OnDisappearing()
         {
-            IsBusy = true;
-
-            List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
-            List<BTDevice> available = AvailableDevices.ToList();
-            available.RemoveAll(availableDevice => savedDevices.Exists(saved => (saved.BT_GUID.CompareTo(availableDevice.BT_GUID)) == 0));
-            AvailableDevices = new ObservableCollection<BTDevice>(available);
+            await App.Bluetooth.StopSearch();
         }
 
         async Task SelectAndRedirectTo(BTDevice device, string page)
         {
             if (device == null)
                 return;
-
-            await App.Bluetooth.StopSearch();
 
             App.DevicesStore.SelectedDevice = device;
             await Shell.Current.GoToAsync(page);

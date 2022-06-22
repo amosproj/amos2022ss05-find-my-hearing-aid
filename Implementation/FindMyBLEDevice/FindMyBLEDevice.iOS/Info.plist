@@ -25,7 +25,7 @@
 	<key>CFBundleDisplayName</key>
 	<string>Find My BLE Device</string>
 	<key>CFBundleIdentifier</key>
-	<string>com.companyname.FindMyBLEDevice</string>
+	<string>com.amos.FindMyBLEDevice</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>UILaunchStoryboardName</key>
@@ -44,10 +44,10 @@
 		<string>location</string>
 	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>Need GPS for Bluetooth</string>
+	<string>Need GPS for Bluetooth and Map</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>Need GPS for Bluetooth functionalities</string>
+	<string>Need GPS for Bluetooth and Location functionalities</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>Need GPS for BLE</string>
+	<string>Need GPS for BLE and Geolocation</string>
 </dict>
 </plist>

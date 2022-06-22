@@ -14,22 +14,23 @@ using System;
 using System.Threading;
 using Plugin.BLE.Abstractions;
 using FindMyBLEDevice.Exceptions;
+using FindMyBLEDevice.Services.Settings;
 
 namespace FindMyBLEDevice.Services.Bluetooth
 {
     public class Bluetooth : IBluetooth
     {
-        private const int PollDelay = 25;
-        
         private readonly IAdapter adapter;
+        private readonly ISettings settings;
 
         private CancellationTokenSource rssiCancel;
 
-        public Bluetooth(IAdapter adapter)
+        public Bluetooth(IAdapter adapter, ISettings settings)
         {
             this.adapter = adapter;
+            this.settings = settings;
         }
-        public Bluetooth() : this(CrossBluetoothLE.Current.Adapter) {}
+        public Bluetooth() : this(CrossBluetoothLE.Current.Adapter, App.Settings) {}
 
         public async Task Search(int scanTimeout, ObservableCollection<BTDevice> availableDevices, Predicate<BTDevice> filter)
         {
@@ -41,7 +42,12 @@ namespace FindMyBLEDevice.Services.Bluetooth
                     return;
                 }
 
-                if (a.Device.Rssi < -80 || a.Device.Name is null)
+                if (a.Device.Rssi < Constants.RssiTooFarThreshold && !settings.Get(SettingsNames.DisplayWeakDevices, false))
+                {
+                    return;
+                }
+
+                if (a.Device.Name is null && !settings.Get(SettingsNames.DisplayNamelessDevices, false))
                 {
                     return;
                 }
@@ -70,7 +76,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
             }
         }
         
-        public void StartRssiPolling(String btguid, Action<int> updateRssi, Action connected = null, Action disconnected = null)
+        public void StartRssiPolling(String btguid, Action<int, int> updateRssi, Action connected = null, Action disconnected = null)
         {
             StopRssiPolling();
             rssiCancel = new CancellationTokenSource();
@@ -85,13 +91,36 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
                         if (!(connected is null)) connected.Invoke();
 
+                        int txPower = Constants.TxPowerDefault;
+                        try
+                        {
+                            var service = await device.GetServiceAsync(Guid.ParseExact("00001804-0000-1000-8000-00805f9b34fb", "d"), token);
+                            if(service != null)
+                            {
+                                var characteristic = await service.GetCharacteristicAsync(Guid.ParseExact("00002a07-0000-1000-8000-00805f9b34fb", "d"));
+                                if(characteristic != null)
+                                {
+                                    var value = await characteristic.ReadAsync(token);
+                                    if(value != null)
+                                    {
+                                        txPower = Convert.ToInt32((sbyte) value[0]);
+                                        Console.WriteLine("Device provided its txPower value: " + txPower);
+                                    }
+                                }
+                            }
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.ToString());
+                        }
+
                         try
                         {
                             while((!token.IsCancellationRequested) && device.State == DeviceState.Connected)
                             {
                                 await device.UpdateRssiAsync();
-                                updateRssi.Invoke(device.Rssi);
-                                await Task.Delay(PollDelay);
+                                updateRssi.Invoke(device.Rssi, txPower);
+                                await Task.Delay(settings.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault));
                             }
                         }
                         catch (Exception e)

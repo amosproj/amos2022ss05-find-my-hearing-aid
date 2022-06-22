@@ -137,6 +137,9 @@
     <ImageAsset Include="Assets.xcassets\AppIcon.appiconset\ItunesArtwork%402x-1.png">
       <Visible>false</Visible>
     </ImageAsset>
+    <BundleResource Include="Resources\geolocation.png" />
+    <BundleResource Include="Resources\signal_strength.png" />
+    <BundleResource Include="Resources\find_my_ble_device.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -149,6 +152,9 @@
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" />
     <PackageReference Include="Xamarin.Essentials" Version="1.6.1" />
+    <PackageReference Include="Xamarin.Forms.Maps">
+      <Version>5.0.0.2012</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <ItemGroup>

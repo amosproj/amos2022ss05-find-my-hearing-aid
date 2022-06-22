@@ -1,4 +1,7 @@
-﻿using FindMyBLEDevice.Views;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+using FindMyBLEDevice.Views;
 using System;
 using Xamarin.Forms;
 
@@ -14,6 +17,7 @@ namespace FindMyBLEDevice
             Routing.RegisterRoute(nameof(ItemsPage), typeof(ItemsPage));
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StrengthPage), typeof(StrengthPage));
+            Routing.RegisterRoute(nameof(MapPage), typeof(MapPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
