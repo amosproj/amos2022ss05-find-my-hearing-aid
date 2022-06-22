@@ -47,6 +47,8 @@ namespace FindMyBLEDevice.ViewModels
 
         private void showSelectedDevice()
         {
+			if (Device is null) return;
+
             var deviceLocation = new Location(Device.LastGPSLatitude, Device.LastGPSLongitude);
             Pin devicePin = new Pin
             {
