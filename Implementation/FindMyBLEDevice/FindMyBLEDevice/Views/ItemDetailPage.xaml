@@ -46,5 +46,14 @@
             Margin="3"
             Command="{Binding MapButtonTapped}"		
             />
+        <Button
+            Text="Delete device"
+            BackgroundColor="White"
+            TextColor="Black"
+            BorderColor="Black"
+            BorderWidth="1"
+            Margin="3"
+            Command="{Binding DeleteButtonTapped}"		
+            />
     </StackLayout>
 </ContentPage>

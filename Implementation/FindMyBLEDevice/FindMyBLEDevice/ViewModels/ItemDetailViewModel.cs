@@ -14,6 +14,7 @@ namespace FindMyBLEDevice.ViewModels
         private int _currentRssi;
         public Command StrengthButtonTapped { get; }
         public Command MapButtonTapped { get; }
+        public Command DeleteButtonTapped { get; }
 
         public ItemDetailViewModel()
         {
@@ -21,6 +22,8 @@ namespace FindMyBLEDevice.ViewModels
                    async () => await RedirectTo(nameof(StrengthPage)));
             MapButtonTapped = new Command(
                 async () => await RedirectTo(nameof(MapPage)));
+            DeleteButtonTapped = new Command(
+                async () => await DeleteDevice());
         }
         async Task RedirectTo(string page)
         {
@@ -38,12 +41,23 @@ namespace FindMyBLEDevice.ViewModels
             get => App.DevicesStore.SelectedDevice;
         }
 
+        async Task DeleteDevice()
+        {
+            App.Bluetooth.StopRssiPolling();
+
+            int id = Device.ID;
+            App.DevicesStore.SelectedDevice = null;
+            await App.DevicesStore.DeleteDevice(id);
+
+            // Go back to devices page
+            await Shell.Current.GoToAsync("..");
+        }
+
         public void OnAppearing()
         {
             App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v, int txPower) => {
                 CurrentRssi = v;
             });
-
         }
         public void OnDisappearing()
         {
