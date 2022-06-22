@@ -35,10 +35,12 @@ namespace FindMyBLEDevice.ViewModels
                 var phonePosition = new Position(currentLocation.Latitude, currentLocation.Longitude);
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(
                     phonePosition,
-                    Distance.BetweenPositions(
-                        phonePosition,
-                        new Position(Device.LastGPSLatitude, Device.LastGPSLongitude
-                ))));
+                    Device is null
+                        ? Distance.FromKilometers(1)
+                        : Distance.BetweenPositions(
+                            phonePosition,
+                            new Position(Device.LastGPSLatitude, Device.LastGPSLongitude))
+                ));
             }
             showSelectedDevice();
         }
