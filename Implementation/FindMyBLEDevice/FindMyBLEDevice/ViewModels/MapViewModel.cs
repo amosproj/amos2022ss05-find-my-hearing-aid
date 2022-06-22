@@ -8,6 +8,7 @@ using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
 using System;
+using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -19,12 +20,9 @@ namespace FindMyBLEDevice.ViewModels
             this.map = map;
         }
 
-        private readonly Xamarin.Forms.Maps.Map map;
+        public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
 
-        public BTDevice Device
-        {
-            get => App.DevicesStore.SelectedDevice;
-        }
+        private readonly Xamarin.Forms.Maps.Map map;
 
         public async void OnAppearing()
         {
@@ -34,9 +32,29 @@ namespace FindMyBLEDevice.ViewModels
                 Console.WriteLine("No Location found!");
             } else {
                 map.IsShowingUser = true;
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(new Position(currentLocation.Latitude, currentLocation.Longitude), Distance.FromKilometers(1)));
+                var phonePosition = new Position(currentLocation.Latitude, currentLocation.Longitude);
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                    phonePosition,
+                    Distance.BetweenPositions(
+                        phonePosition,
+                        new Position(Device.LastGPSLatitude, Device.LastGPSLongitude
+                ))));
             }
+            showSelectedDevice();
         }
+
+        private void showSelectedDevice()
+        {
+            var deviceLocation = new Location(Device.LastGPSLatitude, Device.LastGPSLongitude);
+            Pin devicePin = new Pin
+            {
+                Label = Device.UserLabel,
+                Address = Device.LastGPSTimestamp.ToString(),
+                Type = PinType.Place,
+                Position = new Position(deviceLocation.Latitude, Device.LastGPSLongitude)
+            };
+            map.Pins.Add(devicePin);
+        } 
 
         public void OnDisappearing() {
             // comment to make linter happy, method will be used in the future
