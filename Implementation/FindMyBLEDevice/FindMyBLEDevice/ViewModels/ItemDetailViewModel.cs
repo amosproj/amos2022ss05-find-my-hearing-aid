@@ -12,12 +12,15 @@ namespace FindMyBLEDevice.ViewModels
     public class ItemDetailViewModel : BaseViewModel
     {
         private int _currentRssi;
+        public Command RenameButtonTapped { get; }
         public Command StrengthButtonTapped { get; }
         public Command MapButtonTapped { get; }
         public Command DeleteButtonTapped { get; }
 
         public ItemDetailViewModel()
         {
+            RenameButtonTapped = new Command(
+                   async () => await RenameDevice());
             StrengthButtonTapped = new Command(
                    async () => await RedirectTo(nameof(StrengthPage)));
             MapButtonTapped = new Command(
@@ -40,6 +43,17 @@ namespace FindMyBLEDevice.ViewModels
         {
             get => App.DevicesStore.SelectedDevice;
         }
+
+        async Task RenameDevice()
+        {
+            App.Bluetooth.StopRssiPolling();
+            
+            BTDevice device = Device;
+            device.UserLabel = "new Name";
+            await App.DevicesStore.UpdateDevice(device);
+            
+        }
+
 
         async Task DeleteDevice()
         {

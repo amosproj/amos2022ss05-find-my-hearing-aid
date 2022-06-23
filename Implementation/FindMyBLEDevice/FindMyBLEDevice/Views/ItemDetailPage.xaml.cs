@@ -24,6 +24,5 @@ namespace FindMyBLEDevice.Views
             _viewModel.OnAppearing();
         }
 
-
     }
 }
