@@ -127,7 +127,6 @@ namespace FindMyBLEDevice.Services.Bluetooth
                         {
                             Console.WriteLine(e.ToString());
                         }
-                        await adapter.DisconnectDeviceAsync(device);
                         if (!(disconnected is null)) disconnected.Invoke();
                     }
                     catch (Exception e)
