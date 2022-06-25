@@ -141,5 +141,12 @@ namespace FindMyBLEDevice.Services.Bluetooth
         {
             rssiCancel?.Cancel();
         }
+        
+        public async Task<IDevice> DeviceReachableAsync(BTDevice device)
+        {
+            var adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID));
+            if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
+            return adapterDevice;
+        }
     }
 }
