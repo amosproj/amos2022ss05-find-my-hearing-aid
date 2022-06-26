@@ -19,16 +19,20 @@ namespace FindMyBLEDevice.Services
         private readonly IBluetooth bluetooth;
         private readonly IDevicesStore devicesStore;
         private readonly IGeolocation geolocation;
+        private readonly ISettings settings;
 
+#pragma warning disable S1450
         private List<BTDevice> savedDevices;
+#pragma warning restore S1450
 
         private bool running;
 
-        public UpdateService(IBluetooth bluetooth, IDevicesStore deviceStore, IGeolocation geolocation)
+        public UpdateService(IBluetooth bluetooth, IDevicesStore deviceStore, IGeolocation geolocation, ISettings settings)
         {
             this.bluetooth = bluetooth;
             this.devicesStore = deviceStore;
             this.geolocation = geolocation;
+            this.settings = settings;
 
             savedDevices = new List<BTDevice>();
             devicesStore.DevicesChanged += OnSavedDevicesStoreChanged;
@@ -36,7 +40,7 @@ namespace FindMyBLEDevice.Services
             running = false;
         }
 
-        public UpdateService() : this(App.Bluetooth, App.DevicesStore, App.Geolocation) { }
+        public UpdateService() : this(App.Bluetooth, App.DevicesStore, App.Geolocation, App.Settings) { }
 
 
         private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
@@ -86,8 +90,7 @@ namespace FindMyBLEDevice.Services
                     }
 
                     // delay next poll
-                    const int pollPeriod = 5 * 1000; 
-                    await Task.Delay(pollPeriod);
+                    await Task.Delay(1000 * settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault));
                 }
             });
         }

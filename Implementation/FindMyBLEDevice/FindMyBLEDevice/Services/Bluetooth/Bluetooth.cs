@@ -122,6 +122,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                                 updateRssi.Invoke(device.Rssi, txPower);
                                 await Task.Delay(settings.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault));
                             }
+                            await adapter.DisconnectDeviceAsync(device);
                         }
                         catch (Exception e)
                         {

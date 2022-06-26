@@ -24,7 +24,7 @@ namespace FindMyBLEDevice.Models
 
         public const double MeterClosebyThreshold = 0.5;
 
-        public const int UpdateServiceIntervalDefault = 10; //in seconds
+        public const int UpdateServiceIntervalDefault = 5; //in seconds
         public const int UpdateServiceIntervalMin = 1;
         public const int UpdateServiceIntervalMax = 300;
     }
