@@ -18,21 +18,8 @@ namespace FindMyBLEDevice.Services.Database
 
         private readonly IDatabase _database;
 
-        private BTDevice _selectedDevice;
-        public BTDevice SelectedDevice
-        {
-            get => new BTDevice
-            {
-                UserLabel = "SomeDevice",
-                LastGPSTimestamp = DateTime.Now,
-                LastGPSLatitude = 49,
-                LastGPSLongitude = 11
-            };
-            set
-            {
-                _selectedDevice = value;
-            }
-        }
+        public BTDevice SelectedDevice { get; set; }
+        
 
         public DevicesStore()
         {
