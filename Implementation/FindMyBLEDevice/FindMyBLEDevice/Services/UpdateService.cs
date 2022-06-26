@@ -58,21 +58,25 @@ namespace FindMyBLEDevice.Services
                     Dictionary<BTDevice, Task<IDevice>> reachableTasks = new Dictionary<BTDevice, Task<IDevice>>();
                     foreach (BTDevice device in savedDevices)
                     {
-                        reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
+                        try
+                        {
+                            reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
+                        } catch (Exception e)
+                        {
+                            Console.WriteLine($"[UpdateService] {DateTime.Now} Checking if reachable failed for: {device.UserLabel}");
+                        }
                     }
 
-                    // wait until all connection attempts finished with a timeout
-                    const int reachableTimeout = 5 * 1000;
-                    await Task.WhenAny(Task.WhenAll(reachableTasks.Values), Task.Delay(reachableTimeout));
+                    // wait until all connection attempts finished (adapter timeout ~5s)
+                    await Task.WhenAll(reachableTasks.Values);
 
                     // update geolocations of reachable devices
-                    const int rssiThreshold = -80;
                     var location = await geolocation.GetCurrentLocation();
                     foreach (KeyValuePair<BTDevice, Task<IDevice>> p in reachableTasks)
                     {
                         var databaseDevice = p.Key;
                         var adapterDeviceTask = p.Value;
-                        if (!adapterDeviceTask.IsCompleted || adapterDeviceTask.Result is null || adapterDeviceTask.Result.Rssi < rssiThreshold)
+                        if (adapterDeviceTask.Result is null || adapterDeviceTask.Result.Rssi < Constants.RssiTooFarThreshold)
                         {
                             Console.WriteLine($"[UpdateService] {DateTime.Now} Out of reach: {databaseDevice.UserLabel}");
                             databaseDevice.WithinRange = false;
@@ -87,8 +91,8 @@ namespace FindMyBLEDevice.Services
                         await devicesStore.UpdateDevice(databaseDevice);
                     }
 
-                    // poll only every 20 sec
-                    const int pollPeriod = 20 * 1000; 
+                    // delay next poll
+                    const int pollPeriod = 5 * 1000; 
                     await Task.Delay(pollPeriod);
                 }
             });
