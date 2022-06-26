@@ -139,29 +139,6 @@ namespace FindMyBLEDevice.UITests
 
         }
 
-        [Test]
-        public void OpenSettingsPage()
-        {
-
-            // Assert "About"-Screen is shown
-            AppResult[] results = app.Query(c => c.Marked("Page_About"));
-            Assert.IsTrue(results.Any());
-
-            // Open navigation drawer
-            app.SwipeLeftToRight(0.99);
-
-            // Wait for drawer
-            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_Settings"));
-            Assert.IsTrue(results2.Any());
-
-            // Open devices page
-            app.Tap(c => c.Marked("FlyoutItem_Settings"));
-
-            // Assert that devices page (or at least one element from the page) is visible
-            AppResult[] results3 = app.WaitForElement(c => c.Marked("Page_Settings"));
-            Assert.IsTrue(results3.Any());
-
-        }
-
+        
     }
 }
