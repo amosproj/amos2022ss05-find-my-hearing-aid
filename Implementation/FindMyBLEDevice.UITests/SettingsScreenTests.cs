@@ -155,6 +155,39 @@ namespace FindMyBLEDevice.UITests
 
         }
 
-      
+        [Test]
+        public void Settings_RSSIInterval_Slider()
+        {
+
+            // Open navigation drawer
+            app.SwipeLeftToRight(0.99);
+
+            // Wait for drawer
+            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_Settings"));
+            Assert.IsTrue(results2.Any());
+
+            // Open devices page
+            app.Tap(c => c.Marked("FlyoutItem_Settings"));
+            app.WaitForElement(c => c.Marked("Page_Settings"));
+
+            Assert.IsTrue(app.Query(c => c.Marked("Setting_RSSIInterval_Slider")).Any());
+            Assert.IsTrue(app.Query(c => c.Marked("Setting_RSSIInterval_Entry")).Any());
+            Assert.IsTrue(app.Query(c => c.Marked("Setting_RSSIInterval_Label")).Any());
+
+            app.ClearText("Setting_RSSIInterval_Entry");
+            app.EnterText("Setting_RSSIInterval_Entry", "100");
+            string s2 = app.Query(c => c.Marked("Setting_RSSIInterval_Entry"))[0].Text;
+            Assert.IsTrue(s2 == "100");
+
+            /*
+             * This does not work for some reason. 
+             * app.SetSliderValue("Setting_RSSIInterval_Slider", 600);
+             * string s3 = app.Query(c => c.Marked("Setting_RSSIInterval_Entry"))[0].Text;
+             * Assert.IsTrue(s3 == "600");
+            */
+
+        }
+
+
     }
 }
