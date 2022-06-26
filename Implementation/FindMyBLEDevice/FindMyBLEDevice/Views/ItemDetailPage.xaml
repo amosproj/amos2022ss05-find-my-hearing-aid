@@ -17,7 +17,7 @@
 
     <StackLayout Spacing="20" Padding="15">
         <Label Text="User Label:" FontSize="Medium" TextColor="Black" />
-        <Entry x:Name="UserLabelEntry" Text="{Binding Device.UserLabel, Mode=TwoWay}" FontSize="Small" TextColor="Black"/>
+        <Entry x:Name="UserLabel" Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.UserLabel}" FontSize="Small" TextColor="Black"/>
         <Button
             x:Name="RenameButton"
             Text="Rename"
