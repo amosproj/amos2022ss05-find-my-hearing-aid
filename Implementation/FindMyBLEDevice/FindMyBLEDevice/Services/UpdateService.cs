@@ -58,13 +58,7 @@ namespace FindMyBLEDevice.Services
                     Dictionary<BTDevice, Task<IDevice>> reachableTasks = new Dictionary<BTDevice, Task<IDevice>>();
                     foreach (BTDevice device in savedDevices)
                     {
-                        try
-                        {
-                            reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
-                        } catch (Exception e)
-                        {
-                            Console.WriteLine($"[UpdateService] {DateTime.Now} Checking if reachable failed for: {device.UserLabel}");
-                        }
+                        reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
                     }
 
                     // wait until all connection attempts finished (adapter timeout ~5s)

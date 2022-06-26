@@ -144,9 +144,16 @@ namespace FindMyBLEDevice.Services.Bluetooth
         
         public async Task<IDevice> DeviceReachableAsync(BTDevice device)
         {
-            ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
-            var adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
-            if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
+            IDevice adapterDevice = null;
+            try
+            {
+                ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
+                adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
+                if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
+            } catch (Exception)
+            {
+                Console.WriteLine($"Checking if {device.UserLabel} is reachable failed.");
+            }
             return adapterDevice;
         }
     }
