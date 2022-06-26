@@ -57,32 +57,15 @@ namespace FindMyBLEDevice.UITests
 
          */
 
-
-
         [Test]
-        public void OpenAboutPage()
+        public void AppLaunch()
         {
 
-            // Assert "About"-Screen is shown
+            // Assert "About"-Screen is shown on app launch
             AppResult[] results = app.Query(c => c.Marked("Page_About"));
             Assert.IsTrue(results.Any());
 
-            // Open navigation drawer
-            app.SwipeLeftToRight(0.99);
-
-            // Wait for drawer
-            AppResult[] results2 = app.WaitForElement(c => c.Marked("FlyoutItem_About"));
-            Assert.IsTrue(results2.Any());
-
-            // Open devices page
-            app.Tap(c => c.Marked("FlyoutItem_About"));
-
-            // Assert that devices page (or at least one element from the page) is visible
-            AppResult[] results3 = app.WaitForElement(c => c.Marked("Page_About"));
-            Assert.IsTrue(results3.Any());
-
         }
-
 
         [Test]
         public void OpenDevicesPage()
@@ -131,7 +114,6 @@ namespace FindMyBLEDevice.UITests
             Assert.IsTrue(results3.Any());
 
         }
-
 
         [Test]
         public void OpenMapsPage()
