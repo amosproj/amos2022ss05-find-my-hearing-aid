@@ -18,6 +18,8 @@ namespace FindMyBLEDevice.Services.Database
 
         private readonly IDatabase _database;
 
+        public event EventHandler DevicesChanged;
+
         public BTDevice SelectedDevice { get; set; }
 
         public DevicesStore()
@@ -46,6 +48,8 @@ namespace FindMyBLEDevice.Services.Database
                 throw new DeviceStoreException("Saving device failed!");
             }
 
+            DevicesChanged?.Invoke(this, EventArgs.Empty);
+
             return await GetDeviceByGUID(device.BT_GUID);
         }
 
@@ -65,6 +69,8 @@ namespace FindMyBLEDevice.Services.Database
                 throw new DeviceStoreException("Updating device failed!");
             }
 
+            DevicesChanged?.Invoke(this, EventArgs.Empty);
+
         }
 
         public async Task DeleteDevice(int id)
@@ -82,6 +88,8 @@ namespace FindMyBLEDevice.Services.Database
             {
                 throw new DeviceStoreException("Updating device failed!");
             }
+
+            DevicesChanged?.Invoke(this, EventArgs.Empty);
 
         }
 
@@ -113,15 +121,6 @@ namespace FindMyBLEDevice.Services.Database
             return await _database.GetAllDevicesAsync();
         }
 
-        public Task<BTDevice> GetSelectedDevice()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Task SetSelectedDevice(BTDevice device)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

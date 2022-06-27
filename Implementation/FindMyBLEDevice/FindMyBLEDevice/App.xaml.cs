@@ -30,6 +30,8 @@ namespace FindMyBLEDevice
         private static IGeolocation geolocation;
         // Interface to stored settings 
         private static ISettings settings;
+        // Update-service
+        private static UpdateService updateService;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -91,6 +93,18 @@ namespace FindMyBLEDevice
             }
         }
 
+        public static UpdateService UpdateService
+        {
+            get
+            {
+                if(updateService == null)
+                {
+                    updateService = new UpdateService();
+                }
+                return updateService;
+            }
+        }
+
 
 
         public App()
@@ -98,6 +112,8 @@ namespace FindMyBLEDevice
             InitializeComponent();
 
             MainPage = new AppShell();
+
+            UpdateService.Start();
         }
     }
 }

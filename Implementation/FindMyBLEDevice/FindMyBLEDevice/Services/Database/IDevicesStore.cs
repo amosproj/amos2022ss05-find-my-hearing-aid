@@ -5,6 +5,7 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Models;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -88,18 +89,6 @@ namespace FindMyBLEDevice.Services.Database
         /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
         Task UpdateDevice(BTDevice device);
 
-        /// <summary>
-        /// Get the currently selected device
-        /// </summary>
-        /// <returns>the currently selected device</returns>
-        Task<BTDevice> GetSelectedDevice();
-
-        /// <summary>
-        /// Set this device as the currently selected device. 
-        /// This device does not have to exist in the database, yet.
-        /// </summary>
-        /// <param name="device">the device to select</param>
-        /// <returns></returns>
-        Task SetSelectedDevice(BTDevice device);
+        event EventHandler DevicesChanged;
     }
 }
