@@ -13,10 +13,13 @@ namespace FindMyBLEDevice.Views
 
         ItemDetailViewModel _viewModel;
 
+        private bool initialized = false;
+
         public ItemDetailPage()
         {
             InitializeComponent();
             BindingContext = _viewModel = new ItemDetailViewModel();
+            initialized = true;
         }
         protected override void OnAppearing()
         {
@@ -24,5 +27,12 @@ namespace FindMyBLEDevice.Views
             _viewModel.OnAppearing();
         }
 
+        private void UserLabel_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (initialized)
+            {
+                _viewModel.UserLabel_TextChanged();
+            }
+        }
     }
 }

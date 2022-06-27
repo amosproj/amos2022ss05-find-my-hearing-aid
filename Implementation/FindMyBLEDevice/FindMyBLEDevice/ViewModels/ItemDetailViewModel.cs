@@ -28,6 +28,7 @@ namespace FindMyBLEDevice.ViewModels
                 async () => await RedirectTo(nameof(MapPage)));
             DeleteButtonTapped = new Command(
                 async () => await DeleteDevice());
+
             UserLabel = Device.UserLabel;
         }
         async Task RedirectTo(string page)
@@ -46,11 +47,22 @@ namespace FindMyBLEDevice.ViewModels
             get => App.DevicesStore.SelectedDevice;
         }
 
+        public bool UserLabelEdited
+        {
+            get => UserLabel != Device.UserLabel;
+        }
+
+        public void UserLabel_TextChanged()
+        {
+            OnPropertyChanged("UserLabelEdited");
+        }
+
         async Task RenameDevice()
         {
             Device.UserLabel = UserLabel;
             await App.DevicesStore.UpdateDevice(Device);
             OnPropertyChanged("Device");
+            OnPropertyChanged("UserLabelEdited");
         }
 
 
