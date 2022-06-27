@@ -28,9 +28,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.12.0" />
-    <PackageReference Include="Xamarin.UITest" Version="3.0.5" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.13.0" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="Xamarin.UITest" Version="3.2.8" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />
   </ItemGroup>
   <ItemGroup>
   </ItemGroup>
@@ -39,6 +39,20 @@
     <Compile Include="SettingsScreenTests.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="AppInitializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FindMyBLEDevice\FindMyBLEDevice.iOS\FindMyBLEDevice.iOS.csproj">
+      <Project>{EC9259BD-A478-4199-BA86-D7630ACC7CC9}</Project>
+      <Name>FindMyBLEDevice.iOS</Name>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\FindMyBLEDevice\FindMyBLEDevice.Android\FindMyBLEDevice.Android.csproj">
+      <Project>{72AF5AF2-8AFA-497C-A1D8-E51292277AD3}</Project>
+      <Name>FindMyBLEDevice.Android</Name>
+      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
