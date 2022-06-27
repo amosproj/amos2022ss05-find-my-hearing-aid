@@ -17,8 +17,7 @@ namespace FindMyBLEDevice.ViewModels
     public class StrengthViewModel : BaseViewModel
     {
         public const double MaxRadiusRelativeToScreen = 0.9;
-        private const int MinRadiusSize = 30;      
-        private const double MeterClosebyThreshold = 1.5;
+        private const int MinRadiusSize = 30;
         private readonly int MaxRadiusSize;
 
         private readonly double meterScaleMin;
@@ -181,7 +180,7 @@ namespace FindMyBLEDevice.ViewModels
             return resultingRadius;
         }
 
-        private double rssiToMeter(int rssi, int measuredPower, int environmentalFactor = Constants.RssiEnvironmentalDefault)
+        private double rssiToMeter(int rssi, int measuredPower, double environmentalFactor = Constants.RssiEnvironmentalDefault)
         {
             // https://medium.com/beingcoders/convert-rssi-value-of-the-ble-bluetooth-low-energy-beacons-to-meters-63259f307283 
             return Math.Pow(10, (double)(measuredPower - rssi) / (10 * environmentalFactor));
