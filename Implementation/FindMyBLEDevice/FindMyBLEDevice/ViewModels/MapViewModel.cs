@@ -26,6 +26,9 @@ namespace FindMyBLEDevice.ViewModels
 
         public async void OnAppearing()
         {
+            //updates device label above map when opened via the flyout menu
+            OnPropertyChanged(nameof(Device));
+
             var currentLocation = await App.Geolocation.GetCurrentLocation();
             if (currentLocation == null)
             {
