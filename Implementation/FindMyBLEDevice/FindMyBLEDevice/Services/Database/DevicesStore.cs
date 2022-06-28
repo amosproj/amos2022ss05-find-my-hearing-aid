@@ -21,6 +21,7 @@ namespace FindMyBLEDevice.Services.Database
         public event EventHandler DevicesChanged;
 
         public BTDevice SelectedDevice { get; set; }
+        
 
         public DevicesStore()
         {
