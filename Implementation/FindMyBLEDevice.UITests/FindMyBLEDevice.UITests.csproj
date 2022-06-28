@@ -36,7 +36,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutScreenTests.cs" />
+    <Compile Include="DevicesScreenTests.cs" />
+    <Compile Include="MapScreenTests.cs" />
     <Compile Include="SettingsScreenTests.cs" />
+    <Compile Include="StrengthScreenTests.cs" />
     <Compile Include="Tests.cs" />
     <Compile Include="AppInitializer.cs" />
   </ItemGroup>
