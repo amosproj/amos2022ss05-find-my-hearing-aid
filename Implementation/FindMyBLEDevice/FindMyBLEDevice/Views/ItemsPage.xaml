@@ -31,12 +31,15 @@
             <Label Text=" Saved Devices"
                    FontSize="Medium"
                    BackgroundColor="LightGray"
-                   FontAttributes="Bold" />
+                   FontAttributes="Bold" 
+                   AutomationId="DevicesPage_LabelSavedDevices"
+                   />
             <ScrollView>
                 <StackLayout>
                     <CollectionView x:Name="ItemsListView"
                                         ItemsSource="{Binding SavedDevices}"
-                                        SelectionMode="None">
+                                        SelectionMode="None"
+                                    >
                         <CollectionView.ItemTemplate>
                             <DataTemplate>
                                 <Grid >
@@ -111,16 +114,21 @@
         <StackLayout Grid.Row="2">
             <Label Text=" Available Devices"
                    FontSize="Medium"
-                   BackgroundColor="LightGray"
-                   FontAttributes="Bold" />
+                   BackgroundColor="LightGray"                   
+                   FontAttributes="Bold" 
+                   AutomationId="DevicesPage_LabelAvailableDevices"                                                      
+                   />
             <Button Margin="0,0,0,0" Text="Scan for available devices"
                     Command="{Binding SearchAvailableDevicesCommand}"
                     BackgroundColor="{StaticResource Primary}"
-                    TextColor="White" />
+                    TextColor="White" 
+                    AutomationId="DevicesPage_ButtonScan"
+                    />
             <ScrollView>
                 <CollectionView x:Name="AvailableDevicesListView"
                                     ItemsSource="{Binding AvailableDevices}"
-                                    SelectionMode="None">
+                                    SelectionMode="None"
+                                >
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid >
