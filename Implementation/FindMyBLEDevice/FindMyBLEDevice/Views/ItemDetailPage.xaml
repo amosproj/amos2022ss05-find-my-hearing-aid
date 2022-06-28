@@ -45,23 +45,23 @@
         <Label Text="CURRENT-RSSI:" FontSize="Medium" TextColor="Black" />
         <Label Text="{Binding CurrentRssi}" FontSize="Small" TextColor="Black"/>
 
-        <Button
-            Text="📶"
+        <ImageButton
+            Source="signal_strength.png"
+            HeightRequest="55"
             BackgroundColor="White"
-            TextColor="Black"
             BorderColor="Black"
             BorderWidth="1"
             Margin="3"
             Command="{Binding StrengthButtonTapped}"
             />
-        <Button
-            Text="📌"                     
+        <ImageButton
+            Source="geolocation.png"
+            HeightRequest="55"
             BackgroundColor="White"
-            TextColor="Black"
             BorderColor="Black"
             BorderWidth="1"
             Margin="3"
-            Command="{Binding MapButtonTapped}"		
+            Command="{Binding MapButtonTapped}"
             />
         <Button
             Text="Delete device"

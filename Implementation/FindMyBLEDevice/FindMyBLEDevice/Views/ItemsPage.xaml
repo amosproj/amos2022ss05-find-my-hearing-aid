@@ -18,10 +18,6 @@
     <ContentPage.BindingContext>
         <local:ItemsViewModel/>
     </ContentPage.BindingContext>
-
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Scan" Command="{Binding SearchAvailableDevicesCommand}" />
-    </ContentPage.ToolbarItems>
     <!--
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
@@ -29,7 +25,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />            
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackLayout Grid.Row="1">
             <Label Text=" Saved Devices"
@@ -42,19 +38,34 @@
                                         ItemsSource="{Binding SavedDevices}"
                                         SelectionMode="None">
                         <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="60" />
-                                            <ColumnDefinition Width="60" />
-                                        </Grid.ColumnDefinitions>
-                                        <StackLayout Grid.Column="0" Padding="5" x:DataType="model:BTDevice">
+                            <DataTemplate>
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="60" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Grid.Column="0" Padding="5" x:DataType="model:BTDevice">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="⬤" 
+                                                   FontSize="16" >
+                                                <Label.Style>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="TextColor" Value="Gray" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding WithinRange}" Value="True">
+                                                                <Setter Property="TextColor" Value="LightGreen" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Style>
+                                            </Label>
                                             <Label Text="{Binding UserLabel}" 
                                                    LineBreakMode="NoWrap" 
                                                    Style="{DynamicResource ListItemTextStyle}" 
                                                    FontSize="16" 
                                                    TextColor="Black" />
+                                        </StackLayout>
                                         <Label Text="{Binding AdvertisedName}" 
                                                    LineBreakMode="NoWrap"
                                                    Style="{DynamicResource ListItemDetailTextStyle}"
@@ -68,28 +79,26 @@
                                             </TapGestureRecognizer>
                                         </StackLayout.GestureRecognizers>
                                     </StackLayout>
-                                    <Button 
+                                    <ImageButton 
                                             x:DataType="model:BTDevice"
                                             Grid.Column="1"
-                                            Text="📌"                                          
-                                            BackgroundColor="White"
-                                            TextColor="Black"
+                                            Source="signal_strength.png"
+                                            HeightRequest="55"
                                             BorderColor="Black"
                                             BorderWidth="1"
                                             Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.MapButtonTapped}"
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"
                                             CommandParameter="{Binding .}"
                                             />
-                                        <Button 
+                                    <ImageButton 
                                             x:DataType="model:BTDevice"
-                                            Text="📶"
-                                            Grid.Column="2"
-                                            BackgroundColor="White"
-                                            TextColor="Black"
+                                            Grid.Column="2"   
+                                            Source="geolocation.png"
+                                            HeightRequest="55"                                        
                                             BorderColor="Black"
-                                            BorderWidth="1"                                            
+                                            BorderWidth="1"         
                                             Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"		
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.MapButtonTapped}"		
                                             CommandParameter="{Binding .}"
                                         />
                                 </Grid>
