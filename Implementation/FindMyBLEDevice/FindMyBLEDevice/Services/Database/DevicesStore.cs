@@ -87,7 +87,7 @@ namespace FindMyBLEDevice.Services.Database
 
             if (result != 1)
             {
-                throw new DeviceStoreException("Updating device failed!");
+                throw new DeviceStoreException("Deleting device failed!");
             }
 
             DevicesChanged?.Invoke(this, EventArgs.Empty);
