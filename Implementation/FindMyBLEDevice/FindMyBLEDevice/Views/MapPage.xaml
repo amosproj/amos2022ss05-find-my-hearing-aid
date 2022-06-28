@@ -18,10 +18,8 @@
     <ContentPage.Content>
  
         <StackLayout Orientation="Vertical">
-            <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" AutomationId="MapPage_UserLabel"/>
-            <Label Text="{Binding CurrentLocation.Latitude}" TextColor="Black" AutomationId="MapPage_Latitude"></Label>
-            <Label Text="{Binding CurrentLocation.Longitude}" TextColor="Black" AutomationId="MapPage_Longitude"></Label>
-            <maps:Map x:Name="map" AutomationId="MapPage_Map"/>
+            <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+            <maps:Map x:Name="map"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

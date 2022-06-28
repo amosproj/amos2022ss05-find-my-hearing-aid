@@ -122,12 +122,12 @@ namespace FindMyBLEDevice.Services.Bluetooth
                                 updateRssi.Invoke(device.Rssi, txPower);
                                 await Task.Delay(settings.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault));
                             }
+                            await adapter.DisconnectDeviceAsync(device);
                         }
                         catch (Exception e)
                         {
                             Console.WriteLine(e.ToString());
                         }
-                        await adapter.DisconnectDeviceAsync(device);
                         if (!(disconnected is null)) disconnected.Invoke();
                     }
                     catch (Exception e)
@@ -141,6 +141,21 @@ namespace FindMyBLEDevice.Services.Bluetooth
         public void StopRssiPolling()
         {
             rssiCancel?.Cancel();
+        }
+        
+        public async Task<IDevice> DeviceReachableAsync(BTDevice device)
+        {
+            IDevice adapterDevice = null;
+            try
+            {
+                ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
+                adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
+                if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
+            } catch (Exception)
+            {
+                Console.WriteLine($"Checking if {device.UserLabel} is reachable failed.");
+            }
+            return adapterDevice;
         }
     }
 }

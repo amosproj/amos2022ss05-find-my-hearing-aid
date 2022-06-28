@@ -25,7 +25,7 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />            
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <StackLayout Grid.Row="1">
             <Label Text=" Saved Devices"
@@ -41,19 +41,34 @@
                                         SelectionMode="None"
                                     >
                         <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid >
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="60" />
-                                            <ColumnDefinition Width="60" />
-                                        </Grid.ColumnDefinitions>
-                                        <StackLayout Grid.Column="0" Padding="5" x:DataType="model:BTDevice">
+                            <DataTemplate>
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="60" />
+                                        <ColumnDefinition Width="60" />
+                                    </Grid.ColumnDefinitions>
+                                    <StackLayout Grid.Column="0" Padding="5" x:DataType="model:BTDevice">
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label Text="⬤" 
+                                                   FontSize="16" >
+                                                <Label.Style>
+                                                    <Style TargetType="Label">
+                                                        <Setter Property="TextColor" Value="Gray" />
+                                                        <Style.Triggers>
+                                                            <DataTrigger TargetType="Label" Binding="{Binding WithinRange}" Value="True">
+                                                                <Setter Property="TextColor" Value="LightGreen" />
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </Label.Style>
+                                            </Label>
                                             <Label Text="{Binding UserLabel}" 
                                                    LineBreakMode="NoWrap" 
                                                    Style="{DynamicResource ListItemTextStyle}" 
                                                    FontSize="16" 
                                                    TextColor="Black" />
+                                        </StackLayout>
                                         <Label Text="{Binding AdvertisedName}" 
                                                    LineBreakMode="NoWrap"
                                                    Style="{DynamicResource ListItemDetailTextStyle}"
