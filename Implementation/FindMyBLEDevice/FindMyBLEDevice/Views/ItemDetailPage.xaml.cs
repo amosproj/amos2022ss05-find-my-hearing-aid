@@ -34,6 +34,7 @@ namespace FindMyBLEDevice.Views
             {
                 _viewModel.UserLabel_TextChanged();
             }
+        }
 
         protected override void OnDisappearing()
         {
