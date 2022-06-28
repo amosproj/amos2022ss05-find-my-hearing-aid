@@ -20,7 +20,7 @@ namespace FindMyBLEDevice.Models
         public const int RssiTooFarThreshold = -80;
 
         public const int TxPowerDefault = -70;
-        public const int RssiEnvironmentalDefault = 3;
+        public const double RssiEnvironmentalDefault = 2.5;
 
         public const double MeterClosebyThreshold = 0.5;
 
