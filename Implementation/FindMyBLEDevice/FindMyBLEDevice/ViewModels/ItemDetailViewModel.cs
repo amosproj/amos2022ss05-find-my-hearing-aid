@@ -2,8 +2,9 @@
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 using FindMyBLEDevice.Models;
+using FindMyBLEDevice.Services.Bluetooth;
+using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Views;
-using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -11,12 +12,20 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class ItemDetailViewModel : BaseViewModel
     {
+        private readonly INavigator navigator;
+        private readonly IBluetooth bluetooth;
+        private readonly IDevicesStore devicesStore;
+
         private int _currentRssi;
         public Command StrengthButtonTapped { get; }
         public Command MapButtonTapped { get; }
 
-        public ItemDetailViewModel()
+        public ItemDetailViewModel(INavigator navigator, IBluetooth bluetooth, IDevicesStore devices)
         {
+            this.navigator = navigator;
+            this.bluetooth = bluetooth;
+            this.devicesStore = devices;
+
             StrengthButtonTapped = new Command(
                    async () => await RedirectTo(nameof(StrengthPage)));
             MapButtonTapped = new Command(
@@ -24,8 +33,8 @@ namespace FindMyBLEDevice.ViewModels
         }
         async Task RedirectTo(string page)
         {
-            App.Bluetooth.StopRssiPolling();
-            await Shell.Current.GoToAsync(page);
+            bluetooth.StopRssiPolling();
+            await navigator.GoToAsync(page);
         }
         public int CurrentRssi
         {
@@ -35,19 +44,19 @@ namespace FindMyBLEDevice.ViewModels
 
         public BTDevice Device
         {
-            get => App.DevicesStore.SelectedDevice;
+            get => devicesStore.SelectedDevice;
         }
 
         public void OnAppearing()
         {
-            App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v, int txPower) => {
+            bluetooth.StartRssiPolling(Device.BT_GUID, (int v, int txPower) => {
                 CurrentRssi = v;
             });
 
         }
         public void OnDisappearing()
         {
-            App.Bluetooth.StopRssiPolling();
+            bluetooth.StopRssiPolling();
         }
     }
 }

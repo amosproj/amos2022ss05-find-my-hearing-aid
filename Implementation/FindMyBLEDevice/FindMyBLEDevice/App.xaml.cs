@@ -32,6 +32,8 @@ namespace FindMyBLEDevice
         private static ISettings settings;
         // Update-service
         private static UpdateService updateService;
+        // Interface to access Shell navigation
+        private static INavigator navigator;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -104,6 +106,19 @@ namespace FindMyBLEDevice
                 return updateService;
             }
         }
+
+        public static INavigator Navigator
+        {
+            get
+            {
+                if(navigator == null)
+                {
+                    navigator = new Navigator();
+                }
+                return navigator;
+            }
+        }
+
 
 
 

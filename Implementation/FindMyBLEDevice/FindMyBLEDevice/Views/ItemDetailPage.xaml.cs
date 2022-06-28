@@ -16,7 +16,7 @@ namespace FindMyBLEDevice.Views
         public ItemDetailPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new ItemDetailViewModel();
+            BindingContext = _viewModel = new ItemDetailViewModel(App.Navigator, App.Bluetooth, App.DevicesStore);
         }
         protected override void OnAppearing()
         {
