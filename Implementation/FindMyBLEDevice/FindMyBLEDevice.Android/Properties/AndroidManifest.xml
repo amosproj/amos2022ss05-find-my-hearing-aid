@@ -2,10 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.amos.findmybledevice" android:installLocation="auto">
 	<uses-sdk android:minSdkVersion="21" android:targetSdkVersion="30" />
 	<application android:label="Find My BLE Device" android:theme="@style/MainTheme" android:icon="@mipmap/ic_launcher">
-		<meta-data android:name="com.google.android.geo.API_KEY"
-				   android:value="AIzaSyDXncyfRmfOsKIaEwvFA9Wpf8neYsfDqpY" />
-		<meta-data android:name="com.google.android.gms.version"
-				   android:value="@integer/google_play_services_version" />
+		<meta-data android:name="com.google.android.geo.API_KEY" android:value="AIzaSyDXncyfRmfOsKIaEwvFA9Wpf8neYsfDqpY" />
+		<meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version" />
 		<uses-library android:name="org.apache.http.legacy" android:required="false" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />

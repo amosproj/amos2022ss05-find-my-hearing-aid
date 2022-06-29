@@ -1,4 +1,8 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Dominik Pysch <domi.pysch@gmail.com>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@gmail.com>
+
+using System;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 
@@ -11,10 +15,11 @@ namespace FindMyBLEDevice.UITests
             if (platform == Platform.Android)
             {
                 return ConfigureApp.Android.InstalledApp("com.amos.findmybledevice").StartApp();
-                // return ConfigureApp.Android.StartApp();
             }
 
-            return ConfigureApp.iOS.StartApp();
+            //return ConfigureApp.iOS.InstalledApp("com.amos.findmybledevice").DeviceIdentifier("C6678D33-D7D4-4B7E-9A1B-310249C17CB3").StartApp();
+            //return ConfigureApp.iOS.AppBundle("../../FindMyBLEDevice.iOS/bin/iPhoneSimulator/Debug/FindMyBLEDevice.iOS.app").StartApp();
+            return ConfigureApp.iOS.AppBundle("../../FindMyBLEDevice.iOS/bin/iPhoneSimulator/Debug/FindMyBLEDevice.iOS.app").DeviceIdentifier("C6678D33-D7D4-4B7E-9A1B-310249C17CB3").StartApp();
         }
     }
 }

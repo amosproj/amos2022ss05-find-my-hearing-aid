@@ -84,5 +84,55 @@ namespace FindMyBLEDevice.ViewModels
         {
             get => Constants.RssiIntervalMax;
         }
+
+
+        public int UpdateServiceInterval
+        {
+            get => Preferences.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault);
+            set
+            {
+                Preferences.Set(SettingsNames.UpdateServiceInterval, value);
+                OnPropertyChanged(nameof(UpdateServiceInterval));
+                _updateServiceIntervalString = value.ToString();
+                OnPropertyChanged(nameof(UpdateServiceIntervalString));
+            }
+        }
+        private string _updateServiceIntervalString;
+        public string UpdateServiceIntervalString
+        {
+            get => _updateServiceIntervalString;
+            set
+            {
+                if (_updateServiceIntervalString != value)
+                {
+                    bool parsable = int.TryParse(value, out int result);
+                    if (string.IsNullOrEmpty(value))
+                    {
+                        UpdateServiceInterval = UpdateServiceIntervalDefault;
+                        _updateServiceIntervalString = value;
+                    }
+                    else if (parsable)
+                    {
+                        UpdateServiceInterval = result;
+                    }
+                    OnPropertyChanged(nameof(UpdateServiceIntervalString));
+                }
+            }
+        }
+
+        public int UpdateServiceIntervalDefault
+        {
+            get => Constants.UpdateServiceIntervalDefault;
+        }
+
+        public int UpdateServiceIntervalMin
+        {
+            get => Constants.UpdateServiceIntervalMin;
+        }
+
+        public int UpdateServiceIntervalMax
+        {
+            get => Constants.UpdateServiceIntervalMax;
+        }
     }
 }
