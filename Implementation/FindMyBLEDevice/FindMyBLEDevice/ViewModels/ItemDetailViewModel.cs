@@ -3,6 +3,8 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Views;
+using System;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -59,15 +61,32 @@ namespace FindMyBLEDevice.ViewModels
 
         async Task RenameDevice()
         {
+            
+            // Show confirmation dialog
+            bool answer = await Application.Current.MainPage.DisplayAlert("Rename device", String.Format("Are you sure you want to rename this device to '{0}'?", UserLabel), "Yes", "Cancel");
+
+            if (!answer)
+            {
+                return;
+            }
+
             Device.UserLabel = UserLabel;
             await App.DevicesStore.UpdateDevice(Device);
             OnPropertyChanged("Device");
             OnPropertyChanged("UserLabelEdited");
         }
 
-
         async Task DeleteDevice()
         {
+
+            // Show confirmation dialog
+            bool answer = await Application.Current.MainPage.DisplayAlert("Delete device", "Are you sure you want to delete this device?", "Yes", "Cancel");
+
+            if (!answer)
+            {
+                return;
+            }
+
             App.Bluetooth.StopRssiPolling();
 
             int id = Device.ID;
