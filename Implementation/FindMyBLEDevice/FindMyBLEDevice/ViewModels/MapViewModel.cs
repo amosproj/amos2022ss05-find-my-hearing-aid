@@ -17,23 +17,16 @@ namespace FindMyBLEDevice.ViewModels
     {
         public bool DeviceNotNull => Device != null;
         public Command OpenMapPin { get; }
-        public Command OpenMapRoute { get; }
         public MapViewModel(Xamarin.Forms.Maps.Map map)
         {
             Title = "MapSearch";
             OpenMapPin = new Command( async () => await OpenMapswithPin());
-            OpenMapRoute = new Command( async () => await OpenMapswithRoute());
             this.map = map;
         }
 
         async Task OpenMapswithPin()
         {
             await Xamarin.Essentials.Map.OpenAsync(Device.LastGPSLatitude, Device.LastGPSLongitude, new MapLaunchOptions { Name = Device.UserLabel });
-        }
-
-        async Task OpenMapswithRoute()
-        {
-            await Xamarin.Essentials.Map.OpenAsync(Device.LastGPSLatitude, Device.LastGPSLongitude, new MapLaunchOptions { Name = Device.UserLabel, NavigationMode = NavigationMode.Walking });
         }
 
         public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
