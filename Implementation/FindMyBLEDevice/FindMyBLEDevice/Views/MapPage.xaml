@@ -20,6 +20,10 @@
         <StackLayout Orientation="Vertical">
             <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
             <maps:Map x:Name="map"/>
+            <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="10,10,10,10" >
+                <Button Text="Go to Map with Pin" Command="{Binding OpenMapPin}" />
+                <Button Text="Go to Map with Route to Pin" Command="{Binding OpenMapRoute}" />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>
