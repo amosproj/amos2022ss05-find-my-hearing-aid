@@ -1,4 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+-->
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindMyBLEDevice.App">
@@ -7,7 +11,21 @@
     -->
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Primary">#0B407B</Color>
+            <Color x:Key="Secondary">#1473a5</Color>
+            <Color x:Key="Accent">#96d1ff</Color>
+            <LinearGradientBrush x:Key="DarkGradient" StartPoint="0,1" EndPoint="1,0">
+                <GradientStop Color="{StaticResource Primary}" Offset="0" />
+                <GradientStop Color="{StaticResource Secondary}" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="LightGradient" StartPoint="0,1" EndPoint="1,0">
+                <GradientStop Color="{StaticResource Accent}" Offset="0" />
+                <GradientStop Color="{StaticResource Secondary}" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,1" EndPoint="1,0">
+                <GradientStop Color="#7693AF" Offset="0" />
+                <GradientStop Color="{StaticResource Accent}" Offset="1" />
+            </LinearGradientBrush>
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -26,6 +44,9 @@
                         </VisualStateGroup>
                     </VisualStateGroupList>
                 </Setter>
+            </Style>
+            <Style TargetType="ImageButton">
+                <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
             </Style>
         </ResourceDictionary>        
     </Application.Resources>
