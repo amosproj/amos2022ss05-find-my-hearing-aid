@@ -13,7 +13,6 @@ using Plugin.BLE.Abstractions.Contracts;
 using System;
 using System.Threading;
 using Plugin.BLE.Abstractions;
-using FindMyBLEDevice.Exceptions;
 using FindMyBLEDevice.Services.Settings;
 
 namespace FindMyBLEDevice.Services.Bluetooth
@@ -146,14 +145,21 @@ namespace FindMyBLEDevice.Services.Bluetooth
         public async Task<IDevice> DeviceReachableAsync(BTDevice device)
         {
             IDevice adapterDevice = null;
-            try
+            var connDevMatchingGuid = adapter.ConnectedDevices.Where(connDev => connDev.Id.ToString() == device.BT_GUID);
+            if (connDevMatchingGuid.Any())
             {
-                ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
-                adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
-                if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
-            } catch (Exception)
+                adapterDevice = connDevMatchingGuid.First();
+            } else
             {
-                Console.WriteLine($"Checking if {device.UserLabel} is reachable failed.");
+                try
+                {
+                    ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
+                    adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
+                    if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
+                } catch (Exception)
+                {
+                    Console.WriteLine($"Checking if {device.UserLabel} is reachable failed.");
+                }
             }
             return adapterDevice;
         }
