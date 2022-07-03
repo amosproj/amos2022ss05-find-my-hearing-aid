@@ -21,8 +21,8 @@
             <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
             <maps:Map x:Name="map"/>
             <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand" Padding="10,10,10,10" >
-                <Button Text="Go to Map with Pin" Command="{Binding OpenMapPin}" />
-                <Button Text="Go to Map with Route to Pin" Command="{Binding OpenMapRoute}" />
+                <Button Text="Go to Map with Pin" Command="{Binding OpenMapPin}" IsEnabled="{Binding DeviceNotNull}" />
+                <Button Text="Go to Map with Route to Pin" Command="{Binding OpenMapRoute}" IsEnabled="{Binding DeviceNotNull} "/>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

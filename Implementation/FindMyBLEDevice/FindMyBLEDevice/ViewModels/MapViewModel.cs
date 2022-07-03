@@ -15,6 +15,7 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
+        public bool DeviceNotNull => Device != null;
         public Command OpenMapPin { get; }
         public Command OpenMapRoute { get; }
         public MapViewModel(Xamarin.Forms.Maps.Map map)
@@ -60,10 +61,10 @@ namespace FindMyBLEDevice.ViewModels
                             new Position(Device.LastGPSLatitude, Device.LastGPSLongitude))
                 ));
             }
-            showSelectedDevice();
+            ShowSelectedDevice();
         }
 
-        private void showSelectedDevice()
+        private void ShowSelectedDevice()
         {
 			if (Device is null) return;
 
