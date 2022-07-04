@@ -67,6 +67,9 @@ namespace FindMyBLEDevice.ViewModels
 
             if (!answer)
             {
+                UserLabel = Device.UserLabel;
+                OnPropertyChanged("UserLabel");
+                OnPropertyChanged("UserLabelEdited");
                 return;
             }
 
