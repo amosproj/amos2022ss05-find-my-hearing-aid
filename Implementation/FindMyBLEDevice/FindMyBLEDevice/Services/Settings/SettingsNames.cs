@@ -14,5 +14,7 @@ namespace FindMyBLEDevice.Services.Settings
         public const string DisplayWeakDevices = "DisplayWeakDevices";
 
         public const string RssiInterval = "RssiInterval";
+
+        public const string UpdateServiceInterval = "UpdateServiceInterval";
     }
 }

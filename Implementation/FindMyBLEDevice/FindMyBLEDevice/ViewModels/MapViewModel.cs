@@ -9,6 +9,7 @@ using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -20,41 +21,50 @@ namespace FindMyBLEDevice.ViewModels
             this.map = map;
         }
 
-        private Xamarin.Forms.Maps.Map map;
-        private Location currentLocation;
-        public Location CurrentLocation { 
-            get { return currentLocation; } 
-            set { 
-                SetProperty(ref currentLocation, value);
-            } 
-        }
+        public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
 
-
-        public BTDevice Device
-        {
-            get => App.DevicesStore.SelectedDevice;
-        }
+        private readonly Xamarin.Forms.Maps.Map map;
 
         public async void OnAppearing()
         {
+            //updates device label above map when opened via the flyout menu
+            OnPropertyChanged(nameof(Device));
+
             await CheckBluetoothAndLocation.Check();
 
-            CurrentLocation = await App.Geolocation.GetCurrentLocation();
-            if (CurrentLocation == null)
+            var currentLocation = await App.Geolocation.GetCurrentLocation();
+            if (currentLocation == null)
             {
                 Console.WriteLine("No Location found!");
             } else {
-                Pin pin = new Pin
-                {
-                    Label = "Your Smartphone",
-                    Address = "",
-                    Type = PinType.Place,
-                    Position = new Position(CurrentLocation.Latitude, CurrentLocation.Longitude)
-                };
-                map.Pins.Add(pin);
-                map.MoveToRegion(MapSpan.FromCenterAndRadius(pin.Position, Distance.FromKilometers(1)));
+                map.IsShowingUser = true;
+                var phonePosition = new Position(currentLocation.Latitude, currentLocation.Longitude);
+                map.MoveToRegion(MapSpan.FromCenterAndRadius(
+                    phonePosition,
+                    Device is null
+                        ? Distance.FromKilometers(1)
+                        : Distance.BetweenPositions(
+                            phonePosition,
+                            new Position(Device.LastGPSLatitude, Device.LastGPSLongitude))
+                ));
             }
+            showSelectedDevice();
         }
+
+        private void showSelectedDevice()
+        {
+			if (Device is null) return;
+
+            var deviceLocation = new Location(Device.LastGPSLatitude, Device.LastGPSLongitude);
+            Pin devicePin = new Pin
+            {
+                Label = Device.UserLabel,
+                Address = Device.LastGPSTimestamp.ToString(),
+                Type = PinType.Place,
+                Position = new Position(deviceLocation.Latitude, Device.LastGPSLongitude)
+            };
+            map.Pins.Add(devicePin);
+        } 
 
         public void OnDisappearing() {
             // comment to make linter happy, method will be used in the future

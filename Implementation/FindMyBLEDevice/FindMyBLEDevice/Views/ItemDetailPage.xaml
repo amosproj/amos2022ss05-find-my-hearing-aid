@@ -17,7 +17,24 @@
 
     <StackLayout Spacing="20" Padding="15">
         <Label Text="User Label:" FontSize="Medium" TextColor="Black" />
-        <Label Text="{Binding Device.UserLabel}" FontSize="Small" TextColor="Black"/>
+
+        <StackLayout Spacing="0">
+            <Entry x:Name="UserLabel" Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.UserLabel}" FontSize="Small" TextColor="Black" TextChanged="UserLabel_TextChanged"/>
+            <Label Text="For renaming the device, edit the label in the entry" FontSize="Small" TextColor="Gray" Padding="0,0,0,0" />
+            
+        </StackLayout>
+
+        <Button
+            x:Name="RenameButton"
+            Text="Rename"
+            BackgroundColor="White"
+            TextColor="Black"
+            BorderColor="Black"
+            BorderWidth="1"
+            Margin="3"
+            Command="{Binding RenameButtonTapped}"
+            IsVisible="{Binding UserLabelEdited}"
+            />
 
         <Label Text="Advertised Name:" FontSize="Medium" TextColor="Black" />
         <Label Text="{Binding Device.AdvertisedName}" FontSize="Small" TextColor="Black"/>
@@ -28,23 +45,32 @@
         <Label Text="CURRENT-RSSI:" FontSize="Medium" TextColor="Black" />
         <Label Text="{Binding CurrentRssi}" FontSize="Small" TextColor="Black"/>
 
-        <Button
-            Text="📶"
+        <ImageButton
+            Source="signal_strength.png"
+            HeightRequest="55"
             BackgroundColor="White"
-            TextColor="Black"
             BorderColor="Black"
             BorderWidth="1"
             Margin="3"
             Command="{Binding StrengthButtonTapped}"
             />
+        <ImageButton
+            Source="geolocation.png"
+            HeightRequest="55"
+            BackgroundColor="White"
+            BorderColor="Black"
+            BorderWidth="1"
+            Margin="3"
+            Command="{Binding MapButtonTapped}"
+            />
         <Button
-            Text="📌"                     
+            Text="Delete device"
             BackgroundColor="White"
             TextColor="Black"
             BorderColor="Black"
             BorderWidth="1"
             Margin="3"
-            Command="{Binding MapButtonTapped}"		
+            Command="{Binding DeleteButtonTapped}"		
             />
     </StackLayout>
 </ContentPage>

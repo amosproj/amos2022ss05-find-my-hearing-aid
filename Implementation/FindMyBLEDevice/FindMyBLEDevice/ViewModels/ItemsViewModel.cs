@@ -73,8 +73,18 @@ namespace FindMyBLEDevice.ViewModels
         public async void OnAppearing()
         {
             IsBusy = true;
-
             await CheckBluetoothAndLocation.Check();
+
+            App.DevicesStore.DevicesChanged += OnDevicesChanged;
+            OnDevicesChanged(null, null);
+
+            AvailableDevices = new ObservableCollection<BTDevice>();
+
+            IsBusy = false;
+        }
+
+        private async void OnDevicesChanged(object sender, EventArgs e)
+        {
             try
             {
                 SavedDevices = new ObservableCollection<BTDevice>(await App.DevicesStore.GetAllDevices());
@@ -83,17 +93,13 @@ namespace FindMyBLEDevice.ViewModels
             {
                 Debug.WriteLine(ex);
             }
-            finally
-            {
-                IsBusy = false;
-            }
-
-            AvailableDevices = new ObservableCollection<BTDevice>();
         }
 
         public async void OnDisappearing()
         {
             await App.Bluetooth.StopSearch();
+
+            App.DevicesStore.DevicesChanged -= OnDevicesChanged;
         }
 
         async Task SelectAndRedirectTo(BTDevice device, string page)
@@ -107,10 +113,10 @@ namespace FindMyBLEDevice.ViewModels
 
         private async Task ExecuteSearchAvailableDevicesCommand()
         {
-            List<BTDevice> savedDevices = await App.DevicesStore.GetAllDevices();
+            List<BTDevice> savedDevicesList = SavedDevices.ToList();
             await App.Location.CheckAndRequestLocationPermission();
             await App.Bluetooth.Search(20000, AvailableDevices, 
-                found => !savedDevices.Exists(saved => saved.BT_GUID.Equals(found.BT_GUID)));
+                found => !savedDevicesList.Exists(saved => saved.BT_GUID.Equals(found.BT_GUID)));
         }
 
     }

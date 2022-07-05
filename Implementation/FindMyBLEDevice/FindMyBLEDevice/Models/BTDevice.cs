@@ -26,7 +26,7 @@ namespace FindMyBLEDevice.Models
      */
 
 
-    public class BTDevice : IBTDevice
+    public class BTDevice
     {
 
         [PrimaryKey, AutoIncrement]
@@ -51,5 +51,6 @@ namespace FindMyBLEDevice.Models
 
         public DateTime LastGPSTimestamp { get; set; }
 
+        public bool WithinRange { get; set; }
     }
 }
