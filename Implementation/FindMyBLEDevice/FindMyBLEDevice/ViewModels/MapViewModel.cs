@@ -10,15 +10,24 @@ using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services;
 using System;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
+        public bool DeviceNotNull => Device != null;
+        public Command OpenMapPin { get; }
         public MapViewModel(Xamarin.Forms.Maps.Map map)
         {
             Title = "MapSearch";
+            OpenMapPin = new Command( async () => await OpenMapswithPin());
             this.map = map;
+        }
+
+        async Task OpenMapswithPin()
+        {
+            await Xamarin.Essentials.Map.OpenAsync(Device.LastGPSLatitude, Device.LastGPSLongitude, new MapLaunchOptions { Name = Device.UserLabel });
         }
 
         public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
@@ -48,10 +57,10 @@ namespace FindMyBLEDevice.ViewModels
                             new Position(Device.LastGPSLatitude, Device.LastGPSLongitude))
                 ));
             }
-            showSelectedDevice();
+            ShowSelectedDevice();
         }
 
-        private void showSelectedDevice()
+        private void ShowSelectedDevice()
         {
 			if (Device is null) return;
 
