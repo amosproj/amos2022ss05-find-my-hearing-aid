@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Xamarin.Essentials;
 using FindMyBLEDevice.Services.Settings;
+using FindMyBLEDevice.XamarinAccess;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -32,7 +33,7 @@ namespace FindMyBLEDevice.ViewModels
 
         private string _status;
 
-        public StrengthViewModel()
+        public StrengthViewModel(IDeviceDisplayAccess displayAccess)
         {
             Title = "StrengthSearch";
             meterScaleMin = rssiToMeter(0, Constants.TxPowerDefault);
@@ -41,11 +42,12 @@ namespace FindMyBLEDevice.ViewModels
             _status = "Uninitialized";
 
             // Width (in xamarin.forms units)
-            var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
-            int xamarinWidth = (int)Math.Round(mainDisplayInfo.Width / mainDisplayInfo.Density);
+            int xamarinWidth = (int)Math.Round(displayAccess.Width / displayAccess.Density);
             MaxRadiusSize = (int)Math.Round(xamarinWidth * MaxRadiusRelativeToScreen);
             initializeCircleSizes();
         }
+
+        public StrengthViewModel() : this(new DeviceDisplayAccess()) { }
 
         private void initializeCircleSizes()
         {            
