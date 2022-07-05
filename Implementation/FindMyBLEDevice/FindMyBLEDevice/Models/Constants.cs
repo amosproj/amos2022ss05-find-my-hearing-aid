@@ -10,6 +10,8 @@ namespace FindMyBLEDevice.Models
 {
     public static class Constants
     {
+        public const int DiscoverSearchDuration = 20000;
+
         public const int RssiIntervalDefault = 25;
         public const int RssiIntervalMin = 0;
         public const int RssiIntervalMax = 1000;
@@ -20,7 +22,7 @@ namespace FindMyBLEDevice.Models
         public const int RssiTooFarThreshold = -80;
 
         public const int TxPowerDefault = -70;
-        public const int RssiEnvironmentalDefault = 3;
+        public const double RssiEnvironmentalDefault = 2.5;
 
         public const double MeterClosebyThreshold = 0.5;
 

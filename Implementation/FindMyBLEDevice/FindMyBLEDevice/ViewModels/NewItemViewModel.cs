@@ -9,10 +9,8 @@ namespace FindMyBLEDevice.ViewModels
 
         public NewItemViewModel()
         {
-            SaveCommand = new Command(OnSave, ValidateSave);
+            SaveCommand = new Command(OnSave);
             CancelCommand = new Command(OnCancel);
-            this.PropertyChanged +=
-                (_, __) => SaveCommand.ChangeCanExecute();
             device = new Models.BTDevice();
         }
 
@@ -59,6 +57,10 @@ namespace FindMyBLEDevice.ViewModels
 
         private async void OnSave()
         {
+            if(String.IsNullOrWhiteSpace(device.UserLabel))
+            {
+                device.UserLabel = device.AdvertisedName;
+            }
 
             App.DevicesStore.SelectedDevice = await App.DevicesStore.AddDevice(device);
 

@@ -1,6 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 
 using FindMyBLEDevice.Models;
 using Plugin.BLE.Abstractions.Contracts;
@@ -12,10 +13,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
 {
     public interface IBluetooth
     {
-        Task Search(int scanTimeout, ObservableCollection<BTDevice> availableDevices, Predicate<BTDevice> filter);
+        event EventHandler<BTDevice> DeviceDiscovered;
+        Task StartSearch(int timeout);
+        Task StopSearch();
         void StartRssiPolling(String btguid, Action<int, int> updateRssi, Action connected = null, Action disconnected = null);
         void StopRssiPolling();
-        Task StopSearch();
         Task<IDevice> DeviceReachableAsync(BTDevice device);
     }
 }

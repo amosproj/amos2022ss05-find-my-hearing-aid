@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 using FindMyBLEDevice.ViewModels;
@@ -10,14 +10,14 @@ namespace FindMyBLEDevice.Views
 {
     public partial class ItemDetailPage : ContentPage
     {
-
-        ItemDetailViewModel _viewModel;
+        readonly ItemDetailViewModel _viewModel;
 
         public ItemDetailPage()
         {
             InitializeComponent();
             BindingContext = _viewModel = new ItemDetailViewModel(App.Navigator, App.Bluetooth, App.DevicesStore);
         }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();

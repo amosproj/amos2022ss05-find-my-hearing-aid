@@ -21,6 +21,7 @@ namespace FindMyBLEDevice.Services.Database
         public event EventHandler DevicesChanged;
 
         public BTDevice SelectedDevice { get; set; }
+        
 
         public DevicesStore()
         {
@@ -86,7 +87,7 @@ namespace FindMyBLEDevice.Services.Database
 
             if (result != 1)
             {
-                throw new DeviceStoreException("Updating device failed!");
+                throw new DeviceStoreException("Deleting device failed!");
             }
 
             DevicesChanged?.Invoke(this, EventArgs.Empty);

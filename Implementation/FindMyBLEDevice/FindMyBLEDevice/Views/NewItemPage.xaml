@@ -1,4 +1,8 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
+<!--
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+-->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindMyBLEDevice.Views.NewItemPage"
@@ -9,7 +13,7 @@
     <ContentPage.Content>
         <StackLayout Spacing="3" Padding="15">
             <Label Text="User-Label" FontSize="Medium" />
-            <Entry Text="{Binding UserLabel, Mode=TwoWay}" FontSize="Medium" />
+            <Entry Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding AdvertisedName}" FontSize="Medium" />
             <StackLayout Orientation="Horizontal">
                 <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
                 <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>

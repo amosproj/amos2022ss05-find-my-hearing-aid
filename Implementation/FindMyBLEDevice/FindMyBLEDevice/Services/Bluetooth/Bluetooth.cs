@@ -13,7 +13,6 @@ using Plugin.BLE.Abstractions.Contracts;
 using System;
 using System.Threading;
 using Plugin.BLE.Abstractions;
-using FindMyBLEDevice.Exceptions;
 using FindMyBLEDevice.Services.Settings;
 
 namespace FindMyBLEDevice.Services.Bluetooth
@@ -25,46 +24,43 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
         private CancellationTokenSource rssiCancel;
 
+        public event EventHandler<BTDevice> DeviceDiscovered;
+
         public Bluetooth(IAdapter adapter, ISettings settings)
         {
             this.adapter = adapter;
             this.settings = settings;
+
+            adapter.DeviceDiscovered += OnDeviceDiscovered;
         }
         public Bluetooth() : this(CrossBluetoothLE.Current.Adapter, App.Settings) {}
 
-        public async Task Search(int scanTimeout, ObservableCollection<BTDevice> availableDevices, Predicate<BTDevice> filter)
+        private void OnDeviceDiscovered(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
         {
+            Console.WriteLine(e.Device.Id);
 
-            adapter.DeviceDiscovered += (s, a) => {
-                Console.WriteLine(a.Device.Id);
-                if (availableDevices.ToList<BTDevice>().Exists(o => Guid.Parse(o.BT_GUID) == a.Device.Id))
-                {
-                    return;
-                }
+            if (e.Device.Rssi < Constants.RssiTooFarThreshold 
+                && !settings.Get(SettingsNames.DisplayWeakDevices, false))
+            {
+                return;
+            }
 
-                if (a.Device.Rssi < Constants.RssiTooFarThreshold && !settings.Get(SettingsNames.DisplayWeakDevices, false))
-                {
-                    return;
-                }
+            if (e.Device.Name is null 
+                && !settings.Get(SettingsNames.DisplayNamelessDevices, false))
+            {
+                return;
+            }
 
-                if (a.Device.Name is null && !settings.Get(SettingsNames.DisplayNamelessDevices, false))
-                {
-                    return;
-                }
+            DeviceDiscovered.Invoke(this, new BTDevice()
+            {
+                AdvertisedName = e.Device.Name,
+                BT_GUID = e.Device.Id.ToString()
+            });
+        }
 
-                BTDevice device = (new BTDevice()
-                {
-                    AdvertisedName = a.Device.Name,
-                    BT_GUID = a.Device.Id.ToString()
-                });
-
-                if (filter == null || filter(device))
-                {
-                    availableDevices.Add(device);
-                }
-            };            
-
-            adapter.ScanTimeout = scanTimeout;
+        public async Task StartSearch(int timeout)
+        {
+            adapter.ScanTimeout = timeout;
             await adapter.StartScanningForDevicesAsync();
         }
 

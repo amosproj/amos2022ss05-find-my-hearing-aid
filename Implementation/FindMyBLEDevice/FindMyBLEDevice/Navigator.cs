@@ -11,6 +11,38 @@ namespace FindMyBLEDevice
     /// </summary>
     public class Navigator : INavigator
     {
+        public string AboutPage { get; }
+
+        public string DevicesPage { get; }
+
+        public string NewDevicePage { get; }
+
+        public string DeviceDetailPage { get; }
+
+        public string StrengthPage { get; }
+
+        public string MapPage { get; }
+
+        public string SettingsPage { get; }
+
+        public Navigator(
+            string aboutPage,
+            string devicesPage,
+            string newDevicePage,
+            string deviceDetailPage,
+            string strengthPage, 
+            string mapPage,
+            string settingsPage)
+        {
+            AboutPage = aboutPage;
+            DevicesPage = devicesPage;
+            NewDevicePage = newDevicePage;
+            DeviceDetailPage = deviceDetailPage;
+            StrengthPage = strengthPage;
+            MapPage = mapPage;
+            SettingsPage = settingsPage;
+        }
+
         public Task GoToAsync(string page)
         {
             return Shell.Current.GoToAsync(page);

@@ -14,6 +14,7 @@ using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Settings;
 using System;
 using Xamarin.Forms;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice
 {
@@ -113,7 +114,14 @@ namespace FindMyBLEDevice
             {
                 if(navigator == null)
                 {
-                    navigator = new Navigator();
+                    navigator = new Navigator(
+                        nameof(AboutPage), 
+                        nameof(ItemsPage),
+                        nameof(NewItemPage),
+                        nameof(ItemDetailPage),
+                        nameof(StrengthPage),
+                        nameof(MapPage),
+                        nameof(SettingsPage));
                 }
                 return navigator;
             }
