@@ -33,7 +33,7 @@
                     <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
                                  HeightRequest="220" 
-                                 Source="find_my_ble_device.png" 
+                                 Source="signal_strength.png" 
                                  Aspect="AspectFit" CornerRadius="50" 
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenStrengthPageCommand}" 
