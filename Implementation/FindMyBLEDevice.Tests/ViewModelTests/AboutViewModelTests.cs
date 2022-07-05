@@ -3,6 +3,7 @@
 
 using FindMyBLEDevice.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 
 namespace FindMyBLEDevice.Tests.ViewModelTests
 {
@@ -16,7 +17,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             AboutViewModel vm;
 
             // act
-            vm = new AboutViewModel();
+            vm = new AboutViewModel(new Mock<INavigator>().Object);
 
             // assert
             Assert.IsNotNull(vm);

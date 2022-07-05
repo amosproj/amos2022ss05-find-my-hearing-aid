@@ -20,9 +20,11 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
         {
             // arrange
             ItemDetailViewModel vm;
+            var devStoreMock = new Mock<IDevicesStore>();
+            devStoreMock.SetupGet(mock => mock.SelectedDevice).Returns(new Models.BTDevice { UserLabel = "something" });
 
             // act
-            vm = new ItemDetailViewModel(null, null, null);
+            vm = new ItemDetailViewModel(null, null, devStoreMock.Object);
 
             // assert
             Assert.IsNotNull(vm);
@@ -34,38 +36,48 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
         public void StrengthButtonTapped_StopsPollingAndRedirects()
         {
             // arrange
+            var name = nameof(StrengthPage);
             var nvg = new Mock<INavigator>();
             nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
+            nvg.SetupGet(mock => mock.StrengthPage).Returns(name);
             var bt = new Mock<IBluetooth>();
             bt.Setup(mock => mock.StopRssiPolling());
-            ItemDetailViewModel vm = new(nvg.Object, bt.Object, null);
+            var devStoreMock = new Mock<IDevicesStore>();
+            devStoreMock.SetupGet(mock => mock.SelectedDevice).Returns(new Models.BTDevice { UserLabel = "something" });
+            ItemDetailViewModel vm = new(nvg.Object, bt.Object, devStoreMock.Object);
 
             // act
             vm.StrengthButtonTapped.Execute(null);
+            vm.OnDisappearing();
 
             // assert
             bt.Verify(mock => mock.StopRssiPolling(), Times.Once);
             nvg.Verify(mock => mock.GoToAsync(It.Is<string>(pageName => 
-                pageName == nameof(StrengthPage))), Times.Once);
+                pageName == name)), Times.Once);
         }
 
         [TestMethod]
         public void MapButtonTapped_StopsPollingAndRedirects()
         {
             // arrange
+            var name = nameof(MapPage);
             var nvg = new Mock<INavigator>();
             nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
+            nvg.SetupGet(mock => mock.MapPage).Returns(name);
             var bt = new Mock<IBluetooth>();
             bt.Setup(mock => mock.StopRssiPolling());
-            ItemDetailViewModel vm = new(nvg.Object, bt.Object, null);
+            var devStoreMock = new Mock<IDevicesStore>();
+            devStoreMock.SetupGet(mock => mock.SelectedDevice).Returns(new Models.BTDevice { UserLabel = "something" });
+            ItemDetailViewModel vm = new(nvg.Object, bt.Object, devStoreMock.Object);
 
             // act
             vm.MapButtonTapped.Execute(null);
+            vm.OnDisappearing();
 
             // assert
             bt.Verify(mock => mock.StopRssiPolling(), Times.Once);
             nvg.Verify(mock => mock.GoToAsync(It.Is<string>(pageName =>
-                pageName == nameof(MapPage))), Times.Once);
+                pageName == name)), Times.Once);
         }
 
         [TestMethod]
@@ -118,9 +130,11 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
         public void OnDisppearing_StopsPolling()
         {
             // arrange
+            var devStoreMock = new Mock<IDevicesStore>();
+            devStoreMock.SetupGet(mock => mock.SelectedDevice).Returns(new Models.BTDevice { UserLabel = "something" });
             var bt = new Mock<IBluetooth>();
             bt.Setup(mock => mock.StopRssiPolling());
-            ItemDetailViewModel vm = new(null, bt.Object, null);
+            ItemDetailViewModel vm = new(null, bt.Object, devStoreMock.Object);
 
             // act
             vm.OnDisappearing();
