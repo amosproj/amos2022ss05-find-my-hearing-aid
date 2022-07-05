@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using System.Linq;
 using System.Windows.Input;
+using FindMyBLEDevice.Services;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -69,9 +70,10 @@ namespace FindMyBLEDevice.ViewModels
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(MapPage)));
         }
 
-        public void OnAppearing()
+        public async void OnAppearing()
         {
             IsBusy = true;
+            await CheckBluetoothAndLocation.Check();
 
             App.DevicesStore.DevicesChanged += OnDevicesChanged;
             OnDevicesChanged(null, null);

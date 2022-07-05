@@ -18,8 +18,8 @@
     <ContentPage.Content>
  
         <StackLayout Orientation="Vertical">
-            <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
-            <maps:Map x:Name="map"/>
+            <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" AutomationId="MapPage_UserLabel"/>
+            <maps:Map x:Name="map" AutomationId="MapPage_Map"/>
             <StackLayout Orientation="Vertical" Padding="10, 10, 10, 10">
                 <Button Text="Open in Maps" Command="{Binding OpenMapPin}" IsEnabled="{Binding DeviceNotNull}"/>
             </StackLayout>
