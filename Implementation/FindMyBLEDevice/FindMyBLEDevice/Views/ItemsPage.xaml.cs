@@ -12,9 +12,9 @@ namespace FindMyBLEDevice.Views
             InitializeComponent();
 
             BindingContext = _viewModel = new ItemsViewModel();
-        }
+    }
 
-        protected override void OnAppearing()
+    protected override async void OnAppearing()
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
