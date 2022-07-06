@@ -6,7 +6,6 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
-using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Location;
@@ -15,6 +14,7 @@ using FindMyBLEDevice.Services.Settings;
 using System;
 using Xamarin.Forms;
 using FindMyBLEDevice.Views;
+using FindMyBLEDevice.Services.ForegroundService;
 
 namespace FindMyBLEDevice
 {
@@ -32,7 +32,7 @@ namespace FindMyBLEDevice
         // Interface to stored settings 
         private static ISettings settings;
         // Update-service
-        private static UpdateService updateService;
+        private static IForegroundService foregroundService;
         // Interface to access Shell navigation
         private static INavigator navigator;
 
@@ -96,15 +96,15 @@ namespace FindMyBLEDevice
             }
         }
 
-        public static UpdateService UpdateService
+        public static IForegroundService ForegroundService
         {
             get
             {
-                if(updateService == null)
+                if(foregroundService == null)
                 {
-                    updateService = new UpdateService();
+                    foregroundService = new ForegroundService();
                 }
-                return updateService;
+                return foregroundService;
             }
         }
 
@@ -136,7 +136,7 @@ namespace FindMyBLEDevice
 
             MainPage = new AppShell();
 
-            UpdateService.Start();
+            ForegroundService.Start();
         }
     }
 }
