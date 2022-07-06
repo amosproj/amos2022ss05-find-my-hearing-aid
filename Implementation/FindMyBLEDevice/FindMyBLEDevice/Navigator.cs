@@ -43,8 +43,12 @@ namespace FindMyBLEDevice
             SettingsPage = settingsPage;
         }
 
-        public Task GoToAsync(string page)
+        public Task GoToAsync(string page, bool newStack = false)
         {
+            if (newStack)
+            {
+                page = "//" + page;
+            }
             return Shell.Current.GoToAsync(page);
         }
     }

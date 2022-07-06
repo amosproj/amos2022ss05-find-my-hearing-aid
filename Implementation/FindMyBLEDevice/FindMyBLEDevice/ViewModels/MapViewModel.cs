@@ -8,17 +8,27 @@ using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
 using System;
-using System.Threading.Tasks;
+using FindMyBLEDevice.Services.ForegroundService;
+using Xamarin.Forms;
+using System.Linq;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
-        public MapViewModel(Xamarin.Forms.Maps.Map map)
+        private readonly INavigator navigator;
+
+        private bool userDeclinedPageSwitch;
+        private bool showingDialogue;
+
+        public MapViewModel(Xamarin.Forms.Maps.Map map, INavigator navigator)
         {
             Title = "MapSearch";
             this.map = map;
+            this.navigator = navigator;
         }
+
+        public MapViewModel(Xamarin.Forms.Maps.Map map) : this(map, App.Navigator) { }
 
         public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
 
@@ -46,6 +56,10 @@ namespace FindMyBLEDevice.ViewModels
                 ));
             }
             showSelectedDevice();
+
+            userDeclinedPageSwitch = false;
+            showingDialogue = false;
+            App.ForegroundService.ServiceIteration += CheckIfSelectedDeviceReachable;
         }
 
         private void showSelectedDevice()
@@ -64,7 +78,36 @@ namespace FindMyBLEDevice.ViewModels
         } 
 
         public void OnDisappearing() {
-            // comment to make linter happy, method will be used in the future
+            App.ForegroundService.ServiceIteration -= CheckIfSelectedDeviceReachable;
+        }
+
+        private async void CheckIfSelectedDeviceReachable(object sender, ForegroundServiceEventArgs ea)
+        {
+            if (showingDialogue || userDeclinedPageSwitch || Device is null) return;
+            showingDialogue = true;
+
+            var device = ea.Devices.Where(d => d.ID == Device.ID);
+            if (!device.Any()) return;
+
+            if (device.First().WithinRange)
+            {
+                bool promptAnswer = false;
+                await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the signal strength search?", "Yes", "No");
+                });
+                if (promptAnswer)
+                {
+                    await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                        await navigator.GoToAsync(navigator.StrengthPage, true);
+                    });
+                }
+                else
+                {
+                    userDeclinedPageSwitch = true;
+                }
+            }
+
+            showingDialogue = false;
         }
     }
 }
