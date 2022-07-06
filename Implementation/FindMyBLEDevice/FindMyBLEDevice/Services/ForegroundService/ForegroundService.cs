@@ -18,7 +18,7 @@ namespace FindMyBLEDevice.Services.ForegroundService
     public class ForegroundService : IForegroundService
     {
         private readonly IBluetooth bluetooth;
-        private readonly IDevicesStore devicesStore;
+        private readonly IDevicesStore deviceStore;
         private readonly IGeolocation geolocation;
         private readonly ISettings settings;
 
@@ -33,12 +33,12 @@ namespace FindMyBLEDevice.Services.ForegroundService
         public ForegroundService(IBluetooth bluetooth, IDevicesStore deviceStore, IGeolocation geolocation, ISettings settings)
         {
             this.bluetooth = bluetooth;
-            devicesStore = deviceStore;
+            this.deviceStore = deviceStore;
             this.geolocation = geolocation;
             this.settings = settings;
 
             savedDevices = new List<BTDevice>();
-            devicesStore.DevicesChanged += OnSavedDevicesStoreChanged;
+            this.deviceStore.DevicesChanged += OnSavedDevicesStoreChanged;
 
             ServiceIteration += UpdateDevices;
 
@@ -50,7 +50,7 @@ namespace FindMyBLEDevice.Services.ForegroundService
 
         private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
         {
-            savedDevices = await devicesStore.GetAllDevices();
+            savedDevices = await deviceStore.GetAllDevices();
         }
 
         public void Start()
@@ -60,7 +60,7 @@ namespace FindMyBLEDevice.Services.ForegroundService
             running = true;
             Task.Run(async () =>
             {
-                savedDevices = await devicesStore.GetAllDevices();
+                savedDevices = await deviceStore.GetAllDevices();
                 while (true)
                 {
                     var ea = new ForegroundServiceEventArgs { Devices = savedDevices };
@@ -103,7 +103,7 @@ namespace FindMyBLEDevice.Services.ForegroundService
                     databaseDevice.LastGPSTimestamp = DateTime.Now;
                     databaseDevice.WithinRange = true;
                 }
-                await devicesStore.UpdateDevice(databaseDevice);
+                await deviceStore.UpdateDevice(databaseDevice);
             }
 
         }
