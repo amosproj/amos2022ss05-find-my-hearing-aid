@@ -72,8 +72,6 @@ namespace FindMyBLEDevice.UITests
 
             // Label & Position
             Assert.IsTrue(app.Query(c => c.Marked("MapPage_UserLabel")).Any());
-            Assert.IsTrue(app.Query(c => c.Marked("MapPage_Latitude")).Any());
-            Assert.IsTrue(app.Query(c => c.Marked("MapPage_Longitude")).Any());
             // Map
             Assert.IsTrue(app.Query(c => c.Marked("MapPage_Map")).Any());
 

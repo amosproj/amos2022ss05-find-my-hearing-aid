@@ -3,14 +3,14 @@
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 
-using Xamarin.Forms;
-using FindMyBLEDevice.Models;
 using System;
-using FindMyBLEDevice.Views;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Xamarin.Essentials;
 using FindMyBLEDevice.Services.Settings;
+using FindMyBLEDevice.Services;
+using FindMyBLEDevice.Models;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -113,8 +113,10 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _status, value);
         }
 
-        public void OnAppearing()
+        public async Task OnAppearing()
         {
+            await CheckBluetoothAndLocation.Check();
+
             if (App.DevicesStore.SelectedDevice is null)
             {
                 Status = "No device selected!\nPlease select a device to continue.";
