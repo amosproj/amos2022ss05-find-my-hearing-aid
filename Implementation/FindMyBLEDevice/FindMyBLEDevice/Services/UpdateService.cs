@@ -28,21 +28,18 @@ namespace FindMyBLEDevice.Services
 
         private bool running;
 
-        public UpdateService(IBluetooth bluetooth, IDevicesStore deviceStore, IGeolocation geolocation, ISettings settings)
+        public UpdateService(IBluetooth bluetooth, IDevicesStore devicesStore, IGeolocation geolocation, ISettings settings)
         {
             this.bluetooth = bluetooth;
-            this.devicesStore = deviceStore;
+            this.devicesStore = devicesStore;
             this.geolocation = geolocation;
             this.settings = settings;
 
             savedDevices = new List<BTDevice>();
-            devicesStore.DevicesChanged += OnSavedDevicesStoreChanged;
+            this.devicesStore.DevicesChanged += OnSavedDevicesStoreChanged;
 
             running = false;
         }
-
-        public UpdateService() : this(App.Bluetooth, App.DevicesStore, App.Geolocation, App.Settings) { }
-
 
         private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
         {
@@ -74,11 +71,11 @@ namespace FindMyBLEDevice.Services
             }
             while (running)
             {
-                try //just to be safe...
+                try
                 {
                     var startTime = DateTime.Now;
 
-                    //wait until there are any saved devices
+                    // wait until there are any saved devices
                     try
                     {
                         Monitor.Enter(this);
@@ -92,39 +89,11 @@ namespace FindMyBLEDevice.Services
                         Monitor.Exit(this);
                     }
 
-                    // start connecting to all known devices
-                    Dictionary<BTDevice, Task<IDevice>> reachableTasks = new Dictionary<BTDevice, Task<IDevice>>();
-                    foreach (BTDevice device in savedDevices)
-                    {
-                        reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
-                    }
+                    // run the service tasks
+                    await UpdateDevices();
+                    // to be determined: expose an event that is fired here
 
-                    // wait until all connection attempts finished (adapter timeout ~5s)
-                    await Task.WhenAll(reachableTasks.Values);
-
-                    // update geolocations of reachable devices
-                    var location = await geolocation.GetCurrentLocation();
-                    foreach (KeyValuePair<BTDevice, Task<IDevice>> p in reachableTasks)
-                    {
-                        var databaseDevice = p.Key;
-                        var adapterDeviceTask = p.Value;
-                        if (adapterDeviceTask.Result is null || adapterDeviceTask.Result.Rssi < Constants.RssiTooFarThreshold)
-                        {
-                            Console.WriteLine($"[UpdateService] {DateTime.Now} Out of reach: {databaseDevice.UserLabel}");
-                            databaseDevice.WithinRange = false;
-                        }
-                        else
-                        {
-                            Console.WriteLine($"[UpdateService] {DateTime.Now} Reachable: {databaseDevice.UserLabel}");
-                            databaseDevice.LastGPSLatitude = location.Latitude;
-                            databaseDevice.LastGPSLongitude = location.Longitude;
-                            databaseDevice.LastGPSTimestamp = DateTime.Now;
-                            databaseDevice.WithinRange = true;
-                        }
-                        await devicesStore.UpdateDevice(databaseDevice);
-                    }
-
-                    // delay next poll
+                    // delay next iteration
                     int remaining = (int)(startTime.AddSeconds(settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault)) 
                         - DateTime.Now).TotalMilliseconds;
                     if (remaining > 0) await Task.Delay(remaining);
@@ -133,6 +102,41 @@ namespace FindMyBLEDevice.Services
                 {
                     Console.WriteLine(e.ToString());
                 }
+            }
+        }
+
+        private async Task UpdateDevices()
+        {
+            // start connecting to all known devices
+            Dictionary<BTDevice, Task<IDevice>> reachableTasks = new Dictionary<BTDevice, Task<IDevice>>();
+            foreach (BTDevice device in savedDevices)
+            {
+                reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
+            }
+
+            // wait until all connection attempts finished (adapter timeout ~5s)
+            await Task.WhenAll(reachableTasks.Values);
+
+            // update geolocations of reachable devices
+            var location = await geolocation.GetCurrentLocation();
+            foreach (KeyValuePair<BTDevice, Task<IDevice>> p in reachableTasks)
+            {
+                var databaseDevice = p.Key;
+                var adapterDeviceTask = p.Value;
+                if (adapterDeviceTask.Result is null || adapterDeviceTask.Result.Rssi < Constants.RssiTooFarThreshold)
+                {
+                    Console.WriteLine($"[UpdateService] {DateTime.Now} Out of reach: {databaseDevice.UserLabel}");
+                    databaseDevice.WithinRange = false;
+                }
+                else
+                {
+                    Console.WriteLine($"[UpdateService] {DateTime.Now} Reachable: {databaseDevice.UserLabel}");
+                    databaseDevice.LastGPSLatitude = location.Latitude;
+                    databaseDevice.LastGPSLongitude = location.Longitude;
+                    databaseDevice.LastGPSTimestamp = DateTime.Now;
+                    databaseDevice.WithinRange = true;
+                }
+                await devicesStore.UpdateDevice(databaseDevice);
             }
         }
     }

@@ -102,7 +102,7 @@ namespace FindMyBLEDevice
             {
                 if(updateService == null)
                 {
-                    updateService = new UpdateService();
+                    updateService = new UpdateService(Bluetooth, DevicesStore, Geolocation, Settings);
                 }
                 return updateService;
             }
