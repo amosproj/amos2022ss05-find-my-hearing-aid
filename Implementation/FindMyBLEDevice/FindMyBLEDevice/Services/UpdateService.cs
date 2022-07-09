@@ -10,6 +10,7 @@ using FindMyBLEDevice.Services.Settings;
 using Plugin.BLE.Abstractions.Contracts;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.Services
@@ -46,6 +47,11 @@ namespace FindMyBLEDevice.Services
         private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
         {
             savedDevices = await devicesStore.GetAllDevices();
+
+            //notify service runner in case it waits for saved devices to be added
+            Monitor.Enter(this);
+            Monitor.PulseAll(this);
+            Monitor.Exit(this);
         }
 
         public void Start()
@@ -53,11 +59,39 @@ namespace FindMyBLEDevice.Services
             if (running) return;
 
             running = true;
-            Task.Run(async () =>
+            Task.Run(RunAsync);
+        }
+
+        public async Task RunAsync()
+        {
+            try
             {
                 savedDevices = await devicesStore.GetAllDevices();
-                while (true)
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            while (running)
+            {
+                try //just to be safe...
                 {
+                    var startTime = DateTime.Now;
+
+                    //wait until there are any saved devices
+                    try
+                    {
+                        Monitor.Enter(this);
+                        while (savedDevices.Count == 0)
+                        {
+                            Monitor.Wait(this);
+                        }
+                    }
+                    finally
+                    {
+                        Monitor.Exit(this);
+                    }
+
                     // start connecting to all known devices
                     Dictionary<BTDevice, Task<IDevice>> reachableTasks = new Dictionary<BTDevice, Task<IDevice>>();
                     foreach (BTDevice device in savedDevices)
@@ -78,7 +112,8 @@ namespace FindMyBLEDevice.Services
                         {
                             Console.WriteLine($"[UpdateService] {DateTime.Now} Out of reach: {databaseDevice.UserLabel}");
                             databaseDevice.WithinRange = false;
-                        } else
+                        }
+                        else
                         {
                             Console.WriteLine($"[UpdateService] {DateTime.Now} Reachable: {databaseDevice.UserLabel}");
                             databaseDevice.LastGPSLatitude = location.Latitude;
@@ -90,9 +125,15 @@ namespace FindMyBLEDevice.Services
                     }
 
                     // delay next poll
-                    await Task.Delay(1000 * settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault));
+                    int remaining = (int)(startTime.AddSeconds(settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault)) 
+                        - DateTime.Now).TotalMilliseconds;
+                    if (remaining > 0) await Task.Delay(remaining);
                 }
-            });
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.ToString());
+                }
+            }
         }
     }
 }

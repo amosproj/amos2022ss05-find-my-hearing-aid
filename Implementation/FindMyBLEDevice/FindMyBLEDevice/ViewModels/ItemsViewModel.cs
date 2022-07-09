@@ -15,6 +15,8 @@ using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Location;
 using System.Threading;
+using System.Windows.Input;
+using FindMyBLEDevice.Services;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -78,8 +80,10 @@ namespace FindMyBLEDevice.ViewModels
             await navigator.GoToAsync(page);
         }
 
-        public void OnAppearing()
+        public async void OnAppearing()
         {
+            await CheckBluetoothAndLocation.Check();
+
             devicesStore.DevicesChanged += OnDevicesChanged;
             OnDevicesChanged(null, null);
             AvailableDevices = new ObservableCollection<BTDevice>();

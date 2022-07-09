@@ -3,6 +3,8 @@
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+
 
 using FindMyBLEDevice.Models;
 using Plugin.BLE;
@@ -142,16 +144,30 @@ namespace FindMyBLEDevice.Services.Bluetooth
         public async Task<IDevice> DeviceReachableAsync(BTDevice device)
         {
             IDevice adapterDevice = null;
-            try
+            var connDevMatchingGuid = adapter.ConnectedDevices.Where(connDev => connDev.Id.ToString() == device.BT_GUID);
+            if (connDevMatchingGuid.Any())
             {
-                ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
-                adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
-                if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
-            } catch (Exception)
+                adapterDevice = connDevMatchingGuid.First();
+            } else
             {
-                Console.WriteLine($"Checking if {device.UserLabel} is reachable failed.");
+                try
+                {
+                    ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
+                    adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
+                    if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
+                } catch (Exception)
+                {
+                    Console.WriteLine($"Checking if {device.UserLabel} is reachable failed.");
+                }
             }
             return adapterDevice;
+        }
+
+        public bool IsEnabled()
+        {
+            Plugin.BLE.Abstractions.Contracts.IBluetoothLE ble = CrossBluetoothLE.Current;
+
+            return ble.State == Plugin.BLE.Abstractions.Contracts.BluetoothState.On || ble.State == Plugin.BLE.Abstractions.Contracts.BluetoothState.TurningOn;
         }
     }
 }
