@@ -8,7 +8,6 @@
 
 using FindMyBLEDevice.Models;
 using Plugin.BLE;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Linq;
 using Plugin.BLE.Abstractions.Contracts;
@@ -21,6 +20,9 @@ namespace FindMyBLEDevice.Services.Bluetooth
 {
     public class Bluetooth : IBluetooth
     {
+        private readonly Guid TX_POWER_SERVICE = Guid.ParseExact("00001804-0000-1000-8000-00805f9b34fb", "d");
+        private readonly Guid TX_POWER_LEVEL_CHARACTERISTIC = Guid.ParseExact("00002a07-0000-1000-8000-00805f9b34fb", "d");
+
         private readonly IAdapter adapter;
         private readonly ISettings settings;
 
@@ -35,12 +37,10 @@ namespace FindMyBLEDevice.Services.Bluetooth
 
             adapter.DeviceDiscovered += OnDeviceDiscovered;
         }
-        public Bluetooth() : this(CrossBluetoothLE.Current.Adapter, App.Settings) {}
+        public Bluetooth(ISettings settings) : this(CrossBluetoothLE.Current.Adapter, settings) {}
 
         private void OnDeviceDiscovered(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
         {
-            Console.WriteLine(e.Device.Id);
-
             if (e.Device.Rssi < Constants.RssiTooFarThreshold 
                 && !settings.Get(SettingsNames.DisplayWeakDevices, false))
             {
@@ -85,33 +85,12 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 {
                     try
                     {
-                        IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
+                        IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid), cancellationToken: token);
 
                         if (!(connected is null)) connected.Invoke();
 
-                        int txPower = Constants.TxPowerDefault;
-                        try
-                        {
-                            var service = await device.GetServiceAsync(Guid.ParseExact("00001804-0000-1000-8000-00805f9b34fb", "d"), token);
-                            if(service != null)
-                            {
-                                var characteristic = await service.GetCharacteristicAsync(Guid.ParseExact("00002a07-0000-1000-8000-00805f9b34fb", "d"));
-                                if(characteristic != null)
-                                {
-                                    var value = await characteristic.ReadAsync(token);
-                                    if(value != null)
-                                    {
-                                        txPower = Convert.ToInt32((sbyte) value[0]);
-                                        Console.WriteLine("Device provided its txPower value: " + txPower);
-                                    }
-                                }
-                            }
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.ToString());
-                        }
-
+                        int txPower = await DeviceTXPowerAsync(device, token);
+                        
                         try
                         {
                             while((!token.IsCancellationRequested) && device.State == DeviceState.Connected)
@@ -141,33 +120,73 @@ namespace FindMyBLEDevice.Services.Bluetooth
             rssiCancel?.Cancel();
         }
         
-        public async Task<IDevice> DeviceReachableAsync(BTDevice device)
+        public async Task<int> DeviceTXPowerAsync(String btguid, CancellationToken token = default)
+        {
+            try
+            {
+                IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid), cancellationToken: token);
+                return await DeviceTXPowerAsync(device, token);
+            }
+            catch(Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            return Constants.TxPowerDefault;
+        }
+
+        private async Task<int> DeviceTXPowerAsync(IDevice device, CancellationToken token = default)
+        {
+            try
+            {
+                var service = await device.GetServiceAsync(TX_POWER_SERVICE, token);
+                if (service != null)
+                {
+                    var characteristic = await service.GetCharacteristicAsync(TX_POWER_LEVEL_CHARACTERISTIC);
+                    if (characteristic != null)
+                    {
+                        var value = await characteristic.ReadAsync(token);
+                        if (value != null)
+                        {
+                            return Convert.ToInt32((sbyte)value[0]);
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.ToString());
+            }
+            return Constants.TxPowerDefault;
+        }
+
+        public async Task<int> DeviceReachableAsync(BTDevice device)
         {
             IDevice adapterDevice = null;
             var connDevMatchingGuid = adapter.ConnectedDevices.Where(connDev => connDev.Id.ToString() == device.BT_GUID);
             if (connDevMatchingGuid.Any())
             {
                 adapterDevice = connDevMatchingGuid.First();
-            } else
+            } 
+            else
             {
                 try
                 {
                     ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
                     adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
                     if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
-                } catch (Exception)
+                } catch (Exception e)
                 {
-                    Console.WriteLine($"Checking if {device.UserLabel} is reachable failed.");
+                    Console.WriteLine($"Checking if {device.UserLabel} is reachable failed:\n"+e.ToString());
                 }
             }
-            return adapterDevice;
+            return adapterDevice != null ? adapterDevice.Rssi : int.MinValue;
         }
 
         public bool IsEnabled()
         {
-            Plugin.BLE.Abstractions.Contracts.IBluetoothLE ble = CrossBluetoothLE.Current;
+            IBluetoothLE ble = CrossBluetoothLE.Current;
 
-            return ble.State == Plugin.BLE.Abstractions.Contracts.BluetoothState.On || ble.State == Plugin.BLE.Abstractions.Contracts.BluetoothState.TurningOn;
+            return ble.State == BluetoothState.On || ble.State == BluetoothState.TurningOn;
         }
     }
 }
