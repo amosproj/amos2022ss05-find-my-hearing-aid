@@ -72,8 +72,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public async void OnAppearing()
         {
-            IsBusy = true;
-            await CheckBluetoothAndLocation.Check();
+            IsBusy = true;;
 
             App.DevicesStore.DevicesChanged += OnDevicesChanged;
             OnDevicesChanged(null, null);

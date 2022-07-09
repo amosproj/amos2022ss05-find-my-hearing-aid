@@ -115,8 +115,6 @@ namespace FindMyBLEDevice.ViewModels
 
         public async Task OnAppearing()
         {
-            await CheckBluetoothAndLocation.Check();
-
             if (App.DevicesStore.SelectedDevice is null)
             {
                 Status = "No device selected!\nPlease select a device to continue.";

@@ -39,8 +39,6 @@ namespace FindMyBLEDevice.ViewModels
             //updates device label above map when opened via the flyout menu
             OnPropertyChanged(nameof(Device));
 
-            await CheckBluetoothAndLocation.Check();
-
             var currentLocation = await App.Geolocation.GetCurrentLocation();
             if (currentLocation == null)
             {
