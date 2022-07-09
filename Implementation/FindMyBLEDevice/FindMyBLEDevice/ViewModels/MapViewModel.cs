@@ -11,18 +11,30 @@ using FindMyBLEDevice.Services;
 using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Geolocation;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
         public bool DeviceNotNull => Device != null;
+
+        private readonly Xamarin.Forms.Maps.Map map;
+        private readonly IGeolocation geolocation;
+        private readonly INavigator navigator;
+        private readonly IDevicesStore devicesStore;
+        private bool userDeclinedPageSwitch, showingDialogue;
+
         public Command OpenMapPin { get; }
-        public MapViewModel(Xamarin.Forms.Maps.Map map)
+        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
         {
             Title = "MapSearch";
-            OpenMapPin = new Command( async () => await OpenMapswithPin());
+            OpenMapPin = new Command(async () => await OpenMapswithPin());
             this.map = map;
+            this.geolocation = geolocation;
+            this.navigator = navigator;
+            this.devicesStore = devicesStore;
         }
 
         async Task OpenMapswithPin()
@@ -30,9 +42,7 @@ namespace FindMyBLEDevice.ViewModels
             await Xamarin.Essentials.Map.OpenAsync(Device.LastGPSLatitude, Device.LastGPSLongitude, new MapLaunchOptions { Name = Device.UserLabel });
         }
 
-        public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
-
-        private readonly Xamarin.Forms.Maps.Map map;
+        public BTDevice Device { get => devicesStore.SelectedDevice;  }
 
         public async void OnAppearing()
         {
@@ -41,7 +51,7 @@ namespace FindMyBLEDevice.ViewModels
 
             await CheckBluetoothAndLocation.Check();
 
-            var currentLocation = await App.Geolocation.GetCurrentLocation();
+            var currentLocation = await geolocation.GetCurrentLocation();
             if (currentLocation == null)
             {
                 Console.WriteLine("No Location found!");
@@ -57,6 +67,11 @@ namespace FindMyBLEDevice.ViewModels
                             new Position(Device.LastGPSLatitude, Device.LastGPSLongitude))
                 ));
             }
+
+            userDeclinedPageSwitch = false;
+            showingDialogue = false;
+            devicesStore.DevicesChanged += CheckIfSelectedDeviceReachable;
+
             ShowSelectedDevice();
         }
 
@@ -76,7 +91,43 @@ namespace FindMyBLEDevice.ViewModels
         } 
 
         public void OnDisappearing() {
-            // comment to make linter happy, method will be used in the future
+            devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
+        }
+
+        private async void CheckIfSelectedDeviceReachable(object sender, EventArgs ea)
+        {
+            if (showingDialogue || userDeclinedPageSwitch || Device is null) return;
+            showingDialogue = true;
+
+            BTDevice updatedDevice = null;
+            try
+            {
+                updatedDevice = await devicesStore.GetDevice(Device.ID);
+            } catch (ArgumentException ae)
+            {
+                Console.WriteLine($"[MapPage] Error retrieving selected device from database");
+            }
+            if (updatedDevice is null) return;
+
+            if (updatedDevice.WithinRange)
+            {
+                bool promptAnswer = false;
+                await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the signal strength search?", "Yes", "No");
+                });
+                if (promptAnswer)
+                {
+                    await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                        await navigator.GoToAsync(navigator.StrengthPage, true);
+                    });
+                }
+                else
+                {
+                    userDeclinedPageSwitch = true;
+                }
+            }
+
+            showingDialogue = false;
         }
     }
 }
