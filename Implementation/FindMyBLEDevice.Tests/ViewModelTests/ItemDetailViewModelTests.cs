@@ -38,7 +38,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // arrange
             var name = nameof(StrengthPage);
             var nvg = new Mock<INavigator>();
-            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
+            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>(), It.IsAny<bool>())).Returns(Task.CompletedTask);
             nvg.SetupGet(mock => mock.StrengthPage).Returns(name);
             var bt = new Mock<IBluetooth>();
             bt.Setup(mock => mock.StopRssiPolling());
@@ -53,7 +53,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // assert
             bt.Verify(mock => mock.StopRssiPolling(), Times.Once);
             nvg.Verify(mock => mock.GoToAsync(It.Is<string>(pageName => 
-                pageName == name)), Times.Once);
+                pageName == name), It.IsAny<bool>()), Times.Once);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // arrange
             var name = nameof(MapPage);
             var nvg = new Mock<INavigator>();
-            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
+            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>(), It.IsAny<bool>())).Returns(Task.CompletedTask);
             nvg.SetupGet(mock => mock.MapPage).Returns(name);
             var bt = new Mock<IBluetooth>();
             bt.Setup(mock => mock.StopRssiPolling());
@@ -77,7 +77,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // assert
             bt.Verify(mock => mock.StopRssiPolling(), Times.Once);
             nvg.Verify(mock => mock.GoToAsync(It.Is<string>(pageName =>
-                pageName == name)), Times.Once);
+                pageName == name), It.IsAny<bool>()), Times.Once);
         }
 
         [TestMethod]
