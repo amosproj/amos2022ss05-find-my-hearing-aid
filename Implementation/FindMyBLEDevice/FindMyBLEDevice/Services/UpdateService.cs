@@ -9,7 +9,6 @@ using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Settings;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.Services
@@ -43,11 +42,6 @@ namespace FindMyBLEDevice.Services
         private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
         {
             savedDevices = await devicesStore.GetAllDevices();
-
-            //notify service runner in case it waits for saved devices to be added
-            Monitor.Enter(this);
-            Monitor.PulseAll(this);
-            Monitor.Exit(this);
         }
 
         public void Start()
@@ -77,10 +71,8 @@ namespace FindMyBLEDevice.Services
                     // run the service tasks
                     await UpdateDevices();
                     // to be determined: expose an event that is fired here
-                    // if done so, UpdateDevices() should be made synchronous and the Monitor should be removed 
-                    // and be replaced by "if(savedDevices.Count == 0) return;" at the beginning of UpdateDevices() 
-                    // in order to make the update tick wait for UpdateDevices() to finish 
-                    // but not keep other event listeners from being executed if there are no saved devices
+                    // if done so, UpdateDevices() should be made synchronous
+                    // in order to make the update tick wait for UpdateDevices() to finish again
 
                     // delay next iteration
                     int remaining = (int)(startTime.AddSeconds(settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault)) 
@@ -96,19 +88,7 @@ namespace FindMyBLEDevice.Services
 
         private async Task UpdateDevices()
         {
-            // wait until there are any saved devices
-            try
-            {
-                Monitor.Enter(this);
-                while (savedDevices.Count == 0)
-                {
-                    Monitor.Wait(this);
-                }
-            }
-            finally
-            {
-                Monitor.Exit(this);
-            }
+            if (savedDevices.Count == 0) return;
 
             // start connecting to all known devices
             Dictionary<BTDevice, Task<int>> reachableTasks = new Dictionary<BTDevice, Task<int>>();

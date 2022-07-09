@@ -85,11 +85,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 {
                     try
                     {
-                        IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid), cancellationToken: token);
+                        IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
 
                         if (!(connected is null)) connected.Invoke();
 
-                        int txPower = await DeviceTXPowerAsync(device, token);
+                        int txPower = await DeviceTXPowerAsync(device);
                         
                         try
                         {
@@ -120,12 +120,12 @@ namespace FindMyBLEDevice.Services.Bluetooth
             rssiCancel?.Cancel();
         }
         
-        public async Task<int> DeviceTXPowerAsync(String btguid, CancellationToken token = default)
+        public async Task<int> DeviceTXPowerAsync(String btguid)
         {
             try
             {
-                IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid), cancellationToken: token);
-                return await DeviceTXPowerAsync(device, token);
+                IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
+                return await DeviceTXPowerAsync(device);
             }
             catch(Exception e)
             {
@@ -134,17 +134,17 @@ namespace FindMyBLEDevice.Services.Bluetooth
             return Constants.TxPowerDefault;
         }
 
-        private async Task<int> DeviceTXPowerAsync(IDevice device, CancellationToken token = default)
+        private async Task<int> DeviceTXPowerAsync(IDevice device)
         {
             try
             {
-                var service = await device.GetServiceAsync(TX_POWER_SERVICE, token);
+                var service = await device.GetServiceAsync(TX_POWER_SERVICE);
                 if (service != null)
                 {
                     var characteristic = await service.GetCharacteristicAsync(TX_POWER_LEVEL_CHARACTERISTIC);
                     if (characteristic != null)
                     {
-                        var value = await characteristic.ReadAsync(token);
+                        var value = await characteristic.ReadAsync();
                         if (value != null)
                         {
                             return Convert.ToInt32((sbyte)value[0]);

@@ -20,7 +20,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
         Task StopSearch();
         void StartRssiPolling(String btguid, Action<int, int> updateRssi, Action connected = null, Action disconnected = null);
         void StopRssiPolling();
-        Task<int> DeviceTXPowerAsync(String btguid, CancellationToken token = default);
+        Task<int> DeviceTXPowerAsync(String btguid);
         Task<int> DeviceReachableAsync(BTDevice device);
         bool IsEnabled();
     }
