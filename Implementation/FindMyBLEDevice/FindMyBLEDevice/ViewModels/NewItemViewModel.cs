@@ -45,6 +45,9 @@ namespace FindMyBLEDevice.ViewModels
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
                 Device.UserLabel = Device.AdvertisedName;
+            } else
+            {
+                Device.UserLabel = UserLabel;
             }
 
             devicesStore.SelectedDevice = await devicesStore.AddDevice(Device);
