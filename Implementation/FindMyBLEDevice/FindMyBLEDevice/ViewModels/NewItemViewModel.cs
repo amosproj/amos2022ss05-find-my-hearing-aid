@@ -1,71 +1,61 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+
+using FindMyBLEDevice.Models;
+using FindMyBLEDevice.Services.Database;
+using System;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class NewItemViewModel : BaseViewModel
     {
-        private Models.BTDevice device;
-
-        public NewItemViewModel()
-        {
-            SaveCommand = new Command(OnSave);
-            CancelCommand = new Command(OnCancel);
-            device = new Models.BTDevice();
-        }
-
-        public void OnAppearing()
-        {
-            device = App.DevicesStore.SelectedDevice;
-        }
-
-        private bool ValidateSave()
-        {
-            return !String.IsNullOrWhiteSpace(device.UserLabel);
-        }
-
-        public string BTGUID
-        {
-            get => device.BT_GUID;
-        }
-
-        public string UserLabel
-        {
-            get => device.UserLabel;
-            set {
-                if (device.UserLabel != value)
-                {
-                    device.UserLabel = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        public string AdvertisedName
-        {
-            get => device.AdvertisedName;
-        }
+        private readonly INavigator navigator;
+        private readonly IDevicesStore devicesStore;
 
         public Command SaveCommand { get; }
         public Command CancelCommand { get; }
 
+        public BTDevice Device => devicesStore.SelectedDevice;
+
+        private string _userLabel;
+        public string UserLabel
+        {
+            get => _userLabel;
+            set => SetProperty(ref _userLabel, value);
+        }
+
+        public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore)
+        {
+            this.navigator = navigator;
+            this.devicesStore = devicesStore;
+
+            SaveCommand = new Command(OnSave);
+            CancelCommand = new Command(OnCancel);
+        }
+
+        public void OnAppearing()
+        {
+            UserLabel = null;
+        }
+
         private async void OnCancel()
         {
             // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+            await navigator.GoToAsync("..");
         }
 
         private async void OnSave()
         {
-            if(String.IsNullOrWhiteSpace(device.UserLabel))
+            if(String.IsNullOrWhiteSpace(UserLabel))
             {
-                device.UserLabel = device.AdvertisedName;
+                Device.UserLabel = Device.AdvertisedName;
             }
 
-            App.DevicesStore.SelectedDevice = await App.DevicesStore.AddDevice(device);
+            devicesStore.SelectedDevice = await devicesStore.AddDevice(Device);
 
             // This will pop the current page off the navigation stack
-            await Shell.Current.GoToAsync("..");
+            await navigator.GoToAsync("..");
         }
     }
 }

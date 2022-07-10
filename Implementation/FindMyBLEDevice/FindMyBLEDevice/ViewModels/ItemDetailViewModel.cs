@@ -5,9 +5,7 @@
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
-using FindMyBLEDevice.Views;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -24,10 +22,7 @@ namespace FindMyBLEDevice.ViewModels
         public Command RenameButtonTapped { get; }
         public Command DeleteButtonTapped { get; }
 
-        public BTDevice Device
-        {
-            get => devicesStore.SelectedDevice;
-        }
+        public BTDevice Device => devicesStore.SelectedDevice;
 
         private int _currentRssi;
         public int CurrentRssi
@@ -77,7 +72,10 @@ namespace FindMyBLEDevice.ViewModels
         {
             
             // Show confirmation dialog
-            bool answer = await Application.Current.MainPage.DisplayAlert("Rename device", String.Format("Are you sure you want to rename this device to '{0}'?", UserLabel), "Yes", "Cancel");
+            bool answer = await Application.Current.MainPage.DisplayAlert(
+                "Rename device", 
+                String.Format("Are you sure you want to rename this device to '{0}'?", UserLabel), 
+                "Yes", "Cancel");
 
             if (!answer)
             {
@@ -95,7 +93,10 @@ namespace FindMyBLEDevice.ViewModels
         async Task DeleteDevice()
         {
             // Show confirmation dialog
-            bool answer = await Application.Current.MainPage.DisplayAlert("Delete device", "Are you sure you want to delete this device?", "Yes", "Cancel");
+            bool answer = await Application.Current.MainPage.DisplayAlert(
+                "Delete device", 
+                "Are you sure you want to delete this device?", 
+                "Yes", "Cancel");
             if (!answer)
             {
                 return;
