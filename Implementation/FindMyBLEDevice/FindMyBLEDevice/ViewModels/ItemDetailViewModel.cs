@@ -43,11 +43,11 @@ namespace FindMyBLEDevice.ViewModels
             get => UserLabel != Device.UserLabel;
         }
 
-        public ItemDetailViewModel(INavigator navigator, IBluetooth bluetooth, IDevicesStore devices)
+        public ItemDetailViewModel(INavigator navigator, IBluetooth bluetooth, IDevicesStore devicesStore)
         {
             this.navigator = navigator;
             this.bluetooth = bluetooth;
-            this.devicesStore = devices;
+            this.devicesStore = devicesStore;
 
             StrengthButtonTapped = new Command(
                 async () => await navigator.GoToAsync(navigator.StrengthPage));
@@ -68,7 +68,7 @@ namespace FindMyBLEDevice.ViewModels
                 OnPropertyChanged(nameof(UserLabelEdited));
         }
 
-        async Task RenameDevice()
+        private async Task RenameDevice()
         {
             
             // Show confirmation dialog
@@ -90,7 +90,7 @@ namespace FindMyBLEDevice.ViewModels
             OnPropertyChanged(nameof(Device));
         }
 
-        async Task DeleteDevice()
+        private async Task DeleteDevice()
         {
             // Show confirmation dialog
             bool answer = await Application.Current.MainPage.DisplayAlert(

@@ -3,7 +3,7 @@
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
 using FindMyBLEDevice.ViewModels;
-using System;
+using FindMyBLEDevice.XamarinAccess;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.Views
@@ -15,7 +15,7 @@ namespace FindMyBLEDevice.Views
         public StrengthPage()
         {
             InitializeComponent();
-            BindingContext = viewModel = new StrengthViewModel();
+            BindingContext = viewModel = new StrengthViewModel(new DeviceDisplayAccess());
         }
 
         protected override async void OnAppearing()

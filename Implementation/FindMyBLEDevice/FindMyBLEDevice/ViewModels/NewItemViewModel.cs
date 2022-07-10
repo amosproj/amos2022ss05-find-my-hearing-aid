@@ -34,11 +34,6 @@ namespace FindMyBLEDevice.ViewModels
             CancelCommand = new Command(OnCancel);
         }
 
-        public void OnAppearing()
-        {
-            UserLabel = null;
-        }
-
         private async void OnCancel()
         {
             // This will pop the current page off the navigation stack
@@ -56,6 +51,11 @@ namespace FindMyBLEDevice.ViewModels
 
             // This will pop the current page off the navigation stack
             await navigator.GoToAsync("..");
+        }
+
+        public void OnAppearing()
+        {
+            UserLabel = null;
         }
     }
 }

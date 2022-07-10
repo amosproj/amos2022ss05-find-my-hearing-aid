@@ -8,7 +8,6 @@ using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services;
-using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 using FindMyBLEDevice.Services.Geolocation;
@@ -53,6 +52,21 @@ namespace FindMyBLEDevice.ViewModels
                 new MapLaunchOptions { Name = Device.UserLabel });
         }
 
+        private void ShowSelectedDevice()
+        {
+            if (Device is null) return;
+
+            map.Pins.Clear();
+            Pin devicePin = new Pin
+            {
+                Label = Device.UserLabel,
+                Address = Device.LastGPSTimestamp.ToString(),
+                Type = PinType.Place,
+                Position = new Position(Device.LastGPSLatitude, Device.LastGPSLongitude)
+            };
+            map.Pins.Add(devicePin);
+        }
+
         public async void OnAppearing()
         {
             //updates device label above map when opened
@@ -75,21 +89,6 @@ namespace FindMyBLEDevice.ViewModels
                 ));
             }
             ShowSelectedDevice();
-        }
-
-        private void ShowSelectedDevice()
-        {
-            if (Device is null) return;
-
-            map.Pins.Clear();
-            Pin devicePin = new Pin
-            {
-                Label = Device.UserLabel,
-                Address = Device.LastGPSTimestamp.ToString(),
-                Type = PinType.Place,
-                Position = new Position(Device.LastGPSLatitude, Device.LastGPSLongitude)
-            };
-            map.Pins.Add(devicePin);
         }
     }
 }
