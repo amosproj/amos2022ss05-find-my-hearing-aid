@@ -116,5 +116,18 @@ namespace FindMyBLEDevice.Services.Database
         {
             return _database.Table<BTDevice>().ToListAsync();
         }
+
+        public void AtomicGetAndUpdateDevice(BTDevice device, Action<BTDevice> manipulation)
+        {
+            lock(_database)
+            {
+                var getTask = GetDevice(device.ID);
+                getTask.Wait();
+                BTDevice latestVersion = getTask.Result;
+                manipulation?.Invoke(latestVersion);
+                var updateTask = UpdateDevice(latestVersion);
+                updateTask.Wait();
+            }
+        }
     }
 }

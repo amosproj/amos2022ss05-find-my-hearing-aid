@@ -106,18 +106,25 @@ namespace FindMyBLEDevice.Services
             {
                 var databaseDevice = p.Key;
                 var adapterDeviceTask = p.Value;
+                Action<BTDevice> manipulation = null;
                 if (adapterDeviceTask.Result == int.MinValue || adapterDeviceTask.Result < Constants.RssiTooFarThreshold)
                 {
-                    databaseDevice.WithinRange = false;
+                    manipulation = (dev) =>
+                    {
+                        dev.WithinRange = false;
+                    };
                 }
                 else
                 {
-                    databaseDevice.LastGPSLatitude = location.Latitude;
-                    databaseDevice.LastGPSLongitude = location.Longitude;
-                    databaseDevice.LastGPSTimestamp = DateTime.Now;
-                    databaseDevice.WithinRange = true;
+                    manipulation = (dev) =>
+                    {
+                        dev.LastGPSLatitude = location.Latitude;
+                        dev.LastGPSLongitude = location.Longitude;
+                        dev.LastGPSTimestamp = DateTime.Now;
+                        dev.WithinRange = true;
+                    };
                 }
-                await devicesStore.UpdateDevice(databaseDevice);
+                devicesStore.AtomicGetAndUpdateDevice(databaseDevice, manipulation);
             }
         }
     }
