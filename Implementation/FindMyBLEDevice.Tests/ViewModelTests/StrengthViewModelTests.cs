@@ -17,7 +17,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-            var vm = new StrengthViewModel(disAcc.Object);
+            var vm = new StrengthViewModel(disAcc.Object, null, null);
 
             // act
             var distances = new List<int>();

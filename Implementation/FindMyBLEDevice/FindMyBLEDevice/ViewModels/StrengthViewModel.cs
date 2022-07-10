@@ -13,6 +13,8 @@ using FindMyBLEDevice.Services.Settings;
 using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.XamarinAccess;
+using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Bluetooth;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -20,6 +22,8 @@ namespace FindMyBLEDevice.ViewModels
     {
         public const double MaxRadiusRelativeToScreen = 0.9;
 
+        private readonly IDevicesStore devicesStore;
+        private readonly IBluetooth bluetooth;
         private readonly int minRadiusSize;
         private readonly int maxRadiusSize;
         private readonly double meterScaleMin;
@@ -28,7 +32,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public BTDevice Device
         {
-            get => App.DevicesStore.SelectedDevice;
+            get => devicesStore.SelectedDevice;
         }
 
         private List<int> _circleSizes; 
@@ -82,9 +86,11 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _status, value);
         }
 
-        public StrengthViewModel(IDeviceDisplayAccess displayAccess)
+        public StrengthViewModel(IDeviceDisplayAccess displayAccess, IDevicesStore devicesStore, IBluetooth bluetooth)
         {
             Title = "StrengthSearch";
+            this.devicesStore = devicesStore;
+            this.bluetooth = bluetooth;
             meterScaleMin = rssiToMeter(0, Constants.TxPowerDefault);
             meterScaleMax = rssiToMeter(-100, Constants.TxPowerDefault);
             rssiBuff = new List<int>();
@@ -116,15 +122,15 @@ namespace FindMyBLEDevice.ViewModels
         {
             await CheckBluetoothAndLocation.Check();
 
-            if (App.DevicesStore.SelectedDevice is null)
+            if (devicesStore.SelectedDevice is null)
             {
                 Status = "No device selected!\nPlease select a device to continue.";
             }
             else
             {
-                Status = "Connecting to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\"...\n" +
+                Status = "Connecting to \"" + devicesStore.SelectedDevice.UserLabel + "\"...\n" +
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
-                App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v, int txPower) =>
+                bluetooth.StartRssiPolling(devicesStore.SelectedDevice.BT_GUID, (int v, int txPower) =>
                 {
                     CurrentTxPower = txPower;
                     int rssiInterval = Preferences.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault);
@@ -137,17 +143,17 @@ namespace FindMyBLEDevice.ViewModels
 
                     if(Meter <= Constants.MeterClosebyThreshold)
                     {
-                        Status = "\"" + App.DevicesStore.SelectedDevice.UserLabel + "\" is very close!\n"+
+                        Status = "\"" + devicesStore.SelectedDevice.UserLabel + "\" is very close!\n"+
                             "Try searching the vicinity to find it.";
                     }
                     else
                     {
-                        Status = "Connected to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\".\n" +
+                        Status = "Connected to \"" + devicesStore.SelectedDevice.UserLabel + "\".\n" +
                             "The current distance is about " + Meter.ToString("0.0") + " m.";
                     }
                 }, () =>
                 {
-                    Status = "Connected to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\".\n" +
+                    Status = "Connected to \"" + devicesStore.SelectedDevice.UserLabel + "\".\n" +
                         "Move around to see in which direction the signal gets better.";
                 }, () =>
                 {
@@ -184,7 +190,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public void OnDisappearing()
         {
-            App.Bluetooth.StopRssiPolling();
+            bluetooth.StopRssiPolling();
         }
     }
 }
