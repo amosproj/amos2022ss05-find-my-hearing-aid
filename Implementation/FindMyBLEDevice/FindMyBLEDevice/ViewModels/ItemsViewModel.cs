@@ -45,8 +45,7 @@ namespace FindMyBLEDevice.ViewModels
         public Command SearchAvailableDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
         public Command<BTDevice> AvailableDeviceTapped { get; }
-        public Command<BTDevice> StrengthButtonTapped { get; }
-        public Command<BTDevice> MapButtonTapped { get; }
+        public Command<BTDevice> SavedDeviceSettingsTapped { get; }
 
         public ItemsViewModel()
         {
@@ -58,15 +57,12 @@ namespace FindMyBLEDevice.ViewModels
 #pragma warning disable CS4014
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
 #pragma warning restore CS4014
-            
             SavedDeviceTapped = new Command<BTDevice>(
+    async (BTDevice device) => await Select(device));
+            SavedDeviceSettingsTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(ItemDetailPage)));
             AvailableDeviceTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(NewItemPage)));
-            StrengthButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, nameof(StrengthPage)));
-            MapButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, nameof(MapPage)));
         }
 
         public void OnAppearing()
@@ -107,6 +103,15 @@ namespace FindMyBLEDevice.ViewModels
 
             App.DevicesStore.SelectedDevice = device;
             await Shell.Current.GoToAsync(page);
+        }
+
+        async Task Select(BTDevice device)
+        {
+            if (device == null)
+                return;
+
+            App.DevicesStore.SelectedDevice = device;
+            // vielleicht noch eine Anzeige "Device selected."
         }
 
         private async Task ExecuteSearchAvailableDevicesCommand()

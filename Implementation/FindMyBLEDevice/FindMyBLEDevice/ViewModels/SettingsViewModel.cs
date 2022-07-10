@@ -4,6 +4,7 @@
 
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Settings;
+using FindMyBLEDevice.Views;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 
@@ -14,8 +15,9 @@ namespace FindMyBLEDevice.ViewModels
         public SettingsViewModel() 
         { 
             _rssiIntervalString = RssiInterval.ToString();
+            OpenInfoPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(InfoPage)}"));
         }
-        
+
         public bool DisplayNamelessDevices
         {
             get => Preferences.Get(SettingsNames.DisplayNamelessDevices, false);
@@ -48,6 +50,9 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
         private string _rssiIntervalString;
+
+        public Command OpenInfoPageCommand { get; }
+
         public string RssiIntervalString
         {
             get => _rssiIntervalString;

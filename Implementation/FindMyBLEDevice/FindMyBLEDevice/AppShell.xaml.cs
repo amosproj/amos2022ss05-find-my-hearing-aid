@@ -18,6 +18,7 @@ namespace FindMyBLEDevice
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StrengthPage), typeof(StrengthPage));
             Routing.RegisterRoute(nameof(MapPage), typeof(MapPage));
+            Routing.RegisterRoute(nameof(InfoPage), typeof(InfoPage));
         }
 
         private async void OnMenuItemClicked(object sender, EventArgs e)
@@ -25,5 +26,11 @@ namespace FindMyBLEDevice
             Shell.Current.FlyoutIsPresented = false;
             await Shell.Current.GoToAsync($"{nameof(SettingsPage)}");
         }
+
+        public async void OnInfoButtonClicked()
+        {
+            await Shell.Current.GoToAsync($"{nameof(InfoPage)}");
+        }
+
     }
 }

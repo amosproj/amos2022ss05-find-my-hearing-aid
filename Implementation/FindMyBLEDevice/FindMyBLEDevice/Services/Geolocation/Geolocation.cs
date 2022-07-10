@@ -25,6 +25,7 @@ namespace FindMyBLEDevice.Services.Geolocation
 
         public async Task<Xamarin.Essentials.Location> GetCurrentLocation()
         {
+#pragma warning disable CS0168 // Variable ist deklariert, wird jedoch niemals verwendet
             try
             {
                 var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
@@ -51,6 +52,7 @@ namespace FindMyBLEDevice.Services.Geolocation
             {
                 // Unable to get location
             }
+#pragma warning restore CS0168 // Variable ist deklariert, wird jedoch niemals verwendet
             return null;
         }
 

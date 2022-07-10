@@ -11,15 +11,27 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="local:MapViewModel"
              x:Class="FindMyBLEDevice.Views.MapPage"
-             Title="{Binding Title}"
              AutomationId="Page_Map"
+             Shell.NavBarIsVisible="False"
              >
 
     <ContentPage.Content>
- 
-        <StackLayout Orientation="Vertical">
-            <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+        <StackLayout  Background="{StaticResource DarkGradient}">
+            <StackLayout Orientation="Horizontal" HeightRequest="30" Padding="10,0,10,0" BackgroundColor="{StaticResource Accent}">
+                <ImageButton Source="icon_questionmark.png"  Command="{Binding OpenInfoPageCommand}" HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
             <maps:Map x:Name="map"/>
+                <StackLayout VerticalOptions="End">
+                <StackLayout Grid.Row="2"  VerticalOptions="End" Background="{StaticResource DarkGradient}">
+                    <Button Text="{Binding SelectedDeviceString}"
+                            Command="{Binding SelectDevice}"
+                            Background="{StaticResource LightGradient}"
+                            TextColor="White" 
+                            FontSize="Medium" 
+                            FontAttributes="Bold"
+                            />
+                </StackLayout>
+                </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

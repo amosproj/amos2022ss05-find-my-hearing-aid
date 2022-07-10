@@ -12,8 +12,7 @@ namespace FindMyBLEDevice.ViewModels
     {
         private int _currentRssi;
         public Command RenameButtonTapped { get; }
-        public Command StrengthButtonTapped { get; }
-        public Command MapButtonTapped { get; }
+
         public Command DeleteButtonTapped { get; }
 
         public string UserLabel { get; set; }
@@ -22,20 +21,12 @@ namespace FindMyBLEDevice.ViewModels
         {
             RenameButtonTapped = new Command(
                    async () => await RenameDevice());
-            StrengthButtonTapped = new Command(
-                   async () => await RedirectTo(nameof(StrengthPage)));
-            MapButtonTapped = new Command(
-                async () => await RedirectTo(nameof(MapPage)));
             DeleteButtonTapped = new Command(
                 async () => await DeleteDevice());
 
             UserLabel = Device.UserLabel;
         }
-        async Task RedirectTo(string page)
-        {
-            App.Bluetooth.StopRssiPolling();
-            await Shell.Current.GoToAsync(page);
-        }
+
         public int CurrentRssi
         {
             get => _currentRssi;

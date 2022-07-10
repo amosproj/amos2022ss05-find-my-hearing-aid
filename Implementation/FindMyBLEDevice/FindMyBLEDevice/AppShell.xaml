@@ -19,7 +19,7 @@
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
-                <Setter Property="Shell.NavBarIsVisible" Value="False" />
+                <Setter Property="Shell.NavBarIsVisible" Value="True" />
                 <Setter Property="Shell.BackgroundColor" Value="{StaticResource Accent}" />
                 <Setter Property="Shell.ForegroundColor" Value="White" />
                 <Setter Property="Shell.TitleColor" Value="White" />
@@ -34,24 +34,24 @@
             <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
         </ResourceDictionary>
     </Shell.Resources>
-
-    <!-- 
-        When the Flyout is visible this defines the content to display in the flyout.
-        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
-        https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
-    -->
+      
     <TabBar>
-        <Tab Title="About" Icon="icon_about.png" AutomationId="FlyoutItem_About">
+        <Tab Title="Home" Icon="icon_about.png" AutomationId="FlyoutItem_About">
             <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}"/>
         </Tab>
+        <!--
         <Tab Title="Devices" Icon="icon_feed.png" AutomationId="FlyoutItem_Devices">
             <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}"/>
         </Tab>
+        -->
         <Tab Title="StrengthSearch" Icon="signal_strength.png" AutomationId="FlyoutItem_Strength">
-            <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}"/>
+            <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}" />
         </Tab>
         <Tab Title="MapSearch" Icon="geolocation.png" AutomationId="FlyoutItem_Map">
             <ShellContent Route="MapPage" ContentTemplate="{DataTemplate local:MapPage}"/>
+        </Tab>
+        <Tab Title="Settings" Icon="icon_settings.png" AutomationId="FlyoutItem_Settings">
+            <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}"/>
         </Tab>
     </TabBar>
 

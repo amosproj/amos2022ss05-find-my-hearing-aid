@@ -8,11 +8,11 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindMyBLEDevice.Views.ItemsPage"
-             Title="{Binding Title}"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels"  
              xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
              x:Name="BrowseItemsPage"
              AutomationId="Page_Devices"
+             NavigationPage.HasBackButton="True"
              >
 
     <ContentPage.BindingContext>
@@ -22,7 +22,7 @@
       x:DataType enables compiled bindings for better performance and compile time validation of binding expressions.
       https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/data-binding/compiled-bindings
     -->
-    <Grid>
+    <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -30,7 +30,8 @@
         <StackLayout Grid.Row="1">
             <Label Text=" Saved Devices"
                    FontSize="Medium"
-                   BackgroundColor="LightGray"
+                   TextColor="{StaticResource PrimaryDark}"
+                   Background="{StaticResource LightGradient}"
                    FontAttributes="Bold" 
                    AutomationId="DevicesPage_LabelSavedDevices"
                    />
@@ -67,13 +68,13 @@
                                                    LineBreakMode="NoWrap" 
                                                    Style="{DynamicResource ListItemTextStyle}" 
                                                    FontSize="16" 
-                                                   TextColor="Black" />
+                                                   TextColor="White" />
                                         </StackLayout>
                                         <Label Text="{Binding AdvertisedName}" 
                                                    LineBreakMode="NoWrap"
                                                    Style="{DynamicResource ListItemDetailTextStyle}"
                                                    FontSize="13" 
-                                                   TextColor="Black" />
+                                                   TextColor="White" />
                                         <StackLayout.GestureRecognizers>
                                             <TapGestureRecognizer 
                                                     NumberOfTapsRequired="1"
@@ -84,24 +85,12 @@
                                     </StackLayout>
                                     <ImageButton 
                                             x:DataType="model:BTDevice"
-                                            Grid.Column="1"
-                                            Source="signal_strength.png"
-                                            HeightRequest="55"
-                                            BorderColor="Black"
-                                            BorderWidth="1"
-                                            Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.StrengthButtonTapped}"
-                                            CommandParameter="{Binding .}"
-                                            />
-                                    <ImageButton 
-                                            x:DataType="model:BTDevice"
                                             Grid.Column="2"   
-                                            Source="geolocation.png"
-                                            HeightRequest="55"                                        
-                                            BorderColor="Black"
-                                            BorderWidth="1"         
+                                            Source="icon_settings.png"
+                                            HeightRequest="55"
+                                            Background="{StaticResource LightGradient}"
                                             Margin="3"
-                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.MapButtonTapped}"		
+                                            Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.SavedDeviceSettingsTapped}"		
                                             CommandParameter="{Binding .}"
                                         />
                                 </Grid>
@@ -114,15 +103,18 @@
         <StackLayout Grid.Row="2">
             <Label Text=" Available Devices"
                    FontSize="Medium"
-                   BackgroundColor="LightGray"                   
+                   TextColor="{StaticResource PrimaryDark}"
+                   Background="{StaticResource LightGradient}"
                    FontAttributes="Bold" 
                    AutomationId="DevicesPage_LabelAvailableDevices"                                                      
                    />
             <Button Margin="0,0,0,0" Text="Scan for available devices"
                     Command="{Binding SearchAvailableDevicesCommand}"
-                    BackgroundColor="{StaticResource Primary}"
-                    TextColor="White" 
+                    Background="{StaticResource LightGradient}"
+                    TextColor="{StaticResource PrimaryDark}" 
                     AutomationId="DevicesPage_ButtonScan"
+                    FontSize="Medium" 
+                    FontAttributes="Bold"
                     />
             <ScrollView>
                 <CollectionView x:Name="AvailableDevicesListView"
@@ -141,7 +133,7 @@
                                                 LineBreakMode="NoWrap" 
                                                 Style="{DynamicResource ListItemTextStyle}" 
                                                 FontSize="16" 
-                                                TextColor="Black" />
+                                                TextColor="White" />
                                     <StackLayout.GestureRecognizers>
                                         <TapGestureRecognizer 
                                                 NumberOfTapsRequired="1"
@@ -150,19 +142,6 @@
                                         </TapGestureRecognizer>
                                     </StackLayout.GestureRecognizers>
                                 </StackLayout>
-                                <!-- Will be added again after we decided on a global selected-device model
-                                    <Button 
-                                        x:DataType="model:AvailableBTDevice"
-                                        Grid.Column = "1"
-                                        Text="📶"
-                                        BackgroundColor="White"
-                                        TextColor="Black"
-                                        BorderColor="Black"
-                                        BorderWidth="1"
-                                        Margin="3"
-                                        Command="{Binding Source={x:Reference BrowseItemsPage}, Path=BindingContext.RedirectToStrengthPage}"
-                                        CommandParameter="{Binding .}"
-                                     />-->
                             </Grid >
 
                         </DataTemplate>

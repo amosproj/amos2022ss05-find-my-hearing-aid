@@ -8,42 +8,47 @@
              xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels"
              x:Class="FindMyBLEDevice.Views.StrengthPage"
              x:DataType="viewmodels:StrengthViewModel"
-             Title="{Binding Title}"
              AutomationId="Page_Strength"
+             Shell.NavBarIsVisible="False"
              >
 
     <ContentPage.Content>
-        <ScrollView>
+        <StackLayout Background="{StaticResource DarkGradient}">
+            <StackLayout Orientation="Horizontal" HeightRequest="30" Padding="10,0,10,0" BackgroundColor="{StaticResource Accent}">
+                <ImageButton Source="icon_questionmark.png"  Command="{Binding OpenInfoPageCommand}" HorizontalOptions="EndAndExpand"/>
+            </StackLayout>
 
-            <Grid
-                Padding="10"
+            <StackLayout>
+
+                <Grid
+                Padding="0"
                 >
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="3*" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
 
-                <Label Text="{Binding Status}"
+                    <Label Text="{Binding Status}"
                     Grid.Row="0"
-                    TextColor="Black"
+                    TextColor="White"
                     HorizontalTextAlignment="Center"                    
                     FontSize="16"
                     VerticalOptions="Center"
                     AutomationId="StrengthPage_LabelStatus"
                     />
 
-                <AbsoluteLayout HorizontalOptions="FillAndExpand"
+                    <AbsoluteLayout HorizontalOptions="FillAndExpand"
                     VerticalOptions="StartAndExpand"
                     Grid.Row="1"
                     AutomationId="StrengthPage_CircleLayout"
                     >
 
-                    <Ellipse x:Name="outerEllipse" 
+                        <Ellipse x:Name="outerEllipse" 
                          Fill="LightGray"
                          Stroke="#2196F3"
                          StrokeThickness="4"
@@ -53,7 +58,7 @@
                          AbsoluteLayout.LayoutFlags="PositionProportional"
                          AutomationId="StrengthPage_FilledCircle"
                          />
-                    <Ellipse x:Name="ellipse" 
+                        <Ellipse x:Name="ellipse" 
                          Stroke="DarkBlue"
                          Fill="LightBlue"
                          StrokeThickness="4"
@@ -63,7 +68,7 @@
                          AbsoluteLayout.LayoutFlags="PositionProportional"
                          AutomationId="StrengthPage_ChangingCircle"
                          />
-                    <Ellipse x:Name="innerEllipse"         
+                        <Ellipse x:Name="innerEllipse"         
                          Fill="#2196F3"
                          StrokeThickness="4"
                          WidthRequest="{Binding CircleSizes[5]}"
@@ -72,7 +77,7 @@
                          AbsoluteLayout.LayoutFlags="PositionProportional"
                          AutomationId="StrengthPage_Inner_Cirle"                             
                          />
-                    <Ellipse x:Name="fourthMeter"
+                        <Ellipse x:Name="fourthMeter"
                         Stroke="Black"                         
                         StrokeThickness="1"
                         StrokeDashArray="5.0 5.0"
@@ -82,7 +87,7 @@
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AutomationId="StrengthPage_Dotted_Circle_One" 
                         />
-                    <Ellipse x:Name="thirdMeter" 
+                        <Ellipse x:Name="thirdMeter" 
                         Stroke="Black"
                         StrokeThickness="1"
                         StrokeDashArray="5.0 5.0"
@@ -92,7 +97,7 @@
                         AbsoluteLayout.LayoutFlags="PositionProportional" 
                         AutomationId="StrengthPage_Dotted_Circle_Two"                              
                          />
-                    <Ellipse x:Name="secondMeter"
+                        <Ellipse x:Name="secondMeter"
                         Stroke="Black"
                         StrokeThickness="1"
                         StrokeDashArray="5.0 5.0"
@@ -102,7 +107,7 @@
                         AbsoluteLayout.LayoutFlags="PositionProportional"
                         AutomationId="StrengthPage_Dotted_Circle_Three"
                         />
-                    <Ellipse x:Name="firstMeter"
+                        <Ellipse x:Name="firstMeter"
                         Stroke="Black"
                         StrokeThickness="1"
                         StrokeDashArray="5.0 5.0"
@@ -113,40 +118,20 @@
                         AutomationId="StrengthPage_Dotted_Circle_Four"
                         />
 
-                </AbsoluteLayout>
+                    </AbsoluteLayout>
 
-                <Frame BorderColor="DarkBlue"
-                    CornerRadius="5"
-                    Padding="5" 
-                    Grid.Row="2"
-                    VerticalOptions="End"
-                    AutomationId="StrengthPage_Frame"
-                    >
-
-                    <StackLayout
-                        >
-                        <Label Text="Currently selected device"
-                           TextColor="Black"
-                           FontSize="Subtitle"
-                           HorizontalOptions="CenterAndExpand"
-                           />
-                        <BoxView Color="Black"
-                             HeightRequest="1"
-                             HorizontalOptions="Fill" 
-                             />
-                        <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  
+                <StackLayout Grid.Row="2"  VerticalOptions="End" Background="{StaticResource DarkGradient}">
+                    <Button Text="{Binding SelectedDeviceString}"
+                            Command="{Binding SelectDevice}"
+                            Background="{StaticResource LightGradient}"
+                            TextColor="White" 
                             FontSize="Medium" 
-                            FontAttributes="Bold" 
-                            TextColor="Black" 
-                            HorizontalOptions="Center"
-                            AutomationId="StrengthPage_SelectedDeviceLabel"
+                            FontAttributes="Bold"
                             />
-                    </StackLayout>
+                </StackLayout>
+                </Grid>
 
-                </Frame>
-
-            </Grid>
-
-        </ScrollView>
+            </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

@@ -2,25 +2,32 @@
 <!--
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindMyBLEDevice.Views.AboutPage"
              xmlns:vm="clr-namespace:FindMyBLEDevice.ViewModels"
-             Title="{Binding Title}"
              AutomationId="Page_About"
+             Shell.NavBarIsVisible="False"
              >
 
     <ContentPage.BindingContext>
         <vm:AboutViewModel />
     </ContentPage.BindingContext>
 
-    <Grid Background="{StaticResource DarkGradient}">
+    <StackLayout Background="{StaticResource DarkGradient}">
+        <StackLayout Orientation="Horizontal" HeightRequest="30" Padding="10,0,10,0" BackgroundColor="{StaticResource Accent}">
+            <ImageButton Source="icon_questionmark.png"  Command="{Binding OpenInfoPageCommand}" HorizontalOptions="EndAndExpand"/>
+        </StackLayout>
+
+        <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ScrollView Grid.Row="1">
+        <StackLayout Grid.Row="1">
             <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
 
                 <Label Text="Welcome in Find My BLE Device" FontSize="Title" TextColor="White" AutomationId="AboutPage_Title"/>
@@ -33,7 +40,7 @@
                     <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
                                  HeightRequest="220" 
-                                 Source="signal_strength.png" 
+                                 Source="signal_strength.png"
                                  Aspect="AspectFit" CornerRadius="50" 
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenStrengthPageCommand}" 
@@ -71,7 +78,18 @@
                 </Grid>
 
             </StackLayout>
-        </ScrollView>
-    </Grid>
+        </StackLayout>
+
+        <StackLayout Grid.Row="2"  VerticalOptions="End" Background="{StaticResource DarkGradient}">
+            <Button Text="{Binding SelectedDeviceString}"
+                    Command="{Binding SelectDevice}"
+                    Background="{StaticResource LightGradient}"
+                    TextColor="White" 
+                    FontSize="Medium" 
+                    FontAttributes="Bold"
+                    />
+        </StackLayout>
+        </Grid>
+        </StackLayout>
 
 </ContentPage>

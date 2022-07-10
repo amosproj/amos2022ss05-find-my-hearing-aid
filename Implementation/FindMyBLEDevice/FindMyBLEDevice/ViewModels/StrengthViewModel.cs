@@ -31,6 +31,8 @@ namespace FindMyBLEDevice.ViewModels
         private int _txPower;
 
         private string _status;
+        private string _selectedDeviceString;
+
 
         public StrengthViewModel()
         {
@@ -39,12 +41,14 @@ namespace FindMyBLEDevice.ViewModels
             meterScaleMax = rssiToMeter(-100, Constants.TxPowerDefault);
             rssiBuff = new List<int>();
             _status = "Uninitialized";
-
+            SelectedDeviceString = "Please select a device first.";
             // Width (in xamarin.forms units)
             var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
             int xamarinWidth = (int)Math.Round(mainDisplayInfo.Width / mainDisplayInfo.Density);
             MaxRadiusSize = (int)Math.Round(xamarinWidth * MaxRadiusRelativeToScreen);
             initializeCircleSizes();
+            OpenInfoPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(InfoPage)}"));
+            SelectDevice = new Command(async () => await Shell.Current.GoToAsync($"{nameof(ItemsPage)}"));
         }
 
         private void initializeCircleSizes()
@@ -113,6 +117,14 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _status, value);
         }
 
+        public string SelectedDeviceString
+        {
+            get => _status;
+            set => SetProperty(ref _status, value);
+        }
+        public Command OpenInfoPageCommand { get; }
+        public Command SelectDevice { get; }
+
         public void OnAppearing()
         {
             if (App.DevicesStore.SelectedDevice is null)
@@ -121,6 +133,7 @@ namespace FindMyBLEDevice.ViewModels
             }
             else
             {
+                SelectedDeviceString = "" + App.DevicesStore.SelectedDevice.UserLabel + "\nClick to select another device.";
                 Status = "Connecting to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\"...\n" +
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
                 App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v, int txPower) =>
