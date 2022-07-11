@@ -45,7 +45,9 @@
         <Button
             Text="Delete device"
             TextColor="White"
-            Background="{StaticResource LightGradient}"
+            BackgroundColor="{StaticResource Accent}"
+            FontSize="Medium"
+            FontAttributes="Bold"
             Margin="3"
             Command="{Binding DeleteButtonTapped}"		
             />

@@ -40,7 +40,7 @@
                     <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
                                  HeightRequest="220" 
-                                 Source="signal_strength.png"
+                                 Source="signal_strength_about.png"
                                  Aspect="AspectFit" CornerRadius="50" 
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenStrengthPageCommand}" 
@@ -61,8 +61,8 @@
                     </Grid.RowDefinitions>
                     <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
-                                 HeightRequest="220" 
-                                 Source="find_my_ble_device.png" 
+                                 HeightRequest="220"                                 
+                                 Source="geolocation_about.png"                         
                                  Aspect="AspectFit" CornerRadius="50" 
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenMapPageCommand}" 
@@ -80,10 +80,11 @@
             </StackLayout>
         </StackLayout>
 
-        <StackLayout Grid.Row="2"  VerticalOptions="End" Background="{StaticResource DarkGradient}">
+        <StackLayout Grid.Row="2"  VerticalOptions="End" >
             <Button Text="{Binding SelectedDeviceString}"
                     Command="{Binding SelectDevice}"
-                    Background="{StaticResource LightGradient}"
+                    BackgroundColor="{StaticResource Accent}"
+                    Margin="10"
                     TextColor="White" 
                     FontSize="Medium" 
                     FontAttributes="Bold"

@@ -120,10 +120,11 @@
 
                     </AbsoluteLayout>
 
-                <StackLayout Grid.Row="2"  VerticalOptions="End" Background="{StaticResource DarkGradient}">
+                <StackLayout Grid.Row="2"  VerticalOptions="End">
                     <Button Text="{Binding SelectedDeviceString}"
                             Command="{Binding SelectDevice}"
-                            Background="{StaticResource LightGradient}"
+                            BackgroundColor="{StaticResource Accent}"
+                            Margin="10"
                             TextColor="White" 
                             FontSize="Medium" 
                             FontAttributes="Bold"
