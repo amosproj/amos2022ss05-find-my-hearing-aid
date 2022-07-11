@@ -16,28 +16,27 @@
         <vm:AboutViewModel />
     </ContentPage.BindingContext>
 
-    <StackLayout Background="{StaticResource DarkGradient}">
-        <StackLayout Orientation="Horizontal" HeightRequest="30" Padding="10,0,10,0" BackgroundColor="{StaticResource Accent}">
+    <!--<StackLayout Orientation="Horizontal" HeightRequest="30" Padding="10,0,10,0" BackgroundColor="{StaticResource Accent}">
             <ImageButton Source="icon_questionmark.png"  Command="{Binding OpenInfoPageCommand}" HorizontalOptions="EndAndExpand"/>
-        </StackLayout>
+        </StackLayout>-->
 
-        <Grid Background="{StaticResource DarkGradient}">
+    <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackLayout Grid.Row="1">
-            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
 
-                <Label Text="Welcome in Find My BLE Device" FontSize="Title" TextColor="White" AutomationId="AboutPage_Title"/>
-                <Label Text="The app is able to detect BLE devices and assign labels to it. In addition it helps tracking the device and navigating to the exact location of the device no matter if in short or long distance. This ensures an overview of all relevant devices at all times." TextColor="White" FontSize="16" Padding="0,0,0,0" AutomationId="AboutPage_Description"/>
+        <StackLayout Grid.Row="1" Orientation="Vertical" Padding="20,20,20,20" Spacing="10">
 
-                <Grid Margin="0,20,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <ImageButton Grid.Row="0" 
+            <Label Text="Welcome!" FontSize="60" TextColor="White" FontAttributes="Bold" AutomationId="AboutPage_Title"/>
+            <Label Text="Find your BLE devices via these features:" TextColor="White" FontSize="30" AutomationId="AboutPage_Description"/>
+
+            <Grid Margin="20,20,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
                                  HeightRequest="220" 
                                  Source="signal_strength_about.png"
@@ -45,7 +44,7 @@
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenStrengthPageCommand}" 
                                  AutomationId="AboutPage_Btn_Signal" />
-                    <Label Grid.Row="0" 
+                <Label Grid.Row="0" 
                            HorizontalOptions="Center" 
                            VerticalOptions="End" 
                            Margin="0,0,0,10" 
@@ -53,13 +52,13 @@
                            FontSize="20" 
                            FontAttributes="Bold" 
                            TextColor="White" />
-                </Grid>
+            </Grid>
 
-                <Grid Margin="0,20,0,0">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*" />
-                    </Grid.RowDefinitions>
-                    <ImageButton Grid.Row="0" 
+            <Grid Margin="20,20,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
                                  HeightRequest="220"                                 
                                  Source="geolocation_about.png"                         
@@ -67,7 +66,7 @@
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenMapPageCommand}" 
                                  AutomationId="AboutPage_Btn_Signal" />
-                    <Label Grid.Row="0" 
+                <Label Grid.Row="0" 
                            HorizontalOptions="Center" 
                            VerticalOptions="End" 
                            Margin="0,0,0,10" 
@@ -75,9 +74,8 @@
                            FontSize="20" 
                            FontAttributes="Bold" 
                            TextColor="White" />
-                </Grid>
+            </Grid>
 
-            </StackLayout>
         </StackLayout>
 
         <StackLayout Grid.Row="2"  VerticalOptions="End" >
@@ -90,7 +88,11 @@
                     FontAttributes="Bold"
                     />
         </StackLayout>
-        </Grid>
-        </StackLayout>
+
+        <ImageButton Grid.Row="1" VerticalOptions="StartAndExpand" HorizontalOptions="EndAndExpand" Margin="10" WidthRequest="50"
+                     Source="icon_questionmark.png"  
+                     Command="{Binding OpenInfoPageCommand}" 
+                     BackgroundColor="Transparent" />
+    </Grid>
 
 </ContentPage>
