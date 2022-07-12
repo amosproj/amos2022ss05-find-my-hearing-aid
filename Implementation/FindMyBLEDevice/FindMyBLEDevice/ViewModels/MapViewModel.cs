@@ -8,44 +8,75 @@ using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services;
-using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using FindMyBLEDevice.Services.Geolocation;
+using FindMyBLEDevice.Services.Database;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
-        public bool DeviceNotNull => Device != null;
+        private readonly Xamarin.Forms.Maps.Map map;
+        private readonly IGeolocation geolocation;
+        private readonly IDevicesStore devicesStore;
+
         public Command OpenMapPin { get; }
-        public MapViewModel(Xamarin.Forms.Maps.Map map)
+
+        public BTDevice Device => devicesStore.SelectedDevice;
+        public bool DeviceNotNull => Device != null;
+
+        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, IDevicesStore devices)
         {
             Title = "MapSearch";
-            OpenMapPin = new Command( async () => await OpenMapswithPin());
+
             this.map = map;
+            this.geolocation = geolocation;
+            this.devicesStore = devices;
+
+            OpenMapPin = new Command(
+                async () => await OpenMapswithPin());
+
+            PropertyChanged += DeviceChanged;
         }
 
-        async Task OpenMapswithPin()
+        private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            await Xamarin.Essentials.Map.OpenAsync(Device.LastGPSLatitude, Device.LastGPSLongitude, new MapLaunchOptions { Name = Device.UserLabel });
+            if (e.PropertyName == nameof(Device))
+                OnPropertyChanged(nameof(DeviceNotNull));
         }
 
-        public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
+        private async Task OpenMapswithPin()
+        {
+            await Xamarin.Essentials.Map.OpenAsync(Device.LastGPSLatitude, Device.LastGPSLongitude,
+                new MapLaunchOptions { Name = Device.UserLabel });
+        }
 
-        private readonly Xamarin.Forms.Maps.Map map;
+        private void ShowSelectedDevice()
+        {
+            if (Device is null) return;
+
+            map.Pins.Clear();
+            Pin devicePin = new Pin
+            {
+                Label = Device.UserLabel,
+                Address = Device.LastGPSTimestamp.ToString(),
+                Type = PinType.Place,
+                Position = new Position(Device.LastGPSLatitude, Device.LastGPSLongitude)
+            };
+            map.Pins.Add(devicePin);
+        }
 
         public async void OnAppearing()
         {
-            //updates device label above map when opened via the flyout menu
+            //updates device label above map when opened
             OnPropertyChanged(nameof(Device));
 
             await CheckBluetoothAndLocation.Check();
 
-            var currentLocation = await App.Geolocation.GetCurrentLocation();
-            if (currentLocation == null)
+            var currentLocation = await geolocation.GetCurrentLocation();
+            if (currentLocation != null)
             {
-                Console.WriteLine("No Location found!");
-            } else {
                 map.IsShowingUser = true;
                 var phonePosition = new Position(currentLocation.Latitude, currentLocation.Longitude);
                 map.MoveToRegion(MapSpan.FromCenterAndRadius(
@@ -58,25 +89,6 @@ namespace FindMyBLEDevice.ViewModels
                 ));
             }
             ShowSelectedDevice();
-        }
-
-        private void ShowSelectedDevice()
-        {
-			if (Device is null) return;
-
-            var deviceLocation = new Location(Device.LastGPSLatitude, Device.LastGPSLongitude);
-            Pin devicePin = new Pin
-            {
-                Label = Device.UserLabel,
-                Address = Device.LastGPSTimestamp.ToString(),
-                Type = PinType.Place,
-                Position = new Position(deviceLocation.Latitude, Device.LastGPSLongitude)
-            };
-            map.Pins.Add(devicePin);
-        } 
-
-        public void OnDisappearing() {
-            // comment to make linter happy, method will be used in the future
         }
     }
 }

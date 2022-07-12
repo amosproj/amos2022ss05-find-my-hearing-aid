@@ -1,9 +1,10 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
 
 using FindMyBLEDevice.ViewModels;
-using System;
+using FindMyBLEDevice.XamarinAccess;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.Views
@@ -15,7 +16,7 @@ namespace FindMyBLEDevice.Views
         public StrengthPage()
         {
             InitializeComponent();
-            BindingContext = viewModel = new StrengthViewModel();
+            BindingContext = viewModel = new StrengthViewModel(new DeviceDisplayAccess(), App.DevicesStore, App.Bluetooth);
         }
 
         protected override async void OnAppearing()

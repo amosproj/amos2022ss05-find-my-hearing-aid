@@ -1,7 +1,8 @@
-﻿using System;
-using System.ComponentModel;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+
+using FindMyBLEDevice.ViewModels;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace FindMyBLEDevice.Views
 {
@@ -10,6 +11,7 @@ namespace FindMyBLEDevice.Views
         public AboutPage()
         {
             InitializeComponent();
+            BindingContext = new AboutViewModel(App.Navigator);
         }
     }
 }

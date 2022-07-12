@@ -14,6 +14,7 @@ using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Settings;
 using System;
 using Xamarin.Forms;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice
 {
@@ -32,6 +33,8 @@ namespace FindMyBLEDevice
         private static ISettings settings;
         // Update-service
         private static UpdateService updateService;
+        // Interface to access Shell navigation
+        private static INavigator navigator;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -51,7 +54,7 @@ namespace FindMyBLEDevice
             {
                 if (bluetooth == null)
                 {
-                    bluetooth = new Bluetooth();
+                    bluetooth = new Bluetooth(Settings);
                 }
                 return bluetooth;
             }
@@ -99,11 +102,31 @@ namespace FindMyBLEDevice
             {
                 if(updateService == null)
                 {
-                    updateService = new UpdateService();
+                    updateService = new UpdateService(Bluetooth, DevicesStore, Geolocation, Settings);
                 }
                 return updateService;
             }
         }
+
+        public static INavigator Navigator
+        {
+            get
+            {
+                if(navigator == null)
+                {
+                    navigator = new Navigator(
+                        nameof(AboutPage), 
+                        nameof(ItemsPage),
+                        nameof(NewItemPage),
+                        nameof(ItemDetailPage),
+                        nameof(StrengthPage),
+                        nameof(MapPage),
+                        nameof(SettingsPage));
+                }
+                return navigator;
+            }
+        }
+
 
 
 

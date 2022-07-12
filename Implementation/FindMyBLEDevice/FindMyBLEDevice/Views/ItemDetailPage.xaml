@@ -9,19 +9,15 @@
              x:Class="FindMyBLEDevice.Views.ItemDetailPage"
              Title="{Binding Device.UserLabel}"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels"
-             xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
+             x:DataType="local:ItemDetailViewModel"
              x:Name="BrowseItemDetailPage">
-    <ContentPage.BindingContext>
-        <local:ItemDetailViewModel/>
-    </ContentPage.BindingContext>
 
     <StackLayout Spacing="20" Padding="15">
         <Label Text="User Label:" FontSize="Medium" TextColor="Black" />
 
         <StackLayout Spacing="0">
-            <Entry x:Name="UserLabel" Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.UserLabel}" FontSize="Small" TextColor="Black" TextChanged="UserLabel_TextChanged"/>
+            <Entry x:Name="UserLabel" Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.UserLabel}" FontSize="Small" TextColor="Black" />
             <Label Text="For renaming the device, edit the label in the entry" FontSize="Small" TextColor="Gray" Padding="0,0,0,0" />
-            
         </StackLayout>
 
         <Button
