@@ -14,7 +14,6 @@ using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Settings;
 using System;
 using Xamarin.Forms;
-using FindMyBLEDevice.Services.Permission;
 
 namespace FindMyBLEDevice
 {
