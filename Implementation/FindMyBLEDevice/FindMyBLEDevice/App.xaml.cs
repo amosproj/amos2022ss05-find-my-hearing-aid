@@ -54,7 +54,7 @@ namespace FindMyBLEDevice
             {
                 if (bluetooth == null)
                 {
-                    bluetooth = new Bluetooth();
+                    bluetooth = new Bluetooth(Settings);
                 }
                 return bluetooth;
             }

@@ -8,6 +8,7 @@ using FindMyBLEDevice.Models;
 using Plugin.BLE.Abstractions.Contracts;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.Services.Bluetooth
@@ -19,7 +20,8 @@ namespace FindMyBLEDevice.Services.Bluetooth
         Task StopSearch();
         void StartRssiPolling(String btguid, Action<int, int> updateRssi, Action connected = null, Action disconnected = null);
         void StopRssiPolling();
-        Task<IDevice> DeviceReachableAsync(BTDevice device);
+        Task<int> DeviceTXPowerAsync(String btguid);
+        Task<int> DeviceReachableAsync(BTDevice device);
         bool IsEnabled();
     }
 }

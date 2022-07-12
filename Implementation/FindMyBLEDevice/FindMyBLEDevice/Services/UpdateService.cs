@@ -7,10 +7,8 @@ using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Settings;
-using Plugin.BLE.Abstractions.Contracts;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace FindMyBLEDevice.Services
@@ -44,11 +42,6 @@ namespace FindMyBLEDevice.Services
         private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
         {
             savedDevices = await devicesStore.GetAllDevices();
-
-            //notify service runner in case it waits for saved devices to be added
-            Monitor.Enter(this);
-            Monitor.PulseAll(this);
-            Monitor.Exit(this);
         }
 
         public void Start()
@@ -75,23 +68,11 @@ namespace FindMyBLEDevice.Services
                 {
                     var startTime = DateTime.Now;
 
-                    // wait until there are any saved devices
-                    try
-                    {
-                        Monitor.Enter(this);
-                        while (savedDevices.Count == 0)
-                        {
-                            Monitor.Wait(this);
-                        }
-                    }
-                    finally
-                    {
-                        Monitor.Exit(this);
-                    }
-
                     // run the service tasks
                     await UpdateDevices();
                     // to be determined: expose an event that is fired here
+                    // if done so, UpdateDevices() should be made synchronous
+                    // in order to make the update tick wait for UpdateDevices() to finish again
 
                     // delay next iteration
                     int remaining = (int)(startTime.AddSeconds(settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault)) 
@@ -107,8 +88,10 @@ namespace FindMyBLEDevice.Services
 
         private async Task UpdateDevices()
         {
+            if (savedDevices.Count == 0) return;
+
             // start connecting to all known devices
-            Dictionary<BTDevice, Task<IDevice>> reachableTasks = new Dictionary<BTDevice, Task<IDevice>>();
+            Dictionary<BTDevice, Task<int>> reachableTasks = new Dictionary<BTDevice, Task<int>>();
             foreach (BTDevice device in savedDevices)
             {
                 reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
@@ -119,24 +102,29 @@ namespace FindMyBLEDevice.Services
 
             // update geolocations of reachable devices
             var location = await geolocation.GetCurrentLocation();
-            foreach (KeyValuePair<BTDevice, Task<IDevice>> p in reachableTasks)
+            foreach (KeyValuePair<BTDevice, Task<int>> p in reachableTasks)
             {
                 var databaseDevice = p.Key;
                 var adapterDeviceTask = p.Value;
-                if (adapterDeviceTask.Result is null || adapterDeviceTask.Result.Rssi < Constants.RssiTooFarThreshold)
+                Action<BTDevice> manipulation = null;
+                if (adapterDeviceTask.Result == int.MinValue || adapterDeviceTask.Result < Constants.RssiTooFarThreshold)
                 {
-                    Console.WriteLine($"[UpdateService] {DateTime.Now} Out of reach: {databaseDevice.UserLabel}");
-                    databaseDevice.WithinRange = false;
+                    manipulation = (dev) =>
+                    {
+                        dev.WithinRange = false;
+                    };
                 }
                 else
                 {
-                    Console.WriteLine($"[UpdateService] {DateTime.Now} Reachable: {databaseDevice.UserLabel}");
-                    databaseDevice.LastGPSLatitude = location.Latitude;
-                    databaseDevice.LastGPSLongitude = location.Longitude;
-                    databaseDevice.LastGPSTimestamp = DateTime.Now;
-                    databaseDevice.WithinRange = true;
+                    manipulation = (dev) =>
+                    {
+                        dev.LastGPSLatitude = location.Latitude;
+                        dev.LastGPSLongitude = location.Longitude;
+                        dev.LastGPSTimestamp = DateTime.Now;
+                        dev.WithinRange = true;
+                    };
                 }
-                await devicesStore.UpdateDevice(databaseDevice);
+                devicesStore.AtomicGetAndUpdateDevice(databaseDevice, manipulation);
             }
         }
     }
