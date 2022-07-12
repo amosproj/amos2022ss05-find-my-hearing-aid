@@ -62,22 +62,22 @@ namespace FindMyBLEDevice.ViewModels
             SearchAvailableDevicesCommand = new Command(
                 async () => await ExecuteSearchAvailableDevicesCommand());
             SavedDeviceTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.DeviceDetailPage));
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.DeviceDetailPage, false));
             AvailableDeviceTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.NewDevicePage));
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.NewDevicePage, false));
             StrengthButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.StrengthPage));
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.StrengthPage, true));
             MapButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.MapPage));
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.MapPage, true));
         }
 
-        private async Task SelectAndRedirectTo(BTDevice device, string page)
+        private async Task SelectAndRedirectTo(BTDevice device, string page, bool newStack)
         {
             if (device == null)
                 return;
 
             devicesStore.SelectedDevice = device;
-            await navigator.GoToAsync(page);
+            await navigator.GoToAsync(page, newStack);
         }
 
         private async void OnDevicesChanged(object sender, EventArgs e)

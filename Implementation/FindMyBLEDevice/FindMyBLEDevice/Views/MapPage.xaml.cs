@@ -18,7 +18,7 @@ namespace FindMyBLEDevice.Views
         public MapPage()
         {
             InitializeComponent();
-            BindingContext = viewModel = new MapViewModel(map, App.Geolocation, App.DevicesStore);
+            BindingContext = viewModel = new MapViewModel(map, App.Geolocation, App.Navigator, App.DevicesStore);
         }
 
         protected override void OnAppearing()

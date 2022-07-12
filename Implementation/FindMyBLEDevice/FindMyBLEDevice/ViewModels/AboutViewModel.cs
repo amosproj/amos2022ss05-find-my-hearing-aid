@@ -15,9 +15,9 @@ namespace FindMyBLEDevice.ViewModels
             Title = "About";
             
             OpenMapPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.MapPage));
+                async () => await navigator.GoToAsync(navigator.MapPage, true));
             OpenStrengthPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.StrengthPage));
+                async () => await navigator.GoToAsync(navigator.StrengthPage, true));
         }
     }
 }

@@ -8,31 +8,35 @@ using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services;
-using System.Threading.Tasks;
 using Xamarin.Forms;
-using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Geolocation;
+using System.Threading.Tasks;
+using System;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
-        private readonly Xamarin.Forms.Maps.Map map;
-        private readonly IGeolocation geolocation;
-        private readonly IDevicesStore devicesStore;
-
-        public Command OpenMapPin { get; }
-
-        public BTDevice Device => devicesStore.SelectedDevice;
         public bool DeviceNotNull => Device != null;
 
-        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, IDevicesStore devices)
+        private readonly Xamarin.Forms.Maps.Map map;
+        private readonly IGeolocation geolocation;
+        private readonly INavigator navigator;
+        private readonly IDevicesStore devicesStore;
+        private bool showingDialogue;
+
+        public BTDevice Device { get => devicesStore.SelectedDevice;  }
+
+        public Command OpenMapPin { get; }
+        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
         {
             Title = "MapSearch";
-
+            OpenMapPin = new Command(async () => await OpenMapswithPin());
             this.map = map;
             this.geolocation = geolocation;
-            this.devicesStore = devices;
+            this.navigator = navigator;
+            this.devicesStore = devicesStore;
 
             OpenMapPin = new Command(
                 async () => await OpenMapswithPin());
@@ -67,6 +71,39 @@ namespace FindMyBLEDevice.ViewModels
             map.Pins.Add(devicePin);
         }
 
+        private async void CheckIfSelectedDeviceReachable(object sender, EventArgs ea)
+        {
+            if (showingDialogue || Device is null) return;
+            showingDialogue = true;
+
+            BTDevice updatedDevice = null;
+            try
+            {
+                updatedDevice = await devicesStore.GetDevice(Device.ID);
+            } catch (ArgumentException ae)
+            {
+                Console.WriteLine($"[MapPage] Error retrieving selected device from database");
+            }
+            if (updatedDevice is null) return;
+
+            if (updatedDevice.WithinRange)
+            {
+                devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
+                bool promptAnswer = false;
+                await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the signal strength search?", "Yes", "No");
+                });
+                if (promptAnswer)
+                {
+                    await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                        await navigator.GoToAsync(navigator.StrengthPage, true);
+                    });
+                }
+            }
+
+            showingDialogue = false;
+        }
+
         public async void OnAppearing()
         {
             //updates device label above map when opened
@@ -88,7 +125,15 @@ namespace FindMyBLEDevice.ViewModels
                             new Position(Device.LastGPSLatitude, Device.LastGPSLongitude))
                 ));
             }
+
+            showingDialogue = false;
+            devicesStore.DevicesChanged += CheckIfSelectedDeviceReachable;
+
             ShowSelectedDevice();
+        }
+
+        public void OnDisappearing() {
+            devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
         }
     }
 }

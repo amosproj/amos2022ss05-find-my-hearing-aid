@@ -50,9 +50,9 @@ namespace FindMyBLEDevice.ViewModels
             this.devicesStore = devicesStore;
 
             StrengthButtonTapped = new Command(
-                async () => await navigator.GoToAsync(navigator.StrengthPage));
+                async () => await navigator.GoToAsync(navigator.StrengthPage, true));
             MapButtonTapped = new Command(
-                async () => await navigator.GoToAsync(navigator.MapPage));
+                async () => await navigator.GoToAsync(navigator.MapPage, true));
             RenameButtonTapped = new Command(
                 async () => await RenameDevice());
             DeleteButtonTapped = new Command(
