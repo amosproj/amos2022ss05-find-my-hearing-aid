@@ -35,7 +35,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var nvg = new Mock<INavigator>();
 
             nvg.SetupGet(mock => mock.MapPage).Returns("MapPage");
-            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
+            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>(), It.IsAny<bool>())).Returns(Task.CompletedTask);
 
 
             // act
@@ -44,7 +44,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
             // assert
             nvg.Verify(mock => mock.GoToAsync(It.Is<string>(pageName =>
-               pageName == "MapPage")), Times.Once);
+               pageName == "MapPage"), It.IsAny<bool>()), Times.Once);
 
         }
 
@@ -56,7 +56,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var nvg = new Mock<INavigator>();
 
             nvg.SetupGet(mock => mock.StrengthPage).Returns("StrengthPage");
-            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>())).Returns(Task.CompletedTask);
+            nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>(), It.IsAny<bool>())).Returns(Task.CompletedTask);
 
             // act
             vm = new AboutViewModel(nvg.Object);
@@ -64,7 +64,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
             // assert
             nvg.Verify(mock => mock.GoToAsync(It.Is<string>(pageName =>
-               pageName == "StrengthPage")), Times.Once);
+               pageName == "StrengthPage"), It.IsAny<bool>()), Times.Once);
 
         }
 

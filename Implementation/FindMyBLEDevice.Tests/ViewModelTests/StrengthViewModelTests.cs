@@ -23,7 +23,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-            var vm = new StrengthViewModel(disAcc.Object);
+            var vm = new StrengthViewModel(disAcc.Object, null, null);
 
             // act
             var distances = new List<int>();
@@ -49,7 +49,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             disAcc.SetupGet(mock => mock.Density).Returns(10);
 
             // act
-            var vm = new StrengthViewModel(disAcc.Object);
+            var vm = new StrengthViewModel(disAcc.Object, null, null);
 
             // assert
             Assert.IsTrue(vm.CircleSizes.TrueForAll(s => s < (1000 / 10)));
@@ -65,7 +65,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
             // therefore MaxRadiusSize = 90
-            var vm = new StrengthViewModel(disAcc.Object);
+            var vm = new StrengthViewModel(disAcc.Object, null, null);
 
 
             // act
@@ -90,7 +90,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-            var vm = new StrengthViewModel(disAcc.Object);
+            var vm = new StrengthViewModel(disAcc.Object, null, null);
 
             // act
             MethodInfo methodInfo = typeof(StrengthViewModel).GetMethod("rssiToMeter", BindingFlags.NonPublic | BindingFlags.Instance);

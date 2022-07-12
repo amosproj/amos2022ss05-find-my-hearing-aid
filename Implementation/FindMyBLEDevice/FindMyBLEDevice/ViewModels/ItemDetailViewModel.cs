@@ -5,6 +5,7 @@
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
+using System;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -21,10 +22,7 @@ namespace FindMyBLEDevice.ViewModels
         public Command RenameButtonTapped { get; }
         public Command DeleteButtonTapped { get; }
 
-        public BTDevice Device
-        {
-            get => devicesStore.SelectedDevice;
-        }
+        public BTDevice Device => devicesStore.SelectedDevice;
 
         private int _currentRssi;
         public int CurrentRssi
@@ -45,11 +43,11 @@ namespace FindMyBLEDevice.ViewModels
             get => UserLabel != Device.UserLabel;
         }
 
-        public ItemDetailViewModel(INavigator navigator, IBluetooth bluetooth, IDevicesStore devices)
+        public ItemDetailViewModel(INavigator navigator, IBluetooth bluetooth, IDevicesStore devicesStore)
         {
             this.navigator = navigator;
             this.bluetooth = bluetooth;
-            this.devicesStore = devices;
+            this.devicesStore = devicesStore;
 
             StrengthButtonTapped = new Command(
                 async () => await navigator.GoToAsync(navigator.StrengthPage));
@@ -70,15 +68,40 @@ namespace FindMyBLEDevice.ViewModels
                 OnPropertyChanged(nameof(UserLabelEdited));
         }
 
-        async Task RenameDevice()
+        private async Task RenameDevice()
         {
+            
+            // Show confirmation dialog
+            bool answer = await Application.Current.MainPage.DisplayAlert(
+                "Rename device", 
+                String.Format("Are you sure you want to rename this device to '{0}'?", UserLabel), 
+                "Yes", "Cancel");
+
+            if (!answer)
+            {
+                UserLabel = Device.UserLabel;
+                OnPropertyChanged("UserLabel");
+                OnPropertyChanged("UserLabelEdited");
+                return;
+            }
+
             Device.UserLabel = UserLabel;
             await devicesStore.UpdateDevice(Device);
             OnPropertyChanged(nameof(Device));
         }
 
-        async Task DeleteDevice()
+        private async Task DeleteDevice()
         {
+            // Show confirmation dialog
+            bool answer = await Application.Current.MainPage.DisplayAlert(
+                "Delete device", 
+                "Are you sure you want to delete this device?", 
+                "Yes", "Cancel");
+            if (!answer)
+            {
+                return;
+            }
+
             await devicesStore.DeleteDevice(Device.ID);
             devicesStore.SelectedDevice = null;
 
