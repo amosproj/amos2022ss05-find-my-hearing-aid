@@ -99,7 +99,7 @@
                 Command="{Binding SelectDevice}"
                 BackgroundColor="{StaticResource Accent}"
                 Margin="10"
-                CornerRadius="0"
+                CornerRadius="5"
                 TextColor="White" 
                 FontSize="Medium" 
                 FontAttributes="Bold"

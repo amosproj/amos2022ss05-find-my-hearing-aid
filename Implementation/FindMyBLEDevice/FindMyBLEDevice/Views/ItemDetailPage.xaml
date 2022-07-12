@@ -76,6 +76,7 @@
             FontSize="Medium"
             FontAttributes="Bold"
             Margin="-5"
+            CornerRadius="5"
             Command="{Binding DeleteButtonTapped}"		
             />
             </StackLayout>
