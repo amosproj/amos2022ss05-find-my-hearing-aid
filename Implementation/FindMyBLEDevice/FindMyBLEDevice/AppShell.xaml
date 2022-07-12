@@ -44,10 +44,10 @@
             <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}"/>
         </Tab>
         -->
-        <Tab Title="StrengthSearch" Icon="signal_strength.png" AutomationId="FlyoutItem_Strength">
+        <Tab Title="Strength Search" Icon="signal_strength.png" AutomationId="FlyoutItem_Strength">
             <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}" />
         </Tab>
-        <Tab Title="MapSearch" Icon="geolocation.png" AutomationId="FlyoutItem_Map">
+        <Tab Title="Map Search" Icon="geolocation.png" AutomationId="FlyoutItem_Map">
             <ShellContent Route="MapPage" ContentTemplate="{DataTemplate local:MapPage}"/>
         </Tab>
         <Tab Title="Settings" Icon="icon_settings.png" AutomationId="FlyoutItem_Settings">

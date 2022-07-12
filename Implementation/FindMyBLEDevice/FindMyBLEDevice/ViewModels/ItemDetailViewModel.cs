@@ -11,6 +11,7 @@ namespace FindMyBLEDevice.ViewModels
     public class ItemDetailViewModel : BaseViewModel
     {
         private int _currentRssi;
+        public Command GoBack { get; }
         public Command RenameButtonTapped { get; }
 
         public Command DeleteButtonTapped { get; }
@@ -19,6 +20,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public ItemDetailViewModel()
         {
+            GoBack = new Command(async () => await Shell.Current.GoToAsync(".."));
             RenameButtonTapped = new Command(
                    async () => await RenameDevice());
             DeleteButtonTapped = new Command(

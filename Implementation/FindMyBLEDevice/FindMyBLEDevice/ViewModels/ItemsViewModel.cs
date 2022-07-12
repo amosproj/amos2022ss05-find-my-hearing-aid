@@ -20,18 +20,20 @@ namespace FindMyBLEDevice.ViewModels
     {
 
         private ObservableCollection<BTDevice> savedDevices, availableDevices;
-        public ObservableCollection<BTDevice> SavedDevices 
-        { 
-            get => savedDevices; 
+        public ObservableCollection<BTDevice> SavedDevices
+        {
+            get => savedDevices;
             set
             {
                 savedDevices = value;
                 OnPropertyChanged(nameof(SavedDevices));
             }
         }
-        public ObservableCollection<BTDevice> AvailableDevices {
-            get { 
-                return availableDevices; 
+        public ObservableCollection<BTDevice> AvailableDevices
+        {
+            get
+            {
+                return availableDevices;
             }
             set
             {
@@ -40,6 +42,7 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
+        public Command GoBack { get; }
         public Command LoadSavedDevicesCommand { get; }
         public Command LoadAvailableDevicesCommand { get; }
         public Command SearchAvailableDevicesCommand { get; }
@@ -53,12 +56,13 @@ namespace FindMyBLEDevice.ViewModels
 
             SavedDevices = new ObservableCollection<BTDevice>();
             AvailableDevices = new ObservableCollection<BTDevice>();
+            GoBack = new Command(async () => await Shell.Current.GoToAsync(".."));
             //LoadAvailableDevicesCommand = new Command(() => ExecuteLoadAvailableDevicesCommand()); // we have to find an alternative
 #pragma warning disable CS4014
             SearchAvailableDevicesCommand = new Command(() => ExecuteSearchAvailableDevicesCommand());
 #pragma warning restore CS4014
             SavedDeviceTapped = new Command<BTDevice>(
-    async (BTDevice device) => await Select(device));
+                async (BTDevice device) => await SelectAndRedirectTo(device, ".."));
             SavedDeviceSettingsTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, nameof(ItemDetailPage)));
             AvailableDeviceTapped = new Command<BTDevice>(
@@ -118,7 +122,7 @@ namespace FindMyBLEDevice.ViewModels
         {
             List<BTDevice> savedDevicesList = SavedDevices.ToList();
             await App.Location.CheckAndRequestLocationPermission();
-            await App.Bluetooth.Search(20000, AvailableDevices, 
+            await App.Bluetooth.Search(20000, AvailableDevices,
                 found => !savedDevicesList.Exists(saved => saved.BT_GUID.Equals(found.BT_GUID)));
         }
 

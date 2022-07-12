@@ -16,7 +16,7 @@ namespace FindMyBLEDevice.ViewModels
         public AboutViewModel()
         {
             Title = "Home";
-            _selectedDeviceString = "Please select a device first.";
+            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
             OpenMapPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(MapPage)}"));
             OpenStrengthPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(StrengthPage)}"));
             OpenInfoPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(InfoPage)}"));
@@ -41,7 +41,7 @@ namespace FindMyBLEDevice.ViewModels
         {
             if (!(App.DevicesStore.SelectedDevice is null))
             {
-                SelectedDeviceString = "" + App.DevicesStore.SelectedDevice.UserLabel + "\nClick to select another device.";
+                SelectedDeviceString = "" + App.DevicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
             }
         }
         public void OnDisappearing()

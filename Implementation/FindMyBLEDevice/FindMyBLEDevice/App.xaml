@@ -16,19 +16,19 @@
             <Color x:Key="PrimaryDark">#051B2E</Color>
             <Color x:Key="Secondary">#C0D7EB</Color>
             <Color x:Key="Accent">#7797B8</Color>
-            <Color x:Key="AccentDark">#0B407B</Color>
-            <LinearGradientBrush x:Key="DarkGradient" StartPoint="0,1" EndPoint="1,0">
+            <LinearGradientBrush x:Key="DarkGradient" StartPoint="0.25,1" EndPoint="0.75,0">
                 <GradientStop Color="{StaticResource PrimaryDark}" Offset="0" />
-                <GradientStop Color="{StaticResource Primary}" Offset="1" />
-            </LinearGradientBrush>
-            <LinearGradientBrush x:Key="LightGradient" StartPoint="0,1" EndPoint="1,0">
-                <GradientStop Color="{StaticResource Secondary}" Offset="0" />
                 <GradientStop Color="{StaticResource Primary}" Offset="1" />
             </LinearGradientBrush>
             <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,1" EndPoint="1,0">
                 <GradientStop Color="#7692AD" Offset="0" />
                 <GradientStop Color="{StaticResource Accent}" Offset="1" />
             </LinearGradientBrush>
+            <RadialGradientBrush x:Key="RadialGradient" Center="0.5,0.5" Radius="0.5">
+                <GradientStop Color="{StaticResource Secondary}" Offset="0" />
+                <GradientStop Color="{StaticResource Accent}" Offset="1" />
+            </RadialGradientBrush>
+            <SolidColorBrush x:Key="SolidPrimary" Color="{StaticResource Primary}" />
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -36,12 +36,12 @@
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="Disabled">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#332196F3" />
+                                    <Setter Property="BackgroundColor" Value="#7797B8F3" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>

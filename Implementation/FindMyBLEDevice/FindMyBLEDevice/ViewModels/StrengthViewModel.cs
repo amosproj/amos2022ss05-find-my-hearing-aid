@@ -41,7 +41,7 @@ namespace FindMyBLEDevice.ViewModels
             meterScaleMax = rssiToMeter(-100, Constants.TxPowerDefault);
             rssiBuff = new List<int>();
             _status = "Uninitialized";
-            SelectedDeviceString = "Please select a device first.";
+            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
             // Width (in xamarin.forms units)
             var mainDisplayInfo = DeviceDisplay.MainDisplayInfo;
             int xamarinWidth = (int)Math.Round(mainDisplayInfo.Width / mainDisplayInfo.Density);
@@ -133,7 +133,7 @@ namespace FindMyBLEDevice.ViewModels
             }
             else
             {
-                SelectedDeviceString = "" + App.DevicesStore.SelectedDevice.UserLabel + "\nClick to select another device.";
+                SelectedDeviceString = "" + App.DevicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
                 Status = "Connecting to \"" + App.DevicesStore.SelectedDevice.UserLabel + "\"...\n" +
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
                 App.Bluetooth.StartRssiPolling(App.DevicesStore.SelectedDevice.BT_GUID, (int v, int txPower) =>

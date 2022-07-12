@@ -13,7 +13,9 @@ namespace FindMyBLEDevice.ViewModels
     public class SettingsViewModel : BaseViewModel
     {
         public SettingsViewModel() 
-        { 
+        {
+            Title = "Settings";
+
             _rssiIntervalString = RssiInterval.ToString();
             OpenInfoPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(InfoPage)}"));
         }

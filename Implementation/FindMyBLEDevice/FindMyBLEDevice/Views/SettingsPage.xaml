@@ -7,27 +7,26 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="viewmodels:SettingsViewModel"
              x:Class="FindMyBLEDevice.Views.SettingsPage"
              Title="Settings"
              AutomationId="Page_Settings"
-             Shell.NavBarIsVisible="False"
-                 >
-    <ContentPage.Content>
-        <StackLayout Background="{StaticResource DarkGradient}">
-            <StackLayout Orientation="Horizontal" HeightRequest="30" Padding="10,0,10,0" BackgroundColor="{StaticResource Accent}">
-            <ImageButton Source="icon_questionmark.png"  Command="{Binding OpenInfoPageCommand}" HorizontalOptions="EndAndExpand"/>
-        </StackLayout>
-        <StackLayout Padding="20,20,20,20" Spacing="20" Orientation="Vertical" VerticalOptions="Start">
+             Shell.NavBarIsVisible="False" >
+
+    <StackLayout Orientation="Vertical" Padding="20,0,20,20" Spacing="10"  Background="{StaticResource DarkGradient}">
+
+        <Label Text="{Binding Title}" FontSize="40" TextColor="White" FontAttributes="Bold"/>
+
+        <StackLayout Spacing="20" Orientation="Vertical" VerticalOptions="Start">
 
             <StackLayout Orientation="Horizontal" >
                 <Label Text="List devices without an advertised name in the devices scan." FontSize="Medium" TextColor="White" AutomationId="Setting_NoAdvName_Label"/>
-                <Switch IsToggled="{Binding DisplayNamelessDevices}" OnColor="LightSkyBlue" ThumbColor="{StaticResource Secondary}" HorizontalOptions="End" AutomationId="Setting_NoAdvName_Switch"/>
+                <Switch IsToggled="{Binding DisplayNamelessDevices}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End" AutomationId="Setting_NoAdvName_Switch"/>
             </StackLayout>
 
             <StackLayout Orientation="Horizontal">
                 <Label Text="List devices with a very weak connection in the devices scan." FontSize="Medium" TextColor="White" AutomationId="Setting_WeakConn_Label"/>
-                <Switch IsToggled="{Binding DisplayWeakDevices}" OnColor="LightSkyBlue" ThumbColor="{StaticResource Secondary}" HorizontalOptions="End" AutomationId="Setting_WeakConn_Switch"/>
+                <Switch IsToggled="{Binding DisplayWeakDevices}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End" AutomationId="Setting_WeakConn_Switch"/>
             </StackLayout>
 
             <StackLayout Orientation="Vertical">
@@ -35,16 +34,19 @@
                     <Label Text="The time between RSSI / signal strength updates in milliseconds." FontSize="Medium" TextColor="White" AutomationId="Setting_RSSIInterval_Label"/>
                     <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" AutomationId="Setting_RSSIInterval_Entry" />
                 </StackLayout>
-                <Slider Maximum="{Binding RssiIntervalMax}" Minimum="{Binding RssiIntervalMin}" Value="{Binding RssiInterval}" ThumbColor="{StaticResource Secondary}" MinimumTrackColor="LightSkyBlue" MaximumTrackColor="{StaticResource Primary}" AutomationId="Setting_RSSIInterval_Slider"/>
+                <Slider Maximum="{Binding RssiIntervalMax}" Minimum="{Binding RssiIntervalMin}" Value="{Binding RssiInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" AutomationId="Setting_RSSIInterval_Slider"/>
             </StackLayout>
+
             <StackLayout Orientation="Vertical">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="The time between background GPS updates in seconds." FontSize="Medium" TextColor="White" />
                     <Entry Text="{Binding UpdateServiceIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding UpdateServiceIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" />
                 </StackLayout>
-                <Slider Maximum="{Binding UpdateServiceIntervalMax}" Minimum="{Binding UpdateServiceIntervalMin}" Value="{Binding UpdateServiceInterval}" ThumbColor="{StaticResource Secondary}" MinimumTrackColor="LightSkyBlue" MaximumTrackColor="{StaticResource Primary}" />
+                <Slider Maximum="{Binding UpdateServiceIntervalMax}" Minimum="{Binding UpdateServiceIntervalMin}" Value="{Binding UpdateServiceInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" />
             </StackLayout>
+
         </StackLayout>
-        </StackLayout>
-    </ContentPage.Content>
+
+    </StackLayout>
+
 </ContentPage>

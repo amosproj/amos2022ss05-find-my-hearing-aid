@@ -17,15 +17,25 @@ namespace FindMyBLEDevice.ViewModels
     public class MapViewModel : BaseViewModel
     {
         private string _selectedDeviceString;
+        public bool DeviceNotNull => Device != null;
+        public Command OpenMapPin { get; }
         public MapViewModel(Xamarin.Forms.Maps.Map map)
         {
             Title = "MapSearch";
             this.map = map;
-            _selectedDeviceString = "Please selecet a device first.";
+            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
             OpenInfoPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(InfoPage)}"));
             SelectDevice = new Command(async () => await Shell.Current.GoToAsync($"{nameof(ItemsPage)}"));
+            OpenMapPin = new Command(async () => await OpenMapswithPin());
+
+            PropertyChanged += DeviceChanged;
         }
 
+        private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Device))
+                OnPropertyChanged(nameof(DeviceNotNull));
+        }
         public BTDevice Device { get => App.DevicesStore.SelectedDevice;  }
 
         private readonly Xamarin.Forms.Maps.Map map;
@@ -44,7 +54,7 @@ namespace FindMyBLEDevice.ViewModels
         {
             if (!(App.DevicesStore.SelectedDevice is null))
             {
-                SelectedDeviceString = "" + App.DevicesStore.SelectedDevice.UserLabel + "\nClick to select another device.";
+                SelectedDeviceString = "" + App.DevicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
             }
 
                 //updates device label above map when opened via the flyout menu
@@ -82,8 +92,12 @@ namespace FindMyBLEDevice.ViewModels
                 Position = new Position(deviceLocation.Latitude, Device.LastGPSLongitude)
             };
             map.Pins.Add(devicePin);
-        } 
+        }
 
+        private Task OpenMapswithPin()
+        {
+            return Xamarin.Essentials.Map.OpenAsync(Device.LastGPSLatitude, Device.LastGPSLongitude, new MapLaunchOptions { Name = Device.UserLabel });
+        }
         public void OnDisappearing() {
             // comment to make linter happy, method will be used in the future
         }
