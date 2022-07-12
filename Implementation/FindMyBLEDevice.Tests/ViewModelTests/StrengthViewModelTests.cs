@@ -83,8 +83,10 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
         }
 
-        [TestMethod]
-        public void rssiToMeter_SensibleResults()
+        [DataTestMethod]
+        [DataRow(-30, 0, 10)]
+        [DataRow(-80, 0, 100)]
+        public void rssiToMeter_SensibleResults(int rssi, int minMeterExcl, int maxMeterExcl)
         {
             // arrange
             var disAcc = new Mock<IDeviceDisplayAccess>();
@@ -93,16 +95,12 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var vm = new StrengthViewModel(disAcc.Object, null, null);
 
             // act
-            MethodInfo methodInfo = typeof(StrengthViewModel).GetMethod("rssiToMeter", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] parameters = { -30, Constants.TxPowerDefault, Constants.RssiEnvironmentalDefault };
-            double a = (double) methodInfo.Invoke(vm, parameters);
-            object[] parameters2 = { -80, Constants.TxPowerDefault, Constants.RssiEnvironmentalDefault };
-            double b = (double) methodInfo.Invoke(vm, parameters2);
+            MethodInfo? methodInfo = typeof(StrengthViewModel).GetMethod("rssiToMeter", BindingFlags.NonPublic | BindingFlags.Instance);
+            object[] arguments = { rssi, Constants.TxPowerDefault, Constants.RssiEnvironmentalDefault };
+            double res = (double)methodInfo.Invoke(vm, arguments);
 
             // assert
-            Assert.IsTrue(a > 0 && a < 10);            
-            Assert.IsTrue(b > 0 && b < 100);
-
+            Assert.IsTrue(res > minMeterExcl && res < maxMeterExcl);            
         }
 
     }
