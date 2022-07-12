@@ -6,15 +6,14 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
-using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Location;
 using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Settings;
-using System;
 using Xamarin.Forms;
 using FindMyBLEDevice.Views;
+using FindMyBLEDevice.Services;
 
 namespace FindMyBLEDevice
 {
@@ -100,7 +99,7 @@ namespace FindMyBLEDevice
         {
             get
             {
-                if(updateService == null)
+                if (updateService == null)
                 {
                     updateService = new UpdateService(Bluetooth, DevicesStore, Geolocation, Settings);
                 }

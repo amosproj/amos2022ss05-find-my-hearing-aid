@@ -166,7 +166,7 @@ namespace FindMyBLEDevice.ViewModels
         }
 
         /// <summary>
-        /// Calculates the strengts views radius from any given input value and its scale.
+        /// Calculates the strengths views radius from any given input value and its scale.
         /// </summary>
         /// <param name="scaleMin">Min value of the input value's scale.</param>
         /// <param name="scaleMax">Max value of the input value's scale.</param>
