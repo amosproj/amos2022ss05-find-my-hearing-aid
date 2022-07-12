@@ -2,9 +2,9 @@
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <domi.pysch@gmail.com>
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@gmail.com>
 
+using NUnit.Framework;
 using System;
 using System.Linq;
-using NUnit.Framework;
 using Xamarin.UITest;
 using Xamarin.UITest.Queries;
 
@@ -139,11 +139,11 @@ namespace FindMyBLEDevice.UITests
             }
 
             var content = app.Query("content").First();
-            float ScreenWidth = content.Rect.Width;
+            float screenWidth = content.Rect.Width;
             // Check all circles are centered
             for (int i = 0; i < circles.Length; i++)
             {
-                Assert.IsTrue(Math.Abs(ScreenWidth / 2 - circles[i].Rect.CenterX) < 2f);
+                Assert.AreEqual(screenWidth / 2, circles[i].Rect.CenterX, 2f);
             }
 
 

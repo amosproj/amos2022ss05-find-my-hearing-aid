@@ -10,11 +10,8 @@
              Title="{Binding Device.UserLabel}"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels"
              xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
-             x:Name="BrowseItemDetailPage"
-             Shell.NavBarIsVisible="False" >
-    <ContentPage.BindingContext>
-        <local:ItemDetailViewModel/>
-    </ContentPage.BindingContext>
+             x:DataType="local:ItemDetailViewModel"
+             x:Name="BrowseItemDetailPage">
 
     <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>
@@ -46,19 +43,16 @@
                 <Label Text="User Label:" FontSize="Medium" TextColor="White" />
 
                 <StackLayout Spacing="0">
-                    <Entry x:Name="UserLabel" Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.UserLabel}" FontSize="Small" TextColor="White" TextChanged="UserLabel_TextChanged"/>
+                    <Entry x:Name="UserLabel" Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.UserLabel}" FontSize="Small" TextColor="White"/>
                     <Label Text="For renaming the device, edit the label in the entry" FontSize="Small" TextColor="GhostWhite" Padding="0,0,0,0" />
-
                 </StackLayout>
 
-                <Button
-            x:Name="RenameButton"
-            Text="Rename"
-            TextColor="White"
-            Margin="3"
-            Command="{Binding RenameButtonTapped}"
-            IsVisible="{Binding UserLabelEdited}"
-            />
+                <Button x:Name="RenameButton"
+                        Text="Rename"
+                        TextColor="White"
+                        Margin="3"
+                        Command="{Binding RenameButtonTapped}"
+                        IsVisible="{Binding UserLabelEdited}"/>
 
                 <Label Text="Advertised Name:" FontSize="Medium" TextColor="White" />
                 <Label Text="{Binding Device.AdvertisedName}" FontSize="Small" TextColor="White"/>
@@ -69,16 +63,14 @@
                 <Label Text="CURRENT-RSSI:" FontSize="Medium" TextColor="White" />
                 <Label Text="{Binding CurrentRssi}" FontSize="Small" TextColor="White"/>
 
-                <Button
-            Text="Delete device"
-            TextColor="White"
-            BackgroundColor="{StaticResource Accent}"
-            FontSize="Medium"
-            FontAttributes="Bold"
-            Margin="-5"
-            CornerRadius="5"
-            Command="{Binding DeleteButtonTapped}"		
-            />
+                <Button Text="Delete device"
+                        TextColor="White"
+                        BackgroundColor="{StaticResource Accent}"
+                        FontSize="Medium"
+                        FontAttributes="Bold"
+                        Margin="-5"
+                        CornerRadius="5"
+                        Command="{Binding DeleteButtonTapped}"/>
             </StackLayout>
         </StackLayout>
 

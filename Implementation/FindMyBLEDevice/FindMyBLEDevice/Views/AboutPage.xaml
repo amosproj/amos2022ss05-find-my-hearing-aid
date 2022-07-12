@@ -8,12 +8,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindMyBLEDevice.Views.AboutPage"
              xmlns:vm="clr-namespace:FindMyBLEDevice.ViewModels"
-             AutomationId="Page_About"
-             Shell.NavBarIsVisible="False" >
-
-    <ContentPage.BindingContext>
-        <vm:AboutViewModel />
-    </ContentPage.BindingContext>
+             AutomationId="Page_About">
 
     <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>

@@ -9,7 +9,7 @@ namespace FindMyBLEDevice.Services.Geolocation
 {
     public interface IGeolocation
     {
-        Task CancelLocationSearch();
+        void CancelLocationSearch();
         Task<Xamarin.Essentials.Location> GetCurrentLocation();
     }
 }

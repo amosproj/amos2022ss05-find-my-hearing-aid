@@ -10,8 +10,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="viewmodels:SettingsViewModel"
              x:Class="FindMyBLEDevice.Views.SettingsPage"
              Title="Settings"
-             AutomationId="Page_Settings"
-             Shell.NavBarIsVisible="False" >
+             AutomationId="Page_Settings">
 
     <StackLayout Orientation="Vertical" Padding="20,0,20,20" Spacing="10"  Background="{StaticResource DarkGradient}">
 

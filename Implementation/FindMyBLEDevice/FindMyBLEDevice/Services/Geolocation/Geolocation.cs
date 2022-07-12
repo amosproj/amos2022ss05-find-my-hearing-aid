@@ -15,7 +15,7 @@ namespace FindMyBLEDevice.Services.Geolocation
     public class Geolocation : IGeolocation
     {
         private CancellationTokenSource cts;
-        private IGeolocationAccess _geolocationAccess;
+        private readonly IGeolocationAccess _geolocationAccess;
 
         public Geolocation() : this(new GeolocationAccess()) { }
         public Geolocation(IGeolocationAccess geolocationAccess)
@@ -25,7 +25,6 @@ namespace FindMyBLEDevice.Services.Geolocation
 
         public async Task<Xamarin.Essentials.Location> GetCurrentLocation()
         {
-#pragma warning disable CS0168 // Variable ist deklariert, wird jedoch niemals verwendet
             try
             {
                 var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
@@ -35,28 +34,19 @@ namespace FindMyBLEDevice.Services.Geolocation
                 Console.WriteLine($"Latitude: {location?.Latitude}, Longitude: {location?.Longitude}, Altitude: {location?.Altitude}");
                 return location;
             }
-            catch (FeatureNotSupportedException fnsEx)
-            {
-                // Handle not supported on device exception
-            }
-            catch (FeatureNotEnabledException fneEx)
-            {
-                // Handle not enabled on device exception
-            }
-            catch (PermissionException pEx)
+            catch (PermissionException)
             {
                 Console.WriteLine("No permission");
                 // Handle permission exception
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Unable to get location
             }
-#pragma warning restore CS0168 // Variable ist deklariert, wird jedoch niemals verwendet
             return null;
         }
 
-        public async Task CancelLocationSearch()
+        public void CancelLocationSearch()
         {
             if (cts != null && !cts.IsCancellationRequested) cts.Cancel();
         }

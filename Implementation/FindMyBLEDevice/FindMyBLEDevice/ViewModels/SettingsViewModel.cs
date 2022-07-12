@@ -12,40 +12,47 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class SettingsViewModel : BaseViewModel
     {
-        public SettingsViewModel() 
+        private readonly ISettings settings;
+
+        public SettingsViewModel(ISettings settings, INavigator navigator)
         {
             Title = "Settings";
 
+            this.settings = settings;
+
             _rssiIntervalString = RssiInterval.ToString();
-            OpenInfoPageCommand = new Command(async () => await Shell.Current.GoToAsync($"{nameof(InfoPage)}"));
+            _updateServiceIntervalString = UpdateServiceInterval.ToString();
+
+            OpenInfoPageCommand = new Command(
+                async () => await navigator.GoToAsync(navigator.InfoPage));
         }
 
         public bool DisplayNamelessDevices
         {
-            get => Preferences.Get(SettingsNames.DisplayNamelessDevices, false);
+            get => settings.Get(SettingsNames.DisplayNamelessDevices, false);
             set
             {
-                Preferences.Set(SettingsNames.DisplayNamelessDevices, value);
+                settings.Set(SettingsNames.DisplayNamelessDevices, value);
                 OnPropertyChanged(nameof(DisplayNamelessDevices));
             }
         }
 
         public bool DisplayWeakDevices
         {
-            get => Preferences.Get(SettingsNames.DisplayWeakDevices, false);
+            get => settings.Get(SettingsNames.DisplayWeakDevices, false);
             set
             {
-                Preferences.Set(SettingsNames.DisplayWeakDevices, value);
+                settings.Set(SettingsNames.DisplayWeakDevices, value);
                 OnPropertyChanged(nameof(DisplayWeakDevices));
             }
         }
 
         public int RssiInterval
         {
-            get => Preferences.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault);
+            get => settings.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault);
             set
             {
-                Preferences.Set(SettingsNames.RssiInterval, value);
+                settings.Set(SettingsNames.RssiInterval, value);
                 OnPropertyChanged(nameof(RssiInterval));
                 _rssiIntervalString = value.ToString();
                 OnPropertyChanged(nameof(RssiIntervalString));
@@ -95,10 +102,10 @@ namespace FindMyBLEDevice.ViewModels
 
         public int UpdateServiceInterval
         {
-            get => Preferences.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault);
+            get => settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault);
             set
             {
-                Preferences.Set(SettingsNames.UpdateServiceInterval, value);
+                settings.Set(SettingsNames.UpdateServiceInterval, value);
                 OnPropertyChanged(nameof(UpdateServiceInterval));
                 _updateServiceIntervalString = value.ToString();
                 OnPropertyChanged(nameof(UpdateServiceIntervalString));

@@ -2,6 +2,7 @@
 <!--
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -10,10 +11,11 @@
              Title="New Item"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
+    
     <ContentPage.Content>
         <StackLayout Background="{StaticResource DarkGradient}" Spacing="3" Padding="15">
             <Label Text="User-Label" FontSize="Medium" TextColor="White" />
-            <Entry Text="{Binding UserLabel, Mode=TwoWay}" FontSize="Medium" TextColor="White" />
+            <Entry Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.AdvertisedName}" FontSize="Medium" TextColor="White" />
             <StackLayout Orientation="Horizontal">
                 <Button Text="Cancel" Command="{Binding CancelCommand}" CornerRadius="5" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Accent}"></Button>
                 <Button Text="Save" Command="{Binding SaveCommand}" CornerRadius="5" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Accent}"></Button>

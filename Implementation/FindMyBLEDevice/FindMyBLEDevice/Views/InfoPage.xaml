@@ -5,8 +5,7 @@
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FindMyBLEDevice.Views.InfoPage"
-             Shell.NavBarIsVisible="True">
+             x:Class="FindMyBLEDevice.Views.InfoPage">
     <ContentPage.Content>
         <StackLayout Background="{StaticResource DarkGradient}">
             <Label Text="Oh, you clicked on the QuestionMark."

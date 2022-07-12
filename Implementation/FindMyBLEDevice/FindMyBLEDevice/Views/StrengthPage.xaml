@@ -9,8 +9,7 @@
              xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels"
              x:Class="FindMyBLEDevice.Views.StrengthPage"
              x:DataType="viewmodels:StrengthViewModel"
-             AutomationId="Page_Strength"
-             Shell.NavBarIsVisible="False" >
+             AutomationId="Page_Strength">
 
     <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>
