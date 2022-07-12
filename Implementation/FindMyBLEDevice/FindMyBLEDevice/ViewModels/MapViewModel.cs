@@ -24,7 +24,7 @@ namespace FindMyBLEDevice.ViewModels
         private readonly IGeolocation geolocation;
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
-        private bool userDeclinedPageSwitch, showingDialogue;
+        private bool showingDialogue;
 
         public BTDevice Device { get => devicesStore.SelectedDevice;  }
 
@@ -126,7 +126,6 @@ namespace FindMyBLEDevice.ViewModels
                 ));
             }
 
-            userDeclinedPageSwitch = false;
             showingDialogue = false;
             devicesStore.DevicesChanged += CheckIfSelectedDeviceReachable;
 
