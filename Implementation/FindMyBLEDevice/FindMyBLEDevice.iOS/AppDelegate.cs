@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using CoreLocation;
 using Foundation;
 using UIKit;
 
@@ -29,6 +29,22 @@ namespace FindMyBLEDevice.iOS
             global::Xamarin.Forms.Forms.Init();
             Xamarin.FormsMaps.Init();
             LoadApplication(new App());
+
+            switch (CLLocationManager.Status)
+            {
+                case CLAuthorizationStatus.Authorized | CLAuthorizationStatus.AuthorizedAlways | CLAuthorizationStatus.AuthorizedWhenInUse:
+                    Console.WriteLine("Access");
+                    break;
+                default:
+                    Console.WriteLine("No Access");
+                    var message = "The app is not functioning correctly because the permissions are not granted. You will be redirected to the settings app to grant the required permissions";
+                    bool goToSettings = App.Current.MainPage.DisplayAlert("Attention", message, "Ok", "Cancel").GetAwaiter().GetResult();
+                    if (goToSettings)
+                    {
+                        Xamarin.Essentials.AppInfo.ShowSettingsUI();
+                    }
+                    break;
+            }
 
             return base.FinishedLaunching(app, options);
         }
