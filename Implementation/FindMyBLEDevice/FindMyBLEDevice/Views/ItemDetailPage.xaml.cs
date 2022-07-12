@@ -10,30 +10,18 @@ namespace FindMyBLEDevice.Views
 {
     public partial class ItemDetailPage : ContentPage
     {
-
-        ItemDetailViewModel _viewModel;
-
-        private bool initialized = false;
+        readonly ItemDetailViewModel _viewModel;
 
         public ItemDetailPage()
         {
             InitializeComponent();
-            BindingContext = _viewModel = new ItemDetailViewModel();
-            initialized = true;
+            BindingContext = _viewModel = new ItemDetailViewModel(App.Navigator, App.Bluetooth, App.DevicesStore);
         }
+
         protected override void OnAppearing()
         {
             base.OnAppearing();
             _viewModel.OnAppearing();
-        }
-
-
-        private void UserLabel_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            if (initialized)
-            {
-                _viewModel.UserLabel_TextChanged();
-            }
         }
 
         protected override void OnDisappearing()

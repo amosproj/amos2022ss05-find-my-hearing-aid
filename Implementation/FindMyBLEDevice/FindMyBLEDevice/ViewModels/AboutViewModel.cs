@@ -1,26 +1,23 @@
-﻿using System;
-using System.Windows.Input;
-using Xamarin.Essentials;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+
 using Xamarin.Forms;
-using FindMyBLEDevice.Models;
-using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class AboutViewModel : BaseViewModel
     {
-        public AboutViewModel()
+        public Command OpenMapPageCommand { get; }
+        public Command OpenStrengthPageCommand { get; }
+
+        public AboutViewModel(INavigator navigator)
         {
             Title = "About";
             
-            OpenMapPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(MapPage)}"));
-            OpenStrengthPageCommand = new Command(async () => await Shell.Current.GoToAsync($"//{nameof(StrengthPage)}"));
+            OpenMapPageCommand = new Command(
+                async () => await navigator.GoToAsync(navigator.MapPage, true));
+            OpenStrengthPageCommand = new Command(
+                async () => await navigator.GoToAsync(navigator.StrengthPage, true));
         }
-
-        public ICommand OpenMapPageCommand { get; }
-
-        public ICommand OpenStrengthPageCommand { get; }
-
-        
     }
 }

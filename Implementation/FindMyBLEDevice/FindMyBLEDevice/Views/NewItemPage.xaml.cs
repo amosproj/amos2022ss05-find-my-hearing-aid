@@ -1,4 +1,7 @@
-﻿using FindMyBLEDevice.ViewModels;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+
+using FindMyBLEDevice.ViewModels;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.Views
@@ -11,7 +14,7 @@ namespace FindMyBLEDevice.Views
         {
             InitializeComponent();
 
-            BindingContext = _viewModel = new NewItemViewModel();
+            BindingContext = _viewModel = new NewItemViewModel(App.Navigator, App.DevicesStore);
         }
 
         protected override void OnAppearing()

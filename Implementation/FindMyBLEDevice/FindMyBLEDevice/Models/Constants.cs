@@ -10,6 +10,8 @@ namespace FindMyBLEDevice.Models
 {
     public static class Constants
     {
+        public const int DiscoverSearchDuration = 20000;
+
         public const int RssiIntervalDefault = 25;
         public const int RssiIntervalMin = 0;
         public const int RssiIntervalMax = 1000;

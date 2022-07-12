@@ -1,10 +1,11 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+
 using FindMyBLEDevice.Models;
-using FindMyBLEDevice.Views;
+using FindMyBLEDevice.Services.Bluetooth;
+using FindMyBLEDevice.Services.Database;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -12,41 +13,29 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class ItemDetailViewModel : BaseViewModel
     {
-        private int _currentRssi;
-        public Command RenameButtonTapped { get; }
+        private readonly INavigator navigator;
+        private readonly IBluetooth bluetooth;
+        private readonly IDevicesStore devicesStore;
+
         public Command StrengthButtonTapped { get; }
         public Command MapButtonTapped { get; }
+        public Command RenameButtonTapped { get; }
         public Command DeleteButtonTapped { get; }
 
-        public string UserLabel { get; set; }
+        public BTDevice Device => devicesStore.SelectedDevice;
 
-        public ItemDetailViewModel()
-        {
-            RenameButtonTapped = new Command(
-                   async () => await RenameDevice());
-            StrengthButtonTapped = new Command(
-                   async () => await RedirectTo(nameof(StrengthPage)));
-            MapButtonTapped = new Command(
-                async () => await RedirectTo(nameof(MapPage)));
-            DeleteButtonTapped = new Command(
-                async () => await DeleteDevice());
-
-            UserLabel = Device.UserLabel;
-        }
-        async Task RedirectTo(string page)
-        {
-            App.Bluetooth.StopRssiPolling();
-            await Shell.Current.GoToAsync(page);
-        }
+        private int _currentRssi;
         public int CurrentRssi
         {
             get => _currentRssi;
             set => SetProperty(ref _currentRssi, value);
         }
 
-        public BTDevice Device
+        private string _userLabel;
+        public string UserLabel
         {
-            get => App.DevicesStore.SelectedDevice;
+            get => _userLabel;
+            set => SetProperty(ref _userLabel, value);
         }
 
         public bool UserLabelEdited
@@ -54,16 +43,39 @@ namespace FindMyBLEDevice.ViewModels
             get => UserLabel != Device.UserLabel;
         }
 
-        public void UserLabel_TextChanged()
+        public ItemDetailViewModel(INavigator navigator, IBluetooth bluetooth, IDevicesStore devicesStore)
         {
-            OnPropertyChanged("UserLabelEdited");
+            this.navigator = navigator;
+            this.bluetooth = bluetooth;
+            this.devicesStore = devicesStore;
+
+            StrengthButtonTapped = new Command(
+                async () => await navigator.GoToAsync(navigator.StrengthPage, true));
+            MapButtonTapped = new Command(
+                async () => await navigator.GoToAsync(navigator.MapPage, true));
+            RenameButtonTapped = new Command(
+                async () => await RenameDevice());
+            DeleteButtonTapped = new Command(
+                async () => await DeleteDevice());
+
+            PropertyChanged += DeviceOrUserLabelChanged;
+            UserLabel = Device.UserLabel;
         }
 
-        async Task RenameDevice()
+        private void DeviceOrUserLabelChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(Device) || e.PropertyName == nameof(UserLabel))
+                OnPropertyChanged(nameof(UserLabelEdited));
+        }
+
+        private async Task RenameDevice()
         {
             
             // Show confirmation dialog
-            bool answer = await Application.Current.MainPage.DisplayAlert("Rename device", String.Format("Are you sure you want to rename this device to '{0}'?", UserLabel), "Yes", "Cancel");
+            bool answer = await Application.Current.MainPage.DisplayAlert(
+                "Rename device", 
+                String.Format("Are you sure you want to rename this device to '{0}'?", UserLabel), 
+                "Yes", "Cancel");
 
             if (!answer)
             {
@@ -74,41 +86,40 @@ namespace FindMyBLEDevice.ViewModels
             }
 
             Device.UserLabel = UserLabel;
-            await App.DevicesStore.UpdateDevice(Device);
-            OnPropertyChanged("Device");
-            OnPropertyChanged("UserLabelEdited");
+            await devicesStore.UpdateDevice(Device);
+            OnPropertyChanged(nameof(Device));
         }
 
-        async Task DeleteDevice()
+        private async Task DeleteDevice()
         {
-
             // Show confirmation dialog
-            bool answer = await Application.Current.MainPage.DisplayAlert("Delete device", "Are you sure you want to delete this device?", "Yes", "Cancel");
-
+            bool answer = await Application.Current.MainPage.DisplayAlert(
+                "Delete device", 
+                "Are you sure you want to delete this device?", 
+                "Yes", "Cancel");
             if (!answer)
             {
                 return;
             }
 
-            App.Bluetooth.StopRssiPolling();
+            await devicesStore.DeleteDevice(Device.ID);
+            devicesStore.SelectedDevice = null;
 
-            int id = Device.ID;
-            App.DevicesStore.SelectedDevice = null;
-            await App.DevicesStore.DeleteDevice(id);
-              
             // Go back to devices page
-            await Shell.Current.GoToAsync("..");
+            await navigator.GoToAsync("..");
         }
 
         public void OnAppearing()
         {
-            App.Bluetooth.StartRssiPolling(Device.BT_GUID, (int v, int txPower) => {
-                CurrentRssi = v;
-            });            
+            bluetooth.StartRssiPolling(Device.BT_GUID, (int rssi, int txPower) =>
+            {
+                CurrentRssi = rssi;
+            });
         }
+
         public void OnDisappearing()
         {
-            App.Bluetooth.StopRssiPolling();
+            bluetooth.StopRssiPolling();
         }
     }
 }

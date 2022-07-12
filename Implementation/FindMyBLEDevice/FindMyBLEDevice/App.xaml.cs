@@ -6,14 +6,14 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
-using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Location;
 using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.Services.Settings;
-using System;
 using Xamarin.Forms;
+using FindMyBLEDevice.Views;
+using FindMyBLEDevice.Services;
 
 namespace FindMyBLEDevice
 {
@@ -32,6 +32,8 @@ namespace FindMyBLEDevice
         private static ISettings settings;
         // Update-service
         private static UpdateService updateService;
+        // Interface to access Shell navigation
+        private static INavigator navigator;
         // Check-service
         private static CheckBluetoothAndLocationService checkService;
 
@@ -53,7 +55,7 @@ namespace FindMyBLEDevice
             {
                 if (bluetooth == null)
                 {
-                    bluetooth = new Bluetooth();
+                    bluetooth = new Bluetooth(Settings);
                 }
                 return bluetooth;
             }
@@ -99,12 +101,34 @@ namespace FindMyBLEDevice
         {
             get
             {
-                if(updateService == null)
+                if (updateService == null)
                 {
-                    updateService = new UpdateService();
+                    updateService = new UpdateService(Bluetooth, DevicesStore, Geolocation, Settings);
                 }
                 return updateService;
             }
+        }
+
+        public static INavigator Navigator
+        {
+            get
+            {
+                if(navigator == null)
+                {
+                    navigator = new Navigator(
+                        nameof(AboutPage), 
+                        nameof(ItemsPage),
+                        nameof(NewItemPage),
+                        nameof(ItemDetailPage),
+                        nameof(StrengthPage),
+                        nameof(MapPage),
+                        nameof(SettingsPage));
+                }
+                return navigator;
+            }
+        }
+
+
         }        
         
         public static CheckBluetoothAndLocationService CheckService
@@ -118,6 +142,7 @@ namespace FindMyBLEDevice
                 return checkService;
             }
         }
+
 
         public App()
         {

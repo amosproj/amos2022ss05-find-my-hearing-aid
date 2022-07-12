@@ -41,7 +41,11 @@ namespace FindMyBLEDevice.Models
             set { _advertisedName = value; } 
         }
 
-        public string UserLabel { get; set; }
+        private string _userLabel;
+        public string UserLabel { 
+            get => _userLabel ?? AdvertisedName;
+            set { _userLabel = value; }
+        }
 
         public DateTime CreatedAt { get; set; }
 
