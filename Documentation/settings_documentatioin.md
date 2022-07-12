@@ -44,7 +44,8 @@
         </tr>
         <tr>
             <td>Help</td>
-            <td colspan=2>Forwarding/Hinting to Guidance Page</td>
+            <td>Forwarding/Hinting to Guidance Page</td>
+            <td>Please find any explanation of the functionalties of the software within our specific guidance part which you can find by clicking on the white '?' located on the top right corner</td>
         </tr>
         <tr>
             <td rowspan=6>About</td>
