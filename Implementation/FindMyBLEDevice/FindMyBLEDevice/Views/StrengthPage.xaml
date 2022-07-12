@@ -98,7 +98,7 @@
                 Text="{Binding SelectedDeviceString}"
                 Command="{Binding SelectDevice}"
                 BackgroundColor="{StaticResource Accent}"
-                Margin="0"
+                Margin="10"
                 CornerRadius="0"
                 TextColor="White" 
                 FontSize="Medium" 

@@ -117,10 +117,11 @@
                    AutomationId="DevicesPage_LabelAvailableDevices"                                                      
                    />
             <BoxView HeightRequest="1" Color="White" />
-            <Button Margin="0,0,0,0" Text="Scan for available devices"
+            <Button Text="Scan for available devices"
                     Command="{Binding SearchAvailableDevicesCommand}"
                     BackgroundColor="{StaticResource Accent}"
-                    TextColor="White" 
+                    TextColor="White"
+                    Margin="10"
                     AutomationId="DevicesPage_ButtonScan"
                     FontSize="Medium" 
                     FontAttributes="Bold"

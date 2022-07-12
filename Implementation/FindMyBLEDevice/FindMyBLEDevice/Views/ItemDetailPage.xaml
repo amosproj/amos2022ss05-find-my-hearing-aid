@@ -75,7 +75,7 @@
             BackgroundColor="{StaticResource Accent}"
             FontSize="Medium"
             FontAttributes="Bold"
-            Margin="3"
+            Margin="-5"
             Command="{Binding DeleteButtonTapped}"		
             />
             </StackLayout>
