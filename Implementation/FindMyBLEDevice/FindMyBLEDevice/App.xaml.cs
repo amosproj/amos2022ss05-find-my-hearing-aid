@@ -128,8 +128,6 @@ namespace FindMyBLEDevice
             }
         }
 
-
-        }        
         
         public static CheckBluetoothAndLocationService CheckService
         {

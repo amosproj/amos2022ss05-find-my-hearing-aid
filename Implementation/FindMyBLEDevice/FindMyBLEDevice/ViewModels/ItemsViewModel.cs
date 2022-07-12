@@ -134,8 +134,6 @@ namespace FindMyBLEDevice.ViewModels
 
         public async void OnAppearing()
         {
-            await CheckBluetoothAndLocation.Check();
-
             devicesStore.DevicesChanged += OnDevicesChanged;
             OnDevicesChanged(null, null);
             AvailableDevices = new ObservableCollection<BTDevice>();
