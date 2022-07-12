@@ -1,3 +1,6 @@
+## Our approach: 
+We decided to categorize the settings page to make it more convenient for the user. We priorised it regarding the potential need for the user. 
+The Topic should be initially displayed when clickin on the settings icon and Name/Description open up when the user clikcs on the respective topic
 
 <table>
     <thead>
