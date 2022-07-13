@@ -39,16 +39,31 @@ The Topic should be initially displayed when clickin on the settings icon and Na
         <tr>
             <td rowspan=2>Security</td>
             <td>Current Permissions</td>
-            <td>List of all Permissions with deactivated toggle</td>
+            <td>
+                Permission | Status <br>
+                Read/Write on Filesystem | on/off <br>
+                Bluetooth | on/off <br>
+                GPS | on/off <br>
+                Instead of on/off use deactivated switchs/checkboxes.  <br>
+                Implement Hint like: "You're not able to change the permissions within this app, please go to your application settings."
+            </td>
         </tr>
         <tr>
             <td>Data policy</td>
-            <td>All data that are stored, processed and why</td>
+            <td>
+                - no data sent from mobile device to external source. Everything is locally. <br>
+                - no personal data are collected <br>
+                - Database: write and read on filesystem if "Read/Write on Filesystem" permission is granted<br>
+                - Saving the last location and a timestamp of BLE-devices in database if "GPS" and "Bluetooth" Permission is granted <br>
+            </td>
         </tr>
         <tr>
             <td>Help</td>
             <td>Forwarding/Hinting to Guidance Page</td>
-            <td>Please find any explanation of the functionalties of the software within our specific guidance part which you can find by clicking on the white '?' located on the top right corner</td>
+            <td>
+                Please find any explanation of the functionalties of the software within our specific guidance part which you can find by clicking on the
+                white '?' located on the top right corner
+            </td>
         </tr>
         <tr>
             <td rowspan=6>About</td>
