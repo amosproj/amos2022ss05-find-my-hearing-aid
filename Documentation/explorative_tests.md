@@ -42,7 +42,7 @@ Testing on main branch from 11/07/22
 |-------------------------------------------------------------------------------------------------------------------|--------------|------------------|----------------------------------------------------------------------------------------------------------------------------|
 | I want to immediately see, which of my devices my phone is "seeing"                                               | X            | X                | -                                                                                                                          |
 | I want to be able to go into the Strength Search directly from within the devices-page with a device pre-selected | X            | X                | -                                                                                                                          |
-| I want to be able to go into the MapSearch directly from within the devices-page with a device pre-selected       | X            | X                |                                                                                                                            |
+| I want to be able to go into the MapSearch directly from within the devices-page with a device pre-selected       | X            | X                | -                                                                                                                          |
 | I want to have a sensible view of my saved devices                                                                | X            | X                | The scrollview can be scrolled down quite a bit, even if only one device is listed in it. Deactivate scroll if not needed? It's also possible to let the listed devices disappear with scrolling up. |
 
 ## Strength Search
@@ -50,9 +50,9 @@ Testing on main branch from 11/07/22
 | Use-Case                                                                                                          | Works on iOS | Works on Android | Improvement proposal                                                                                                       |
 |-------------------------------------------------------------------------------------------------------------------|--------------|------------------|----------------------------------------------------------------------------------------------------------------------------|
 | I want to switch between devices without navigating to Devices via Burger Menu                                              |             |                 | Currently not implemented                                                                                                                          |
-| I want to be notified if no device is selected | X            |                  | -                                                                                                                          |
-| I want to be notified if device is near       | X            |                  |                                                                                                                            |
-| If there's no connection to the device, I'd like to get notified and get the advice to switch to GPS Search                                                               | X            |                 |  |
+| I want to be notified if no device is selected | X            | X                | -                                                                                                                          |
+| I want to be notified if device is near       | X            | X                | -                                                                                                                          |
+| If there's no connection to the device, I'd like to get notified and get the advice to switch to GPS Search                                                               |              |                 | Currently not implemented |
 
 
 ## GPS Search
@@ -60,7 +60,7 @@ Testing on main branch from 11/07/22
 | Use-Case                                                                                                          | Works on iOS | Works on Android | Improvement proposal                                                                                                       |
 |-------------------------------------------------------------------------------------------------------------------|--------------|------------------|----------------------------------------------------------------------------------------------------------------------------|
 | I want to switch between devices without navigating to Devices via Burger Menu                                              |             |                 | Currently not implemented                                                                                                                          |
-| I want to be notified if no device is selected | X            |                  | -                                                                                                                          |
+| I want to be notified if no device is selected | X            | X                | -                                                                                                                          |
 | I want to be notified if no location was saved       |             |                  | not implemented                                                                                                                          |
-| If there's a connection to the device, I'd like to get notified and get the advice to switch to Strength Search                                                               |              |                 | not yet implemented |
-| I'd like to switch to the mobile phone specific Maps App                                                               | X            |                 |  |
+| If there's a connection to the device, I'd like to get notified and get the advice to switch to Strength Search                                                               | X            | X               | -|
+| I'd like to switch to the mobile phone specific Maps App                                                               | X            | X               | -|
