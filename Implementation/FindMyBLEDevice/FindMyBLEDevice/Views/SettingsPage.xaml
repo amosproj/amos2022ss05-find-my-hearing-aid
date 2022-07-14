@@ -10,7 +10,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="viewmodels:SettingsViewModel"
              x:Class="FindMyBLEDevice.Views.SettingsPage"
              Title="Settings"
-             AutomationId="Page_Settings">
+             AutomationId="Page_Settings"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
 
     <StackLayout Orientation="Vertical" Padding="20,0,20,20" Spacing="10"  Background="{StaticResource DarkGradient}">
 

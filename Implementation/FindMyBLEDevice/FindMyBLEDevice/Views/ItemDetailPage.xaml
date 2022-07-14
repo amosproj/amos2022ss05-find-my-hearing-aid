@@ -11,7 +11,9 @@
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels"
              xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
              x:DataType="local:ItemDetailViewModel"
-             x:Name="BrowseItemDetailPage">
+             x:Name="BrowseItemDetailPage"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
 
     <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>
