@@ -32,7 +32,7 @@
                                  Padding="0,20,0,45" 
                                  HeightRequest="220" 
                                  Source="signal_strength_about.png"
-                                 Aspect="Fill" CornerRadius="50" 
+                                 Aspect="AspectFit" CornerRadius="50" 
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenStrengthPageCommand}" 
                                  AutomationId="AboutPage_Btn_Signal" />
@@ -54,7 +54,7 @@
                                  Padding="0,20,0,45" 
                                  HeightRequest="200"                                 
                                  Source="geolocation_about.png"                         
-                                 Aspect="Fill" CornerRadius="50"
+                                 Aspect="AspectFit" CornerRadius="50"
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenMapPageCommand}" 
                                  AutomationId="AboutPage_Btn_Signal" />
