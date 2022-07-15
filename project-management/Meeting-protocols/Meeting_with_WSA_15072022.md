@@ -22,4 +22,4 @@ Communicate our to-date progress to and gather feedback from the industry partne
 - Agreed on submitting the documentation in WIKI format.
 
 ### Action items(Todos on feature board are NOT included)
-- Offer time slots for the final digital handover to WSA.
+- [ ] Offer time slots for the final digital handover to WSA.
