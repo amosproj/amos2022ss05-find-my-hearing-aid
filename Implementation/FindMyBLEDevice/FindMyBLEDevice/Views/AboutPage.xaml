@@ -52,9 +52,9 @@
                 </Grid.RowDefinitions>
                 <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
-                                 HeightRequest="220"                                 
+                                 HeightRequest="200"                                 
                                  Source="geolocation_about.png"                         
-                                 Aspect="Fill" CornerRadius="50" 
+                                 Aspect="Fill" CornerRadius="50"
                                  Background="{StaticResource AccentGradient}" 
                                  Command="{Binding OpenMapPageCommand}" 
                                  AutomationId="AboutPage_Btn_Signal" />

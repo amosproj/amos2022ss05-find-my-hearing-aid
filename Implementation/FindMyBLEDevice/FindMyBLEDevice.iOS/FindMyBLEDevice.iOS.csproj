@@ -139,6 +139,22 @@
     <BundleResource Include="Resources\geolocation.png" />
     <BundleResource Include="Resources\signal_strength.png" />
     <BundleResource Include="Resources\find_my_ble_device.png" />
+    <BundleResource Include="Resources\geolocation_about.png" />
+    <BundleResource Include="Resources\geolocation_about%402x.png" />
+    <BundleResource Include="Resources\geolocation_about%403x.png" />
+    <BundleResource Include="Resources\geolocation%402x.png" />
+    <BundleResource Include="Resources\geolocation%403x.png" />
+    <BundleResource Include="Resources\icon_questionmark.png" />
+    <BundleResource Include="Resources\icon_questionmark%402x.png" />
+    <BundleResource Include="Resources\icon_questionmark%403x.png" />
+    <BundleResource Include="Resources\icon_settings.png" />
+    <BundleResource Include="Resources\icon_settings%402x.png" />
+    <BundleResource Include="Resources\icon_settings%403x.png" />
+    <BundleResource Include="Resources\signal_strength_about.png" />
+    <BundleResource Include="Resources\signal_strength_about%402x.png" />
+    <BundleResource Include="Resources\signal_strength_about%403x.png" />
+    <BundleResource Include="Resources\signal_strength%402x.png" />
+    <BundleResource Include="Resources\signal_strength%403x.png" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
