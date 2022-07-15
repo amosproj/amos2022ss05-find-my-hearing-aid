@@ -19,7 +19,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             AboutViewModel vm;
 
             // act
-            vm = new AboutViewModel(new Mock<INavigator>().Object);
+            vm = new AboutViewModel(new Mock<INavigator>().Object, null);
 
             // assert
             Assert.IsNotNull(vm);
@@ -39,7 +39,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
 
             // act
-            vm = new AboutViewModel(nvg.Object);
+            vm = new AboutViewModel(nvg.Object, null);
             vm.OpenMapPageCommand.Execute(null);
 
             // assert
@@ -59,7 +59,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             nvg.Setup(mock => mock.GoToAsync(It.IsAny<string>(), It.IsAny<bool>())).Returns(Task.CompletedTask);
 
             // act
-            vm = new AboutViewModel(nvg.Object);
+            vm = new AboutViewModel(nvg.Object, null);
             vm.OpenStrengthPageCommand.Execute(null);
 
             // assert

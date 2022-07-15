@@ -23,7 +23,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-            var vm = new StrengthViewModel(disAcc.Object, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
 
             // act
             var distances = new List<int>();
@@ -49,7 +49,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             disAcc.SetupGet(mock => mock.Density).Returns(10);
 
             // act
-            var vm = new StrengthViewModel(disAcc.Object, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
 
             // assert
             Assert.IsTrue(vm.CircleSizes.TrueForAll(s => s < (1000 / 10)));
@@ -68,11 +68,11 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
             // therefore MaxRadiusSize = 90
-            var vm = new StrengthViewModel(disAcc.Object, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
 
 
             // act
-            MethodInfo methodInfo = typeof(StrengthViewModel).GetMethod("otherScaleToRadius", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo methodInfo = typeof(StrengthViewModel).GetMethod("OtherScaleToRadius", BindingFlags.NonPublic | BindingFlags.Instance);
             object[] arguments = { scaleMin, scaleMax, value };
             int res = (int) methodInfo.Invoke(vm, arguments);
 
@@ -89,10 +89,10 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-            var vm = new StrengthViewModel(disAcc.Object, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
 
             // act
-            MethodInfo? methodInfo = typeof(StrengthViewModel).GetMethod("rssiToMeter", BindingFlags.NonPublic | BindingFlags.Instance);
+            MethodInfo? methodInfo = typeof(StrengthViewModel).GetMethod("RssiToMeter", BindingFlags.NonPublic | BindingFlags.Instance);
             object[] arguments = { rssi, Constants.TxPowerDefault, Constants.RssiEnvironmentalDefault };
             double res = (double)methodInfo.Invoke(vm, arguments);
 
