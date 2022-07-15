@@ -33,7 +33,7 @@
             <StackLayout Orientation="Vertical">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="The time between RSSI / signal strength updates in milliseconds." FontSize="Medium" TextColor="White" AutomationId="Setting_RSSIInterval_Label"/>
-                    <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" AutomationId="Setting_RSSIInterval_Entry" />
+                    <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" AutomationId="Setting_RSSIInterval_Entry" BackgroundColor="Black"/>
                 </StackLayout>
                 <Slider Maximum="{Binding RssiIntervalMax}" Minimum="{Binding RssiIntervalMin}" Value="{Binding RssiInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" AutomationId="Setting_RSSIInterval_Slider"/>
             </StackLayout>
@@ -41,7 +41,7 @@
             <StackLayout Orientation="Vertical">
                 <StackLayout Orientation="Horizontal">
                     <Label Text="The time between background GPS updates in seconds." FontSize="Medium" TextColor="White" />
-                    <Entry Text="{Binding UpdateServiceIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding UpdateServiceIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" />
+                    <Entry Text="{Binding UpdateServiceIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding UpdateServiceIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" BackgroundColor="Black"/>
                 </StackLayout>
                 <Slider Maximum="{Binding UpdateServiceIntervalMax}" Minimum="{Binding UpdateServiceIntervalMin}" Value="{Binding UpdateServiceInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" />
             </StackLayout>
