@@ -11,7 +11,9 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="local:MapViewModel"
              x:Class="FindMyBLEDevice.Views.MapPage"
-             AutomationId="Page_Map">
+             AutomationId="Page_Map"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
 
     <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>

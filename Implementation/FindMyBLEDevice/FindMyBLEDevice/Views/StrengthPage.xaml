@@ -9,7 +9,13 @@
              xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels"
              x:Class="FindMyBLEDevice.Views.StrengthPage"
              x:DataType="viewmodels:StrengthViewModel"
-             AutomationId="Page_Strength">
+             AutomationId="Page_Strength"
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" WinPhone="20,20,20,20" />
+    </ContentPage.Padding>
+
 
     <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>

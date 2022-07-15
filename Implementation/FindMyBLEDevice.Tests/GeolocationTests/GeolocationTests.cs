@@ -127,7 +127,7 @@ namespace FindMyBLEDevice.Tests.GeolocationTests
             var location = new Services.Geolocation.Geolocation(new Mock<IGeolocationAccess>().Object);
 
             // act
-            await location.CancelLocationSearch();
+            location.CancelLocationSearch();
 
             // assert
             // if no exception was thrown this test is successfull

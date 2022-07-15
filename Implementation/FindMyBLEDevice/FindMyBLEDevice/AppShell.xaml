@@ -8,7 +8,10 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:FindMyBLEDevice.Views"
        Title="FindMyBLEDevice"
-       x:Class="FindMyBLEDevice.AppShell">
+       x:Class="FindMyBLEDevice.AppShell"
+       xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+       ios:Page.PrefersStatusBarHidden="True"
+       ios:Page.PreferredStatusBarUpdateAnimation="Fade">
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.
