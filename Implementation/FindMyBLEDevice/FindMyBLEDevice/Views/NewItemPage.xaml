@@ -1,6 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <!--
 // SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
@@ -10,13 +11,14 @@
              Title="New Item"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
+    
     <ContentPage.Content>
-        <StackLayout Spacing="3" Padding="15">
-            <Label Text="User-Label" FontSize="Medium" />
-            <Entry Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.AdvertisedName}" FontSize="Medium" />
+        <StackLayout Background="{StaticResource DarkGradient}" Spacing="3" Padding="15">
+            <Label Text="User-Label" FontSize="Medium" TextColor="White" />
+            <Entry Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.AdvertisedName}" FontSize="Medium" TextColor="White" />
             <StackLayout Orientation="Horizontal">
-                <Button Text="Cancel" Command="{Binding CancelCommand}" HorizontalOptions="FillAndExpand"></Button>
-                <Button Text="Save" Command="{Binding SaveCommand}" HorizontalOptions="FillAndExpand"></Button>
+                <Button Text="Cancel" Command="{Binding CancelCommand}" CornerRadius="5" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Accent}"></Button>
+                <Button Text="Save" Command="{Binding SaveCommand}" CornerRadius="5" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Accent}"></Button>
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

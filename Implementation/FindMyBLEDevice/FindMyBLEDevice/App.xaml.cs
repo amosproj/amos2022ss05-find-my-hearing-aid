@@ -120,7 +120,8 @@ namespace FindMyBLEDevice
                         nameof(ItemDetailPage),
                         nameof(StrengthPage),
                         nameof(MapPage),
-                        nameof(SettingsPage));
+                        nameof(SettingsPage),
+                        nameof(InfoPage));
                 }
                 return navigator;
             }

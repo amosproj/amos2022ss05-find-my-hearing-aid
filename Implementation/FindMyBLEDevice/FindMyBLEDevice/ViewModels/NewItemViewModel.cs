@@ -37,6 +37,7 @@ namespace FindMyBLEDevice.ViewModels
         private async void OnCancel()
         {
             // This will pop the current page off the navigation stack
+            devicesStore.SelectedDevice = null;
             await navigator.GoToAsync("..");
         }
 

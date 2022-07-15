@@ -11,18 +11,56 @@
              xmlns:maps="clr-namespace:Xamarin.Forms.Maps;assembly=Xamarin.Forms.Maps"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="local:MapViewModel"
              x:Class="FindMyBLEDevice.Views.MapPage"
-             Title="{Binding Title}"
              AutomationId="Page_Map"
-             >
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
 
-    <ContentPage.Content>
- 
-        <StackLayout Orientation="Vertical">
-            <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  FontSize="Medium" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" AutomationId="MapPage_UserLabel"/>
-            <maps:Map x:Name="map" AutomationId="MapPage_Map"/>
-            <StackLayout Orientation="Vertical" Padding="10, 10, 10, 10">
-                <Button Text="Open in Maps" Command="{Binding OpenMapPin}" IsEnabled="{Binding DeviceNotNull}"/>
-            </StackLayout>
+    <Grid Background="{StaticResource DarkGradient}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <StackLayout Grid.Row="0" Orientation="Vertical" Padding="20,0" Spacing="10">
+
+            <Label Text="{Binding Title}" FontSize="40" TextColor="White" FontAttributes="Bold"/>
+
+            <maps:Map x:Name="map"/>
+            
         </StackLayout>
-    </ContentPage.Content>
+
+        <Button Grid.Row="0" 
+                VerticalOptions="EndAndExpand"
+                HorizontalOptions="StartAndExpand"
+                Margin="25"
+                Text="Open in Maps"
+                TextColor="White"
+                CornerRadius="5"
+                BackgroundColor="{StaticResource Accent}"
+                Command="{Binding OpenMapPin}"
+                IsVisible="{Binding DeviceNotNull}" />
+
+        <Button Grid.Row="1" 
+                Text="{Binding SelectedDeviceString}"
+                Command="{Binding SelectDevice}"
+                BackgroundColor="{StaticResource Accent}"
+                Margin="10"
+                CornerRadius="5"
+                TextColor="White" 
+                FontSize="Medium" 
+                FontAttributes="Bold"
+                />
+
+        <ImageButton Grid.Row="0" 
+                     VerticalOptions="StartAndExpand" 
+                     HorizontalOptions="EndAndExpand" 
+                     Margin="10" 
+                     CornerRadius="0"
+                     WidthRequest="40"
+                     Source="icon_questionmark.png"  
+                     Command="{Binding OpenInfoPageCommand}" 
+                     BackgroundColor="Transparent" />
+
+    </Grid>
+
 </ContentPage>
