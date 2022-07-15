@@ -18,7 +18,7 @@ Communicate our to-date progress to and gather feedback from the industry partne
 ### Feedback
 - The app looks really nice!
 - The plan sounds really good as well!
-- Agreed on run the handover digitally.
+- Agreed on running the project handover digitally.
 - Agreed on submitting the documentation in WIKI format.
 
 ### Action items(Todos on feature board are NOT included)
