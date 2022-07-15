@@ -39,6 +39,6 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 |23|29/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 9|XC, EW, LM, NS, DP, JS, AW, MA, LK|-|
 |24|06/07/22, 12.30 - 14.00|Team|Team meeting of Sprint 10|XC, EW, LM, NS, DP, JS, AW, MA, LK|-|
 |25|13/07/22, 12.30 - 14.00|Team|Team meeting of Sprint 11|XC, EW, LM, NS, DP, JS, AW, MA, LK|-|
-|26|15/07/22, 11.00 - 12.00|Team|Bi-Weekly meeting with the industry partner|-|-|
+|26|15/07/22, 11.00 - 12.00|Team|Bi-Weekly meeting with the industry partner|XC, EW, LM, NS, DP, ~~JS~~, AW, MA, LK, SM(WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeting_with_WSA_15072022.md)|
 
 _______________________
