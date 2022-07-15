@@ -52,7 +52,7 @@
                 </Grid.RowDefinitions>
                 <ImageButton Grid.Row="0" 
                                  Padding="0,20,0,45" 
-                                 HeightRequest="200"                                 
+                                 HeightRequest="220"                                 
                                  Source="geolocation_about.png"                         
                                  Aspect="AspectFit" CornerRadius="50"
                                  Background="{StaticResource AccentGradient}" 
