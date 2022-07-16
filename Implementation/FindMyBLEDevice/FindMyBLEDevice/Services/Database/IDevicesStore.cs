@@ -96,6 +96,6 @@ namespace FindMyBLEDevice.Services.Database
         /// <param name="manipulation">A method that applies the manipulations to the device object.</param>
         void AtomicGetAndUpdateDevice(BTDevice device, Action<BTDevice> manipulation);
 
-        event EventHandler DevicesChanged;
+        event EventHandler<List<int>> DevicesChanged;
     }
 }

@@ -39,7 +39,7 @@ namespace FindMyBLEDevice.Services
             running = false;
         }
 
-        private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
+        private async void OnSavedDevicesStoreChanged(object sender, List<int> ids)
         {
             savedDevices = await devicesStore.GetAllDevices();
         }

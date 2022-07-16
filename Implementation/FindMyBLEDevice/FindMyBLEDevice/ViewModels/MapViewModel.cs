@@ -13,6 +13,7 @@ using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Geolocation;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -87,7 +88,7 @@ namespace FindMyBLEDevice.ViewModels
             map.Pins.Add(devicePin);
         }
 
-        private async void CheckIfSelectedDeviceReachable(object sender, EventArgs ea)
+        private async void CheckIfSelectedDeviceReachable(object sender, List<int> ids)
         {
             if (showingDialogue || Device is null) return;
             showingDialogue = true;

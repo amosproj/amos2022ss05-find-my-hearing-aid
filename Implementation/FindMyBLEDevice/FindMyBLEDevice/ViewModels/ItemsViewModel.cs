@@ -15,6 +15,7 @@ using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Location;
 using System.Threading;
 using FindMyBLEDevice.Services;
+using System.Collections.Generic;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -83,7 +84,7 @@ namespace FindMyBLEDevice.ViewModels
             await navigator.GoToAsync(page, newStack);
         }
 
-        private async void OnDevicesChanged(object sender, EventArgs e)
+        private async void OnDevicesChanged(object sender, List<int> ids)
         {
             try
             {
