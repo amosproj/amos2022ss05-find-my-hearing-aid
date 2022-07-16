@@ -82,7 +82,7 @@
                      Margin="10" 
                      WidthRequest="40"
                      Source="icon_questionmark.png"  
-                     Command="{Binding OpenInfoPageCommand}" 
+                     Command="{Binding ShowInfoPage}" 
                      BackgroundColor="Transparent" />
 
     </Grid>
