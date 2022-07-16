@@ -14,6 +14,7 @@ using FindMyBLEDevice.Services.Geolocation;
 using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -90,7 +91,7 @@ namespace FindMyBLEDevice.ViewModels
 
         private async void CheckIfSelectedDeviceReachable(object sender, List<int> ids)
         {
-            if (showingDialogue || Device is null) return;
+            if (showingDialogue || Device is null || !ids.Contains(Device.ID)) return;
             showingDialogue = true;
 
             BTDevice updatedDevice = null;
@@ -108,6 +109,12 @@ namespace FindMyBLEDevice.ViewModels
                 devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
                 bool promptAnswer = false;
                 await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    // the database operation and switching threads can take a while,
+                    // so make sure the map page is still displayed
+                    bool stillShowing =
+                        Application.Current.MainPage is MapPage
+                        || (Application.Current.MainPage is AppShell shell && shell.CurrentPage is MapPage);
+                    if (!stillShowing) return;
                     promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the signal strength search?", "Yes", "No");
                 });
                 if (promptAnswer)
