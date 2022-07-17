@@ -32,12 +32,31 @@ namespace FindMyBLEDevice.Services
         public async Task RunAsync()
         {
             Console.WriteLine("Started Checking Services");
+
+
+
             while (running)
             {
                 try //just to be safe...
                 {
+
                     try
                     {
+
+                        if (Device.RuntimePlatform == Device.iOS)
+                        {
+                            bool hasBluetoothPermission = true;
+                            bool hasLocationPermission = false;  // checkLocationPermission();
+
+                            if (!hasBluetoothPermission || !hasLocationPermission)
+                            {
+                                string msg = "The app is not functioning correctly because the permissions are not granted. Please navigate to the settings app to grant the required permissions";
+                                bool goToSettings = await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                                    return await Application.Current.MainPage.DisplayAlert("Attention", msg, "Ok", "Cancel");
+                                });
+                            }
+                        }
+
                         var locationEnabled = platFormLocationService.IsLocationServiceEnabled();
                         var bluetoothEnabled = App.Bluetooth.IsEnabled();
 
