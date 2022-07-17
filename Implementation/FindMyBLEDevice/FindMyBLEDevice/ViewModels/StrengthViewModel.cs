@@ -96,7 +96,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public StrengthViewModel(IDeviceDisplayAccess displayAccess, IDevicesStore devicesStore, IBluetooth bluetooth, INavigator navigator)
         {
-            Title = "StrengthSearch";
+            Title = "Strength Search";
 
             this.devicesStore = devicesStore;
             this.bluetooth = bluetooth;
@@ -105,7 +105,7 @@ namespace FindMyBLEDevice.ViewModels
             meterScaleMax = RssiToMeter(-100, Constants.TxPowerDefault);
             rssiBuff = new List<int>();
             _status = "Uninitialized";
-            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
+            SelectedDeviceString = "No device selected!\n> Click to select a device <";
 
             // Width (in xamarin.forms units)
             int xamarinWidth = (int)Math.Round(displayAccess.Width / displayAccess.Density);

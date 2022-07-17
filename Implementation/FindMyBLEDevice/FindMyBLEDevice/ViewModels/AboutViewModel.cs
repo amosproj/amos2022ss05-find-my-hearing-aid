@@ -32,7 +32,7 @@ namespace FindMyBLEDevice.ViewModels
 
             this.devicesStore = devicesStore;
 
-            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
+            SelectedDeviceString = "No device selected!\n> Click to select a device <";
 
             OpenMapPageCommand = new Command(
                 async () => await navigator.GoToAsync(navigator.MapPage, true));

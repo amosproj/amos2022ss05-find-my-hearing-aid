@@ -41,14 +41,14 @@ namespace FindMyBLEDevice.ViewModels
 
         public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
         {
-            Title = "MapSearch";
+            Title = "Map Search";
 
             this.map = map;
             this.geolocation = geolocation;
             this.navigator = navigator;
             this.devicesStore = devicesStore;
 
-            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
+            SelectedDeviceString = "No device selected!\n> Click to select a device <";
 
             OpenInfoPageCommand = new Command(
                 async () => await navigator.GoToAsync(navigator.InfoPage));
@@ -107,7 +107,7 @@ namespace FindMyBLEDevice.ViewModels
                 devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
                 bool promptAnswer = false;
                 await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
-                    promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the signal strength search?", "Yes", "No");
+                    promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the Strength Search?", "Yes", "No");
                 });
                 if (promptAnswer)
                 {
