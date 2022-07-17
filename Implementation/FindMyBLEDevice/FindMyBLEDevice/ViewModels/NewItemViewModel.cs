@@ -5,6 +5,7 @@ using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Database;
 using System;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -46,6 +47,18 @@ namespace FindMyBLEDevice.ViewModels
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
                 Device.UserLabel = Device.AdvertisedName;
+            } else if(UserLabel.Length > Constants.UserLabelMaxLength)
+            {
+                await App.Current.MainPage.DisplayAlert("Label too long", $"The label can not contain over {Constants.UserLabelMaxLength} characters. Please choose another one.", "Ok");
+                UserLabel = "";
+                OnPropertyChanged("UserLabel");
+                return;
+            } else if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
+            {
+                await App.Current.MainPage.DisplayAlert("Label already taken", $"The label '{UserLabel}' is already taken by another device. Please choose another one.", "Ok");
+                UserLabel = "";
+                OnPropertyChanged("UserLabel");
+                return;
             } else
             {
                 Device.UserLabel = UserLabel;
