@@ -35,45 +35,7 @@ namespace FindMyBLEDevice.iOS
             Xamarin.FormsMaps.Init();
             LoadApplication(new App());
 
-            bool hasBluetoothPermission = checkBluetoothPermission();
-            /* bool hasLocationPermission = checkLocationPermission();
-
-            if (!hasBluetoothPermission) || !hasLocationPermission)
-            {
-                var message = "The app is not functioning correctly because the permissions are not granted. You will be redirected to the settings app to grant the required permissions";
-                bool goToSettings = App.Current.MainPage.DisplayAlert("Attention", message, "Ok", "Cancel").GetAwaiter().GetResult();
-                if (goToSettings)
-                {
-                    Xamarin.Essentials.AppInfo.ShowSettingsUI();
-                }
-            }*/
-
-
             return base.FinishedLaunching(app, options);
-        }
-
-        bool checkLocationPermission()
-        {
-            switch (CLLocationManager.Status)
-            {
-                case CLAuthorizationStatus.Authorized:
-                case CLAuthorizationStatus.AuthorizedWhenInUse:
-                    return true;
-                default:
-                    return false;
-            }
-        }
-
-        bool checkBluetoothPermission()
-        {
-            if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
-            {
-                return CBCentralManager.Authorization == CBManagerAuthorization.AllowedAlways;
-            }
-            else
-            {
-                return true;
-            }
         }
     }
 }
