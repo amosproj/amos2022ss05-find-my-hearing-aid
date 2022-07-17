@@ -52,8 +52,6 @@ namespace FindMyBLEDevice.ViewModels
             this.navigator = navigator;
             this.devicesStore = devicesStore;
 
-            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
-
             SelectDevice = new Command(
                 async () => await navigator.GoToAsync(navigator.DevicesPage));
             OpenMapPin = new Command(
@@ -132,6 +130,9 @@ namespace FindMyBLEDevice.ViewModels
             if (devicesStore.SelectedDevice != null)
             {
                 SelectedDeviceString = "" + devicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
+            } else
+            {
+                SelectedDeviceString = "No device selected!\n> Click to select a device <";
             }
 
             await CheckBluetoothAndLocation.Check();

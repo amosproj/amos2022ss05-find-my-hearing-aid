@@ -110,7 +110,6 @@ namespace FindMyBLEDevice.ViewModels
             meterScaleMax = RssiToMeter(-100, Constants.TxPowerDefault);
             rssiBuff = new List<int>();
             _status = "Uninitialized";
-            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
 
             // Width (in xamarin.forms units)
             int xamarinWidth = (int)Math.Round(displayAccess.Width / displayAccess.Density);
@@ -145,11 +144,7 @@ namespace FindMyBLEDevice.ViewModels
         {
             await CheckBluetoothAndLocation.Check();
 
-            if (devicesStore.SelectedDevice is null)
-            {
-                Status = "No device selected!\nPlease select a device to continue.";
-            }
-            else
+            if (devicesStore.SelectedDevice != null)
             {
                 SelectedDeviceString = "" + devicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
                 Status = "Connecting to \"" + devicesStore.SelectedDevice.UserLabel + "\"...\n" +
@@ -186,6 +181,9 @@ namespace FindMyBLEDevice.ViewModels
                     CurrentRssi = -100;
                     Meter = meterScaleMax;
                 });
+            } else
+            {
+                SelectedDeviceString = "No device selected!\n> Click to select a device <";
             }
         }
 
