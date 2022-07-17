@@ -25,6 +25,8 @@ namespace FindMyBLEDevice
 
         public string SettingsPage { get; }
 
+        public string InfoPage { get; }
+
         public Navigator(
             string aboutPage,
             string devicesPage,
@@ -32,7 +34,8 @@ namespace FindMyBLEDevice
             string deviceDetailPage,
             string strengthPage, 
             string mapPage,
-            string settingsPage)
+            string settingsPage,
+            string infoPage)
         {
             AboutPage = aboutPage;
             DevicesPage = devicesPage;
@@ -41,6 +44,7 @@ namespace FindMyBLEDevice
             StrengthPage = strengthPage;
             MapPage = mapPage;
             SettingsPage = settingsPage;
+            InfoPage = infoPage;
         }
 
         public Task GoToAsync(string page, bool newStack = false)

@@ -18,26 +18,42 @@ namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
-        public bool DeviceNotNull => Device != null;
-
         private readonly Xamarin.Forms.Maps.Map map;
         private readonly IGeolocation geolocation;
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
         private bool showingDialogue;
 
-        public BTDevice Device { get => devicesStore.SelectedDevice;  }
-
+        public Command OpenInfoPageCommand { get; }
+        public Command SelectDevice { get; }
         public Command OpenMapPin { get; }
+
+        public BTDevice Device => devicesStore.SelectedDevice;
+
+        public bool DeviceNotNull => Device != null;
+
+        private string _selectedDeviceString;
+        public string SelectedDeviceString
+        {
+            get => _selectedDeviceString;
+            set => SetProperty(ref _selectedDeviceString, value);
+        }
+
         public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
         {
             Title = "MapSearch";
-            OpenMapPin = new Command(async () => await OpenMapswithPin());
+
             this.map = map;
             this.geolocation = geolocation;
             this.navigator = navigator;
             this.devicesStore = devicesStore;
 
+            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
+
+            OpenInfoPageCommand = new Command(
+                async () => await navigator.GoToAsync(navigator.InfoPage));
+            SelectDevice = new Command(
+                async () => await navigator.GoToAsync(navigator.DevicesPage));
             OpenMapPin = new Command(
                 async () => await OpenMapswithPin());
 
@@ -80,7 +96,7 @@ namespace FindMyBLEDevice.ViewModels
             try
             {
                 updatedDevice = await devicesStore.GetDevice(Device.ID);
-            } catch (ArgumentException ae)
+            } catch (ArgumentException)
             {
                 Console.WriteLine($"[MapPage] Error retrieving selected device from database");
             }
@@ -109,6 +125,10 @@ namespace FindMyBLEDevice.ViewModels
             //updates device label above map when opened
             OnPropertyChanged(nameof(Device));
 
+            if (devicesStore.SelectedDevice != null)
+            {
+                SelectedDeviceString = "" + devicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
+            }
 
             var currentLocation = await geolocation.GetCurrentLocation();
             if (currentLocation != null)

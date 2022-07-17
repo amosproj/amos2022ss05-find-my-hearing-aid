@@ -121,13 +121,13 @@ namespace FindMyBLEDevice.Tests.GeolocationTests
         }
 
         [TestMethod]
-        public async Task CancelLocationSearch_WithoutActiveSearchDoesNotBreak()
+        public void CancelLocationSearch_WithoutActiveSearchDoesNotBreak()
         {
             // arrange
             var location = new Services.Geolocation.Geolocation(new Mock<IGeolocationAccess>().Object);
 
             // act
-            await location.CancelLocationSearch();
+            location.CancelLocationSearch();
 
             // assert
             // if no exception was thrown this test is successfull

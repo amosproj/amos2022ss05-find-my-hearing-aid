@@ -17,6 +17,7 @@ namespace FindMyBLEDevice
         string StrengthPage { get; }
         string MapPage { get; }
         string SettingsPage { get; }
+        string InfoPage { get; }
 
         Task GoToAsync(string page, bool newStack = false);
     }

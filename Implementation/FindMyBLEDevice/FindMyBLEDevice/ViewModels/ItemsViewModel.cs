@@ -30,8 +30,9 @@ namespace FindMyBLEDevice.ViewModels
         public Command SearchAvailableDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
         public Command<BTDevice> AvailableDeviceTapped { get; }
-        public Command<BTDevice> StrengthButtonTapped { get; }
-        public Command<BTDevice> MapButtonTapped { get; }
+        public Command<BTDevice> SavedDeviceSettingsTapped { get; }
+        public Command OpenInfoPageCommand { get; }
+        public Command GoBack { get; }
 
         private ObservableCollection<BTDevice> _savedDevices;
         public ObservableCollection<BTDevice> SavedDevices
@@ -62,16 +63,18 @@ namespace FindMyBLEDevice.ViewModels
             SearchAvailableDevicesCommand = new Command(
                 async () => await ExecuteSearchAvailableDevicesCommand());
             SavedDeviceTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.DeviceDetailPage, false));
+                async (BTDevice device) => await SelectAndRedirectTo(device, ".."));
+            SavedDeviceSettingsTapped = new Command<BTDevice>(
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.DeviceDetailPage));
             AvailableDeviceTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.NewDevicePage, false));
-            StrengthButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.StrengthPage, true));
-            MapButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.MapPage, true));
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.NewDevicePage));
+            OpenInfoPageCommand = new Command(
+                async () => await navigator.GoToAsync(navigator.InfoPage));
+            GoBack = new Command(
+                async () => await navigator.GoToAsync(".."));
         }
 
-        private async Task SelectAndRedirectTo(BTDevice device, string page, bool newStack)
+        private async Task SelectAndRedirectTo(BTDevice device, string page, bool newStack = false)
         {
             if (device == null)
                 return;

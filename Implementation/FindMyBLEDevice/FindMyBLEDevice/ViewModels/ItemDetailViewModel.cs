@@ -21,6 +21,8 @@ namespace FindMyBLEDevice.ViewModels
         public Command MapButtonTapped { get; }
         public Command RenameButtonTapped { get; }
         public Command DeleteButtonTapped { get; }
+        public Command OpenInfoPageCommand { get; }
+        public Command GoBack { get; }
 
         public BTDevice Device => devicesStore.SelectedDevice;
 
@@ -57,6 +59,10 @@ namespace FindMyBLEDevice.ViewModels
                 async () => await RenameDevice());
             DeleteButtonTapped = new Command(
                 async () => await DeleteDevice());
+            OpenInfoPageCommand = new Command(
+                async () => await navigator.GoToAsync(navigator.InfoPage));
+            GoBack = new Command(
+                async () => await navigator.GoToAsync(".."));
 
             PropertyChanged += DeviceOrUserLabelChanged;
             UserLabel = Device.UserLabel;
@@ -70,7 +76,6 @@ namespace FindMyBLEDevice.ViewModels
 
         private async Task RenameDevice()
         {
-            
             // Show confirmation dialog
             bool answer = await Application.Current.MainPage.DisplayAlert(
                 "Rename device", 

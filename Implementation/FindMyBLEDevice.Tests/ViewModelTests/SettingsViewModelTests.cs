@@ -21,7 +21,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
 
             // act
-            vm = new SettingsViewModel(st.Object);
+            vm = new SettingsViewModel(st.Object, null);
 
             // assert
             Assert.IsNotNull(vm);
@@ -35,10 +35,10 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // arrange
             var st1 = new Mock<ISettings>();
             st1.Setup(mock => mock.Get(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>())).Returns(false);
-            SettingsViewModel vm1 = new SettingsViewModel(st1.Object);
+            SettingsViewModel vm1 = new SettingsViewModel(st1.Object, null);
             var st2 = new Mock<ISettings>();
             st2.Setup(mock => mock.Get(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>())).Returns(true);
-            SettingsViewModel vm2 = new SettingsViewModel(st2.Object);
+            SettingsViewModel vm2 = new SettingsViewModel(st2.Object, null);
 
             // act
             var res1 = vm1.DisplayNamelessDevices;
@@ -59,12 +59,12 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var st1 = new Mock<ISettings>();
             st1.Setup(mock => mock.Set(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>()))
                 .Callback<string, bool>((name, value) => res1 = value);
-            SettingsViewModel vm1 = new SettingsViewModel(st1.Object);
+            SettingsViewModel vm1 = new SettingsViewModel(st1.Object, null);
             var res2 = true;
             var st2 = new Mock<ISettings>();
             st2.Setup(mock => mock.Set(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>()))
                 .Callback<string, bool>((name, value) => res2 = value);
-            SettingsViewModel vm2 = new SettingsViewModel(st2.Object);
+            SettingsViewModel vm2 = new SettingsViewModel(st2.Object, null);
 
             // act
             vm1.DisplayNamelessDevices = true;

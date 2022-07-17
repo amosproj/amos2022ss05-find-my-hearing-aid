@@ -15,7 +15,7 @@ namespace FindMyBLEDevice.Services.Geolocation
     public class Geolocation : IGeolocation
     {
         private CancellationTokenSource cts;
-        private IGeolocationAccess _geolocationAccess;
+        private readonly IGeolocationAccess _geolocationAccess;
 
         public Geolocation() : this(new GeolocationAccess()) { }
         public Geolocation(IGeolocationAccess geolocationAccess)
@@ -34,27 +34,19 @@ namespace FindMyBLEDevice.Services.Geolocation
                 Console.WriteLine($"Latitude: {location?.Latitude}, Longitude: {location?.Longitude}, Altitude: {location?.Altitude}");
                 return location;
             }
-            catch (FeatureNotSupportedException fnsEx)
-            {
-                // Handle not supported on device exception
-            }
-            catch (FeatureNotEnabledException fneEx)
-            {
-                // Handle not enabled on device exception
-            }
-            catch (PermissionException pEx)
+            catch (PermissionException)
             {
                 Console.WriteLine("No permission");
                 // Handle permission exception
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Unable to get location
             }
             return null;
         }
 
-        public async Task CancelLocationSearch()
+        public void CancelLocationSearch()
         {
             if (cts != null && !cts.IsCancellationRequested) cts.Cancel();
         }

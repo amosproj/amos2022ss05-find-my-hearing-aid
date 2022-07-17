@@ -15,7 +15,7 @@ namespace FindMyBLEDevice.Views
         public SettingsPage()
         {
             InitializeComponent();
-            this.BindingContext = new SettingsViewModel(App.Settings);
+            this.BindingContext = new SettingsViewModel(App.Settings, App.Navigator);
         }
     }
 }

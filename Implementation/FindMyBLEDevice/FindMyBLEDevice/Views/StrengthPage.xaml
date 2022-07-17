@@ -2,151 +2,123 @@
 <!--
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels"
              x:Class="FindMyBLEDevice.Views.StrengthPage"
              x:DataType="viewmodels:StrengthViewModel"
-             Title="{Binding Title}"
              AutomationId="Page_Strength"
-             >
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
+    <ContentPage.Padding>
+        <OnPlatform x:TypeArguments="Thickness" iOS="0, 20, 0, 0" WinPhone="20,20,20,20" />
+    </ContentPage.Padding>
 
-    <ContentPage.Content>
-        <ScrollView>
 
-            <Grid
-                Padding="10"
-                >
+    <Grid Background="{StaticResource DarkGradient}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
 
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="3*" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
+        <StackLayout Grid.Row="0" Orientation="Vertical" Padding="20,0,20,20" Spacing="20">
 
-                <Label Text="{Binding Status}"
-                    Grid.Row="0"
-                    TextColor="Black"
+            <Label Text="{Binding Title}" FontSize="40" TextColor="White" FontAttributes="Bold"/>
+
+            <Label Text="{Binding Status}"
+                    TextColor="White"
                     HorizontalTextAlignment="Center"                    
-                    FontSize="16"
+                    FontSize="20"
                     VerticalOptions="Center"
-                    AutomationId="StrengthPage_LabelStatus"
-                    />
+                    AutomationId="StrengthPage_LabelStatus" />
 
-                <AbsoluteLayout HorizontalOptions="FillAndExpand"
-                    VerticalOptions="StartAndExpand"
-                    Grid.Row="1"
-                    AutomationId="StrengthPage_CircleLayout"
-                    >
-
-                    <Ellipse x:Name="outerEllipse" 
-                         Fill="LightGray"
-                         Stroke="#2196F3"
-                         StrokeThickness="4"
+            <AbsoluteLayout HorizontalOptions="FillAndExpand"
+                    VerticalOptions="FillAndExpand"
+                    AutomationId="StrengthPage_CircleLayout" >
+                <Ellipse x:Name="outerEllipse" 
+                         Fill="{StaticResource RadialGradient}"
                          WidthRequest="{Binding CircleSizes[0]}"
                          HeightRequest="{Binding CircleSizes[0]}"
                          AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
                          AbsoluteLayout.LayoutFlags="PositionProportional"
-                         AutomationId="StrengthPage_FilledCircle"
-                         />
-                    <Ellipse x:Name="ellipse" 
-                         Stroke="DarkBlue"
-                         Fill="LightBlue"
+                         AutomationId="StrengthPage_FilledCircle" />
+                <Ellipse x:Name="fourthMeter"
+                         Stroke="{StaticResource SolidPrimary}"    
+                         StrokeThickness="1"
+                         StrokeDashArray="5.0 5.0"
+                         WidthRequest="{Binding CircleSizes[1]}"
+                         HeightRequest="{Binding CircleSizes[1]}"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AutomationId="StrengthPage_Dotted_Circle_One" />
+                <Ellipse x:Name="thirdMeter" 
+                         Stroke="{StaticResource SolidPrimary}"
+                         StrokeThickness="1"
+                         StrokeDashArray="5.0 5.0"
+                         WidthRequest="{Binding CircleSizes[2]}"
+                         HeightRequest="{Binding CircleSizes[2]}"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional" 
+                         AutomationId="StrengthPage_Dotted_Circle_Two" />
+                <Ellipse x:Name="secondMeter"
+                         Stroke="{StaticResource SolidPrimary}"
+                         StrokeThickness="1"
+                         StrokeDashArray="5.0 5.0"
+                         WidthRequest="{Binding CircleSizes[3]}"
+                         HeightRequest="{Binding CircleSizes[3]}"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AutomationId="StrengthPage_Dotted_Circle_Three" />
+                <Ellipse x:Name="firstMeter"
+                         Stroke="{StaticResource SolidPrimary}"
+                         StrokeThickness="1"
+                         StrokeDashArray="5.0 5.0"
+                         WidthRequest="{Binding CircleSizes[4]}"
+                         HeightRequest="{Binding CircleSizes[4]}"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AutomationId="StrengthPage_Dotted_Circle_Four" />
+                <Ellipse x:Name="innerEllipse"         
+                         Fill="{StaticResource SolidPrimary}"
+                         WidthRequest="{Binding CircleSizes[5]}"
+                         HeightRequest="{Binding CircleSizes[5]}"
+                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
+                         AbsoluteLayout.LayoutFlags="PositionProportional"
+                         AutomationId="StrengthPage_Inner_Cirle" />
+                <Ellipse x:Name="ellipse" 
+                         Stroke="{StaticResource SolidPrimary}"
                          StrokeThickness="4"
                          WidthRequest="{Binding Radius}"
                          HeightRequest="{Binding Radius}"
                          AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
                          AbsoluteLayout.LayoutFlags="PositionProportional"
-                         AutomationId="StrengthPage_ChangingCircle"
-                         />
-                    <Ellipse x:Name="innerEllipse"         
-                         Fill="#2196F3"
-                         StrokeThickness="4"
-                         WidthRequest="{Binding CircleSizes[5]}"
-                         HeightRequest="{Binding CircleSizes[5]}"
-                         AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
-                         AbsoluteLayout.LayoutFlags="PositionProportional"
-                         AutomationId="StrengthPage_Inner_Cirle"                             
-                         />
-                    <Ellipse x:Name="fourthMeter"
-                        Stroke="Black"                         
-                        StrokeThickness="1"
-                        StrokeDashArray="5.0 5.0"
-                        WidthRequest="{Binding CircleSizes[1]}"
-                        HeightRequest="{Binding CircleSizes[1]}"
-                        AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AutomationId="StrengthPage_Dotted_Circle_One" 
-                        />
-                    <Ellipse x:Name="thirdMeter" 
-                        Stroke="Black"
-                        StrokeThickness="1"
-                        StrokeDashArray="5.0 5.0"
-                        WidthRequest="{Binding CircleSizes[2]}"
-                        HeightRequest="{Binding CircleSizes[2]}"
-                        AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
-                        AbsoluteLayout.LayoutFlags="PositionProportional" 
-                        AutomationId="StrengthPage_Dotted_Circle_Two"                              
-                         />
-                    <Ellipse x:Name="secondMeter"
-                        Stroke="Black"
-                        StrokeThickness="1"
-                        StrokeDashArray="5.0 5.0"
-                        WidthRequest="{Binding CircleSizes[3]}"
-                        HeightRequest="{Binding CircleSizes[3]}"
-                        AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AutomationId="StrengthPage_Dotted_Circle_Three"
-                        />
-                    <Ellipse x:Name="firstMeter"
-                        Stroke="Black"
-                        StrokeThickness="1"
-                        StrokeDashArray="5.0 5.0"
-                        WidthRequest="{Binding CircleSizes[4]}"
-                        HeightRequest="{Binding CircleSizes[4]}"
-                        AbsoluteLayout.LayoutBounds="0.5, 0.5, -1, -1"
-                        AbsoluteLayout.LayoutFlags="PositionProportional"
-                        AutomationId="StrengthPage_Dotted_Circle_Four"
-                        />
+                         AutomationId="StrengthPage_ChangingCircle" />
+            </AbsoluteLayout>
 
-                </AbsoluteLayout>
+        </StackLayout>
 
-                <Frame BorderColor="DarkBlue"
-                    CornerRadius="5"
-                    Padding="5" 
-                    Grid.Row="2"
-                    VerticalOptions="End"
-                    AutomationId="StrengthPage_Frame"
-                    >
+        <Button Grid.Row="1" 
+                Text="{Binding SelectedDeviceString}"
+                Command="{Binding SelectDevice}"
+                BackgroundColor="{StaticResource Accent}"
+                Margin="10"
+                CornerRadius="5"
+                TextColor="White" 
+                FontSize="Medium" 
+                FontAttributes="Bold"
+                />
 
-                    <StackLayout
-                        >
-                        <Label Text="Currently selected device"
-                           TextColor="Black"
-                           FontSize="Subtitle"
-                           HorizontalOptions="CenterAndExpand"
-                           />
-                        <BoxView Color="Black"
-                             HeightRequest="1"
-                             HorizontalOptions="Fill" 
-                             />
-                        <Label Text="{Binding Device.UserLabel, FallbackValue='Please select a device first'}"  
-                            FontSize="Medium" 
-                            FontAttributes="Bold" 
-                            TextColor="Black" 
-                            HorizontalOptions="Center"
-                            AutomationId="StrengthPage_SelectedDeviceLabel"
-                            />
-                    </StackLayout>
+        <ImageButton Grid.Row="0" 
+                     VerticalOptions="StartAndExpand" 
+                     HorizontalOptions="EndAndExpand" 
+                     Margin="10" 
+                     WidthRequest="40"
+                     Source="icon_questionmark.png"  
+                     Command="{Binding OpenInfoPageCommand}" 
+                     BackgroundColor="Transparent" />
 
-                </Frame>
+    </Grid>
 
-            </Grid>
-
-        </ScrollView>
-    </ContentPage.Content>
 </ContentPage>
