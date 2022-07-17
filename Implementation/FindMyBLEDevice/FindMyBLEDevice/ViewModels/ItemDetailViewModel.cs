@@ -107,8 +107,15 @@ namespace FindMyBLEDevice.ViewModels
                 return;
             }
 
-            await devicesStore.DeleteDevice(Device.ID);
+            var id = Device.ID;
             devicesStore.SelectedDevice = null;
+            try
+            {
+                await devicesStore.DeleteDevice(id);
+            } catch (Exception e)
+            {
+                Console.WriteLine($"[DevicesView] Deleting device failed: {e.StackTrace}");
+            }
 
             // Go back to devices page
             await navigator.GoToAsync("..");

@@ -60,6 +60,7 @@ namespace FindMyBLEDevice.ViewModels
                 async () => await OpenMapswithPin());
 
             PropertyChanged += DeviceChanged;
+            devicesStore.DevicesChanged += UpdateDisplayedDevice;
         }
 
         private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -74,24 +75,40 @@ namespace FindMyBLEDevice.ViewModels
                 new MapLaunchOptions { Name = Device.UserLabel });
         }
 
-        private void ShowSelectedDevice()
+        private async void UpdateDisplayedDevice(object sender, List<int> ids)
         {
-            if (Device is null) return;
+            if (Device is null)
+            {
+                map.Pins.Clear();
+                return;
+            }
+            if (ids != null && !ids.Contains(Device.ID)) return;
+
+            var updatedDevice = await devicesStore.GetDevice(Device.ID);
+            if (updatedDevice != null)
+            {
+                DisplayDevicePin(updatedDevice);
+            }
+        }
+
+        private void DisplayDevicePin(BTDevice device)
+        {
+            if (device is null) return;
 
             map.Pins.Clear();
             Pin devicePin = new Pin
             {
-                Label = Device.UserLabel,
-                Address = Device.LastGPSTimestamp.ToString(),
+                Label = device.UserLabel,
+                Address = device.LastGPSTimestamp.ToString(),
                 Type = PinType.Place,
-                Position = new Position(Device.LastGPSLatitude, Device.LastGPSLongitude)
+                Position = new Position(device.LastGPSLatitude, device.LastGPSLongitude)
             };
             map.Pins.Add(devicePin);
         }
 
         private async void CheckIfSelectedDeviceReachable(object sender, List<int> ids)
         {
-            if (showingDialogue || Device is null || !ids.Contains(Device.ID)) return;
+            if (showingDialogue || Device is null || (ids != null && !ids.Contains(Device.ID))) return;
             showingDialogue = true;
 
             BTDevice updatedDevice = null;
@@ -158,7 +175,7 @@ namespace FindMyBLEDevice.ViewModels
             showingDialogue = false;
             devicesStore.DevicesChanged += CheckIfSelectedDeviceReachable;
 
-            ShowSelectedDevice();
+            DisplayDevicePin(Device);
         }
 
         public void OnDisappearing() {

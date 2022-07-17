@@ -119,6 +119,7 @@ namespace FindMyBLEDevice.Services.Database
 
         public void AtomicGetAndUpdateDevice(BTDevice device, Action<BTDevice> manipulation)
         {
+            if (device is null) return;
             lock(_database)
             {
                 var getTask = GetDevice(device.ID);
