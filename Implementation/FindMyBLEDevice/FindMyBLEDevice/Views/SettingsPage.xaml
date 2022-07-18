@@ -16,7 +16,7 @@
 
     <StackLayout Orientation="Vertical" Padding="20,0,20,20" Spacing="10"  Background="{StaticResource DarkGradient}">
 
-        <Label Text="{Binding Title}" FontSize="40" TextColor="White" FontAttributes="Bold"/>
+        <Label Text="{Binding Title}" Style="{StaticResource PageHeaderFontSize}" TextColor="White" FontAttributes="Bold"/>
 
         <StackLayout Spacing="20" Orientation="Vertical" VerticalOptions="Start">
 
