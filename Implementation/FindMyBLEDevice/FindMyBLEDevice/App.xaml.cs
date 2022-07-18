@@ -116,14 +116,13 @@ namespace FindMyBLEDevice
                 if(navigator == null)
                 {
                     navigator = new Navigator(
-                        nameof(AboutPage), 
+                        nameof(AboutPage),
                         nameof(ItemsPage),
                         nameof(NewItemPage),
                         nameof(ItemDetailPage),
                         nameof(StrengthPage),
                         nameof(MapPage),
-                        nameof(SettingsPage),
-                        nameof(InfoPage));
+                        nameof(SettingsPage));
                 }
                 return navigator;
             }

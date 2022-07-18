@@ -24,6 +24,11 @@ namespace FindMyBLEDevice.ViewModels
         private readonly IDevicesStore devicesStore;
         private readonly IBluetooth bluetooth;
         private readonly ILocation location;
+        private readonly string _message = "By clicking on 'Scan for available devices' all devices in your surrounding"
+                          + "that are currently emitting a Bluetooth signal are displayed.\n"
+                          + "You can permanently store a device on your app by clicking on the device and by assigning it an individual name.\n"
+                          + "Click on a device in the 'Saved Devices' section to select a device.\n"
+                          + "The settings symbol next to the device allows you to display device specific details.";
 
         private CancellationTokenSource isBusyCancel;
 
@@ -31,7 +36,7 @@ namespace FindMyBLEDevice.ViewModels
         public Command<BTDevice> SavedDeviceTapped { get; }
         public Command<BTDevice> AvailableDeviceTapped { get; }
         public Command<BTDevice> SavedDeviceSettingsTapped { get; }
-        public Command OpenInfoPageCommand { get; }
+        public Command ShowInfoPage { get; }
         public Command GoBack { get; }
 
         private ObservableCollection<BTDevice> _savedDevices;
@@ -68,10 +73,10 @@ namespace FindMyBLEDevice.ViewModels
                 async (BTDevice device) => await SelectAndRedirectTo(device, navigator.DeviceDetailPage));
             AvailableDeviceTapped = new Command<BTDevice>(
                 async (BTDevice device) => await SelectAndRedirectTo(device, navigator.NewDevicePage));
-            OpenInfoPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.InfoPage));
             GoBack = new Command(
                 async () => await navigator.GoToAsync(".."));
+            ShowInfoPage = new Command(
+                async () => await App.Current.MainPage.DisplayAlert("Information", _message, "Ok"));
         }
 
         private async Task SelectAndRedirectTo(BTDevice device, string page, bool newStack = false)

@@ -16,12 +16,15 @@ namespace FindMyBLEDevice.ViewModels
         private readonly INavigator navigator;
         private readonly IBluetooth bluetooth;
         private readonly IDevicesStore devicesStore;
+        private readonly string _message = "On this screen you can rename your device,"
+                          + "find additional information and delete the device from the 'Saved Devices' section of the previous page.";
+
 
         public Command StrengthButtonTapped { get; }
         public Command MapButtonTapped { get; }
         public Command RenameButtonTapped { get; }
         public Command DeleteButtonTapped { get; }
-        public Command OpenInfoPageCommand { get; }
+        public Command ShowInfoPage { get; }
         public Command GoBack { get; }
 
         public BTDevice Device => devicesStore.SelectedDevice;
@@ -59,10 +62,10 @@ namespace FindMyBLEDevice.ViewModels
                 async () => await RenameDevice());
             DeleteButtonTapped = new Command(
                 async () => await DeleteDevice());
-            OpenInfoPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.InfoPage));
             GoBack = new Command(
                 async () => await navigator.GoToAsync(".."));
+            ShowInfoPage = new Command(
+                async () => await App.Current.MainPage.DisplayAlert("Information", _message, "Ok"));
 
             PropertyChanged += DeviceOrUserLabelChanged;
             UserLabel = Device.UserLabel;
