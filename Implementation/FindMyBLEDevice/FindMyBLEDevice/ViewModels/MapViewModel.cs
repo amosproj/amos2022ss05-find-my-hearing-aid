@@ -159,8 +159,6 @@ namespace FindMyBLEDevice.ViewModels
                 SelectedDeviceString = "No device selected!\n> Click to select a device <";
             }
 
-            await CheckBluetoothAndLocation.Check();
-
             var currentLocation = await geolocation.GetCurrentLocation();
             if (currentLocation != null)
             {

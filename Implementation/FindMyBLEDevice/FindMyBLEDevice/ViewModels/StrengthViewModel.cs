@@ -1,4 +1,4 @@
-﻿// SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
@@ -140,11 +140,15 @@ namespace FindMyBLEDevice.ViewModels
             _circleSizes.Add(minRadiusSize);
         }
 
-        public async Task OnAppearing()
+        public void OnAppearing()
         {
-            await CheckBluetoothAndLocation.Check();
+            if (devicesStore.SelectedDevice is null)
+            {
+                SelectedDeviceString = "No device selected!\n> Click to select a device <";
+                Status = "No device selected!\n> Please select a device to continue<";
 
-            if (devicesStore.SelectedDevice != null)
+            }
+            else
             {
                 SelectedDeviceString = "" + devicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
                 Status = "Connecting to \"" + devicesStore.SelectedDevice.UserLabel + "\"...\n" +
@@ -181,9 +185,6 @@ namespace FindMyBLEDevice.ViewModels
                     CurrentRssi = -100;
                     Meter = meterScaleMax;
                 });
-            } else
-            {
-                SelectedDeviceString = "No device selected!\n> Click to select a device <";
             }
         }
 

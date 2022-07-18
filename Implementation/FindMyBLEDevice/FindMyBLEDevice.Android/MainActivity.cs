@@ -1,4 +1,8 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+
+using System;
 
 using Android.App;
 using Android.Content.PM;
@@ -13,6 +17,8 @@ namespace FindMyBLEDevice.Droid
     [Activity(Label = "Find My BLE Device", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
+        readonly int requiredPermissionsRequestCode = 1000;
+
         protected override void OnCreate(Bundle savedInstanceState)
         {
             base.OnCreate(savedInstanceState);
@@ -23,7 +29,7 @@ namespace FindMyBLEDevice.Droid
             LoadApplication(new App());
 
 
-            var locationPermissions = new[]
+            var requiredPermissions = new[]
             {
                 Manifest.Permission.AccessCoarseLocation,
                 Manifest.Permission.AccessFineLocation,
@@ -38,21 +44,37 @@ namespace FindMyBLEDevice.Droid
             var bluetoothPermissionGranted = 
                 ContextCompat.CheckSelfPermission(this, Manifest.Permission.Bluetooth);
             // if either is denied permission, request permission from the user
-            const int locationPermissionsRequestCode = 1000;
             if (coarseLocationPermissionGranted == Permission.Denied ||
                 fineLocationPermissionGranted == Permission.Denied || 
                 bluetoothPermissionGranted == Permission.Denied)
             {
-                ActivityCompat.RequestPermissions(this, locationPermissions,
-                locationPermissionsRequestCode);
+                ActivityCompat.RequestPermissions(this, requiredPermissions, requiredPermissionsRequestCode);
             }
-
         }
 
 
-        public override void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
+        public override async void OnRequestPermissionsResult(int requestCode, string[] permissions, [GeneratedEnum] Android.Content.PM.Permission[] grantResults)
         {
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+
+            if (requestCode == requiredPermissionsRequestCode)
+            {
+                // check if you user granted these permissions
+                var coarseLocationPermissionGranted = ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessCoarseLocation);
+                var fineLocationPermissionGranted = ContextCompat.CheckSelfPermission(this, Manifest.Permission.AccessFineLocation);
+                var bluetoothPermissionGranted = ContextCompat.CheckSelfPermission(this, Manifest.Permission.Bluetooth);
+                if (coarseLocationPermissionGranted == Permission.Denied ||
+                    fineLocationPermissionGranted == Permission.Denied ||
+                    bluetoothPermissionGranted == Permission.Denied)
+                {
+                    var message = "The app is not functioning correctly because the permissions are not granted. You will be redirected to the settings app to grant the required permissions";
+                    bool goToSettings = await App.Current.MainPage.DisplayAlert("Attention", message, "Ok", "Cancel");
+                    if (goToSettings)
+                    {
+                        Xamarin.Essentials.AppInfo.ShowSettingsUI();
+                    }
+                }
+            }
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
         }

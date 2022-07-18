@@ -1,7 +1,12 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using CoreBluetooth;
+using CoreLocation;
 using Foundation;
 using UIKit;
 
