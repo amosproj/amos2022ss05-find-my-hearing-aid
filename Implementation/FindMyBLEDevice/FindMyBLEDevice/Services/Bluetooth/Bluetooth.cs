@@ -189,7 +189,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
             return ble.State == BluetoothState.On || ble.State == BluetoothState.TurningOn;
         }
 
-        public double RssiToMeter(double rssi, double measuredPower, double environmentalFactor = Constants.RssiEnvironmentalDefault)
+        public static double RssiToMeter(double rssi, double measuredPower, double environmentalFactor = Constants.RssiEnvironmentalDefault)
         {
             return Math.Pow(10, (measuredPower - rssi) / (10 * environmentalFactor));
         }

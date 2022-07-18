@@ -75,7 +75,7 @@ namespace FindMyBLEDevice.ViewModels
             {
                 _rssiBuffer.Update(value);
                 OnPropertyChanged(nameof(CurrentRssi));
-                Meter = bluetooth.RssiToMeter(CurrentRssi, CurrentTxPower);
+                Meter = Bluetooth.RssiToMeter(CurrentRssi, CurrentTxPower);
             }
         }
 
@@ -117,8 +117,9 @@ namespace FindMyBLEDevice.ViewModels
             this.geolocation = geolocation;
             this.settings = settings;
 
-            meterScaleMin = bluetooth.RssiToMeter(0, Constants.TxPowerDefault);
-            meterScaleMax = bluetooth.RssiToMeter(-100, Constants.TxPowerDefault);
+            meterScaleMin = Bluetooth.RssiToMeter(0, Constants.TxPowerDefault);
+            meterScaleMax = Bluetooth.RssiToMeter(-100, Constants.TxPowerDefault);
+            _rssiBuffer = new RssiBuffer();
             _currentTxPower = Constants.TxPowerDefault;
             _status = "Uninitialized";
 

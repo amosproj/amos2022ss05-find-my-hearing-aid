@@ -23,6 +23,5 @@ namespace FindMyBLEDevice.Services.Bluetooth
         Task<int> DeviceTXPowerAsync(String btguid);
         Task<int> DeviceReachableAsync(BTDevice device);
         bool IsEnabled();
-        double RssiToMeter(double rssi, double measuredPower, double environmentalFactor = Constants.RssiEnvironmentalDefault);
     }
 }
