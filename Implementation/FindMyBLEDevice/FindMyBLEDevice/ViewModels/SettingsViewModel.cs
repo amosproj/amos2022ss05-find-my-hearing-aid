@@ -23,8 +23,6 @@ namespace FindMyBLEDevice.ViewModels
             _rssiIntervalString = RssiInterval.ToString();
             _updateServiceIntervalString = UpdateServiceInterval.ToString();
 
-            OpenInfoPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.InfoPage));
         }
 
         public bool DisplayNamelessDevices

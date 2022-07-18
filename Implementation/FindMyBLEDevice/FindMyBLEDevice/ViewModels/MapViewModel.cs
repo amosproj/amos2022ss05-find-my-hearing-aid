@@ -23,8 +23,12 @@ namespace FindMyBLEDevice.ViewModels
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
         private bool showingDialogue;
+        private readonly string _message = "'Map Search' shows the last known GPS coordinate of your lost device.\n"
+                    + "Please note that the displayed GPS coordinate is the latest tracked location of your smartphone while having a connection to your device.\n"
+                    + "The 'Open in maps'-button will forward you to your local map app to start a navigation.\n"
+                    + "After you have reached your destination, you can switch to the 'Strength Search' within the app to track your device in your near surrounding.";
 
-        public Command OpenInfoPageCommand { get; }
+        public Command ShowInfoPage { get; }
         public Command SelectDevice { get; }
         public Command OpenMapPin { get; }
 
@@ -48,14 +52,12 @@ namespace FindMyBLEDevice.ViewModels
             this.navigator = navigator;
             this.devicesStore = devicesStore;
 
-            SelectedDeviceString = "No device selected!\n> Click here to select a device <";
-
-            OpenInfoPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.InfoPage));
             SelectDevice = new Command(
                 async () => await navigator.GoToAsync(navigator.DevicesPage));
             OpenMapPin = new Command(
                 async () => await OpenMapswithPin());
+            ShowInfoPage = new Command(
+                async () => await App.Current.MainPage.DisplayAlert("Information", _message, "Ok"));
 
             PropertyChanged += DeviceChanged;
         }
@@ -128,6 +130,9 @@ namespace FindMyBLEDevice.ViewModels
             if (devicesStore.SelectedDevice != null)
             {
                 SelectedDeviceString = "" + devicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
+            } else
+            {
+                SelectedDeviceString = "No device selected!\n> Click to select a device <";
             }
 
             await CheckBluetoothAndLocation.Check();
