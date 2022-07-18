@@ -142,11 +142,11 @@ namespace FindMyBLEDevice.ViewModels
 
         public void OnAppearing()
         {
-            await CheckBluetoothAndLocation.Check();
-
             if (devicesStore.SelectedDevice is null)
             {
-                Status = "No device selected!\nPlease select a device to continue.";
+                SelectedDeviceString = "No device selected!\n> Click to select a device <";
+                Status = "No device selected!\n> Please select a device to continue<";
+
             }
             else
             {
@@ -185,9 +185,6 @@ namespace FindMyBLEDevice.ViewModels
                     CurrentRssi = -100;
                     Meter = meterScaleMax;
                 });
-            } else
-            {
-                SelectedDeviceString = "No device selected!\n> Click to select a device <";
             }
         }
 
