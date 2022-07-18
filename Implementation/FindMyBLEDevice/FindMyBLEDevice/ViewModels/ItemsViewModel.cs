@@ -135,7 +135,7 @@ namespace FindMyBLEDevice.ViewModels
             }, cancellationToken);
         }
 
-        public async void OnAppearing()
+        public void OnAppearing()
         {
             devicesStore.DevicesChanged += OnDevicesChanged;
             OnDevicesChanged(null, null);

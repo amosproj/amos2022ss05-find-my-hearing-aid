@@ -136,7 +136,7 @@ namespace FindMyBLEDevice.ViewModels
             _circleSizes.Add(minRadiusSize);
         }
 
-        public async Task OnAppearing()
+        public void OnAppearing()
         {
             if (devicesStore.SelectedDevice is null)
             {
