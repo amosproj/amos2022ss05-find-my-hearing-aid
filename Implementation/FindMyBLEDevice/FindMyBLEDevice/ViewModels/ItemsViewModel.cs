@@ -54,6 +54,11 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _availableDevices, value);
         }
 
+        public bool IsBusyAndNothingFound
+        {
+            get => IsBusy && AvailableDevices.Count == 0;
+        }
+
         public ItemsViewModel(INavigator navigator, IDevicesStore devicesStore, IBluetooth bluetooth, ILocation location)
         {
             Title = "Devices";
@@ -78,6 +83,22 @@ namespace FindMyBLEDevice.ViewModels
                 async () => await navigator.GoToAsync(".."));
             ShowInfoPage = new Command(
                 async () => await App.Current.MainPage.DisplayAlert("Information", _message, "Ok"));
+            
+            PropertyChanged += IsBusyChanged;
+
+        }
+
+        private void IsBusyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(IsBusy))
+            {
+                OnPropertyChanged(nameof(IsBusyAndNothingFound));
+            }
+        }
+
+        private void AvailableDevicesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(IsBusyAndNothingFound));
         }
 
         private async Task SelectAndRedirectTo(BTDevice device, string page, bool newStack = false)
@@ -126,6 +147,7 @@ namespace FindMyBLEDevice.ViewModels
 
             await location.CheckAndRequestLocationPermission();
             AvailableDevices = new ObservableCollection<BTDevice>();
+            AvailableDevices.CollectionChanged += AvailableDevicesChanged;
             await bluetooth.StartSearch(Constants.DiscoverSearchDuration);
 
             _ = Task.Run(async () =>

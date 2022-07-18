@@ -6,6 +6,7 @@ using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Geolocation;
 using System;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -24,7 +25,14 @@ namespace FindMyBLEDevice.ViewModels
         public string UserLabel
         {
             get => _userLabel;
-            set => SetProperty(ref _userLabel, value);
+            set
+            {
+                if (_userLabel != value && value.Length <= Constants.UserLabelMaxLength)
+                {
+                    _userLabel = value;
+                }
+                OnPropertyChanged(nameof(UserLabel));
+            }
         }
 
         public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore, IGeolocation geolocation)
@@ -49,6 +57,10 @@ namespace FindMyBLEDevice.ViewModels
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
                 Device.UserLabel = Device.AdvertisedName;
+            } else if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
+            {
+                await App.Current.MainPage.DisplayAlert("Label already taken", $"The label '{UserLabel}' is already taken by another device. Please choose another one.", "Ok");
+                return;
             } else
             {
                 Device.UserLabel = UserLabel;

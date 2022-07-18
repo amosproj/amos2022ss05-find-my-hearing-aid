@@ -29,5 +29,8 @@ namespace FindMyBLEDevice.Models
         public const int UpdateServiceIntervalDefault = 5; //in seconds
         public const int UpdateServiceIntervalMin = 1;
         public const int UpdateServiceIntervalMax = 300;
+
+        public const int UserLabelMaxLength = 15;
+
     }
 }
