@@ -128,7 +128,7 @@ namespace FindMyBLEDevice.Services
                 try
                 {
                     devicesStore.AtomicGetAndUpdateDevice(databaseDevice, manipulation);
-                } catch (DeviceStoreException e)
+                } catch (DeviceStoreException)
                 {
                     Console.WriteLine($"Failed to update a device");
                 }
