@@ -60,7 +60,6 @@ namespace FindMyBLEDevice.ViewModels
                 async () => await OpenMapswithPin());
 
             PropertyChanged += DeviceChanged;
-            devicesStore.DevicesChanged += UpdateDisplayedDevice;
         }
 
         private void DeviceChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -176,10 +175,12 @@ namespace FindMyBLEDevice.ViewModels
             devicesStore.DevicesChanged += CheckIfSelectedDeviceReachable;
 
             DisplayDevicePin(Device);
+            devicesStore.DevicesChanged += UpdateDisplayedDevice;
         }
 
         public void OnDisappearing() {
             devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
+            devicesStore.DevicesChanged -= UpdateDisplayedDevice;
         }
     }
 }
