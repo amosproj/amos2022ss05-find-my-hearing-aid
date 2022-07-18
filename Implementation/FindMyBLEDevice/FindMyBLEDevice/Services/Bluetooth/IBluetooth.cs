@@ -18,10 +18,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
         event EventHandler<BTDevice> DeviceDiscovered;
         Task StartSearch(int timeout);
         Task StopSearch();
-        void StartRssiPolling(String btguid, Action<int, int> updateRssi, Action connected = null, Action disconnected = null);
+        void StartRssiPolling(String btguid, Action<int> updateRssi, Action<int> connected = null, Action disconnected = null);
         void StopRssiPolling();
         Task<int> DeviceTXPowerAsync(String btguid);
         Task<int> DeviceReachableAsync(BTDevice device);
         bool IsEnabled();
+        double RssiToMeter(double rssi, double measuredPower, double environmentalFactor = Constants.RssiEnvironmentalDefault);
     }
 }

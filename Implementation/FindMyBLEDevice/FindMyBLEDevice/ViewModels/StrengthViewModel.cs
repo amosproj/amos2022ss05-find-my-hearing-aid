@@ -16,6 +16,7 @@ using FindMyBLEDevice.XamarinAccess;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Bluetooth;
 using Xamarin.Forms;
+using FindMyBLEDevice.Services.Geolocation;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -25,11 +26,12 @@ namespace FindMyBLEDevice.ViewModels
 
         private readonly IDevicesStore devicesStore;
         private readonly IBluetooth bluetooth;
+        private readonly IGeolocation geolocation;
+        private readonly ISettings settings;
         private readonly int minRadiusSize;
         private readonly int maxRadiusSize;
         private readonly double meterScaleMin;
         private readonly double meterScaleMax;
-        private readonly List<int> rssiBuff;
         private readonly string _message = "'Strength Search' measures the distance to your lost device based on the emitting Bluetooth signal.\n"
                     + "By moving around, the blue circle radius changes.\n"
                     + "If you move away from your device, the circle radius will increase.\n"
@@ -65,14 +67,15 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        private int _currentRssi;
-        public int CurrentRssi
+        private RssiBuffer _rssiBuffer;
+        public double CurrentRssi
         {
-            get => _currentRssi;
+            get => _rssiBuffer.Get();
             set
             {
-                SetProperty(ref _currentRssi, value);
-                Meter = RssiToMeter(CurrentRssi, CurrentTxPower);
+                _rssiBuffer.Update(value);
+                OnPropertyChanged(nameof(CurrentRssi));
+                Meter = bluetooth.RssiToMeter(CurrentRssi, CurrentTxPower);
             }
         }
 
@@ -99,16 +102,23 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _selectedDeviceString, value);
         }
 
-        public StrengthViewModel(IDeviceDisplayAccess displayAccess, IDevicesStore devicesStore, IBluetooth bluetooth, INavigator navigator)
+        public StrengthViewModel(
+            IDeviceDisplayAccess displayAccess, 
+            IDevicesStore devicesStore, 
+            IBluetooth bluetooth, 
+            INavigator navigator, 
+            IGeolocation geolocation, 
+            ISettings settings)
         {
             Title = "StrengthSearch";
 
             this.devicesStore = devicesStore;
             this.bluetooth = bluetooth;
+            this.geolocation = geolocation;
+            this.settings = settings;
 
-            meterScaleMin = RssiToMeter(0, Constants.TxPowerDefault);
-            meterScaleMax = RssiToMeter(-100, Constants.TxPowerDefault);
-            rssiBuff = new List<int>();
+            meterScaleMin = bluetooth.RssiToMeter(0, Constants.TxPowerDefault);
+            meterScaleMax = bluetooth.RssiToMeter(-100, Constants.TxPowerDefault);
             _status = "Uninitialized";
 
             // Width (in xamarin.forms units)
@@ -142,6 +152,15 @@ namespace FindMyBLEDevice.ViewModels
 
         public void OnAppearing()
         {
+            if (settings.Get(SettingsNames.IncorporateGpsIntoRssi, false))
+            {
+                _rssiBuffer = new RssiExponentialBuffer(geolocation);
+            }
+            else
+            {
+                _rssiBuffer = new RssiRingBuffer(settings);
+            }
+
             if (devicesStore.SelectedDevice is null)
             {
                 SelectedDeviceString = "No device selected!\n> Click to select a device <";
@@ -153,16 +172,9 @@ namespace FindMyBLEDevice.ViewModels
                 SelectedDeviceString = "" + devicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
                 Status = "Connecting to \"" + devicesStore.SelectedDevice.UserLabel + "\"...\n" +
                     "If this takes longer than a few seconds, the device is probably out of range or turned off.";
-                bluetooth.StartRssiPolling(devicesStore.SelectedDevice.BT_GUID, (int v, int txPower) =>
+                bluetooth.StartRssiPolling(devicesStore.SelectedDevice.BT_GUID, (int newRssi) =>
                 {
-                    CurrentTxPower = txPower;
-                    int rssiInterval = Preferences.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault);
-                    int buffSize = rssiInterval > 0 
-                        ? Math.Min(Constants.RssiBufferDuration / rssiInterval, Constants.RssiBufferMaxSize)
-                        : Constants.RssiBufferMaxSize;
-                    rssiBuff.Add(v);
-                    while (rssiBuff.Count > buffSize) rssiBuff.RemoveAt(0);
-                    CurrentRssi = (int)rssiBuff.Average();
+                    CurrentRssi = newRssi;
 
                     if(Meter <= Constants.MeterClosebyThreshold)
                     {
@@ -174,8 +186,9 @@ namespace FindMyBLEDevice.ViewModels
                         Status = "Connected to \"" + devicesStore.SelectedDevice.UserLabel + "\".\n" +
                             "The current distance is about " + Meter.ToString("0.0") + " m.";
                     }
-                }, () =>
+                }, (int txPower) =>
                 {
+                    CurrentTxPower = txPower;
                     Status = "Connected to \"" + devicesStore.SelectedDevice.UserLabel + "\".\n" +
                         "Move around to see in which direction the signal gets better.";
                 }, () =>
@@ -188,13 +201,6 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
-        /// <summary>
-        /// Calculates the strengths views radius from any given input value and its scale.
-        /// </summary>
-        /// <param name="scaleMin">Min value of the input value's scale.</param>
-        /// <param name="scaleMax">Max value of the input value's scale.</param>
-        /// <param name="value">Input value</param>
-        /// <returns>circle radius</returns>
         private int OtherScaleToRadius(double scaleMin, double scaleMax, double value)
         {
             int radiusScaleSize = maxRadiusSize - minRadiusSize;
@@ -203,12 +209,6 @@ namespace FindMyBLEDevice.ViewModels
             double relScalePosition = (value - scaleMin) / inputScaleSize;
             int resultingRadius = minRadiusSize + (int)(relScalePosition * radiusScaleSize);
             return resultingRadius;
-        }
-
-        private double RssiToMeter(int rssi, int measuredPower, double environmentalFactor = Constants.RssiEnvironmentalDefault)
-        {
-            // https://medium.com/beingcoders/convert-rssi-value-of-the-ble-bluetooth-low-energy-beacons-to-meters-63259f307283 
-            return Math.Pow(10, (double)(measuredPower - rssi) / (10 * environmentalFactor));
         }
 
         public void OnDisappearing()

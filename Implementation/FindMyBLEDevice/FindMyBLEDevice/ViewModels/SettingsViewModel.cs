@@ -14,6 +14,8 @@ namespace FindMyBLEDevice.ViewModels
     {
         private readonly ISettings settings;
 
+        public Command OpenInfoPageCommand { get; }
+
         public SettingsViewModel(ISettings settings, INavigator navigator)
         {
             Title = "Settings";
@@ -57,9 +59,6 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
         private string _rssiIntervalString;
-
-        public Command OpenInfoPageCommand { get; }
-
         public string RssiIntervalString
         {
             get => _rssiIntervalString;
@@ -95,6 +94,16 @@ namespace FindMyBLEDevice.ViewModels
         public int RssiIntervalMax
         {
             get => Constants.RssiIntervalMax;
+        }
+
+        public bool IncorporateGpsIntoRssi
+        {
+            get => settings.Get(SettingsNames.IncorporateGpsIntoRssi, false);
+            set
+            {
+                settings.Set(SettingsNames.IncorporateGpsIntoRssi, value);
+                OnPropertyChanged(nameof(IncorporateGpsIntoRssi));
+            }
         }
 
 

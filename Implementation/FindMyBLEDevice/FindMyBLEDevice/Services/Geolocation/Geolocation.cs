@@ -25,7 +25,7 @@ namespace FindMyBLEDevice.Services.Geolocation
         {
             try
             {
-                var request = new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10));
+                var request = new GeolocationRequest(GeolocationAccuracy.Best, TimeSpan.FromSeconds(10));
                 cts = new CancellationTokenSource();
                 var location = await _geolocationAccess.GetLocationAsync(request, cts.Token);
 
