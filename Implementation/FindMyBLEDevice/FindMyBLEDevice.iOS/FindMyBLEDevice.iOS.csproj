@@ -181,4 +181,22 @@
       <Name>FindMyBLEDevice</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\collapse.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\collapse%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\collapse%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\expand.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\expand%402x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\expand%403x.png" />
+  </ItemGroup>
 </Project>

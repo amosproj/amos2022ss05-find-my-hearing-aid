@@ -1,4 +1,8 @@
-﻿using FindMyBLEDevice.ViewModels;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
+
+using FindMyBLEDevice.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +19,7 @@ namespace FindMyBLEDevice.Views
         public SettingsPage()
         {
             InitializeComponent();
-            this.BindingContext = new SettingsViewModel(App.Settings, App.Navigator);
+            this.BindingContext = new SettingsViewModel(App.Settings, App.Navigator, App.DevicesStore);
         }
     }
 }
