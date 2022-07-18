@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 
+using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Settings;
 using FindMyBLEDevice.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
