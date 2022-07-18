@@ -21,7 +21,7 @@ namespace FindMyBLEDevice.Services.Database
          */
         private readonly SQLiteAsyncConnection _database;
 
-        public event EventHandler DevicesChanged;
+        public event EventHandler<List<int>> DevicesChanged;
 
         public BTDevice SelectedDevice { get; set; }
 
@@ -48,7 +48,7 @@ namespace FindMyBLEDevice.Services.Database
                 throw new DeviceStoreException("Saving device failed!");
             }
 
-            DevicesChanged?.Invoke(this, EventArgs.Empty);
+            DevicesChanged?.Invoke(this, new List<int>() { device.ID });
 
             return await GetDeviceByGUID(device.BT_GUID);
         }
@@ -64,7 +64,7 @@ namespace FindMyBLEDevice.Services.Database
                 throw new DeviceStoreException("Updating device failed!");
             }
 
-            DevicesChanged?.Invoke(this, EventArgs.Empty);
+            DevicesChanged?.Invoke(this, new List<int>() { device.ID });
 
         }
 
@@ -79,7 +79,7 @@ namespace FindMyBLEDevice.Services.Database
                 throw new DeviceStoreException("Deleting device failed!");
             }
 
-            DevicesChanged?.Invoke(this, EventArgs.Empty);
+            DevicesChanged?.Invoke(this, new List<int>() { id });
 
         }
 
@@ -119,6 +119,7 @@ namespace FindMyBLEDevice.Services.Database
 
         public void AtomicGetAndUpdateDevice(BTDevice device, Action<BTDevice> manipulation)
         {
+            if (device is null) return;
             lock(_database)
             {
                 var getTask = GetDevice(device.ID);

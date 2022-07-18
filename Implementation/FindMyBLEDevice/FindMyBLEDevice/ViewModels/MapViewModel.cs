@@ -13,6 +13,8 @@ using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Geolocation;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -74,24 +76,40 @@ namespace FindMyBLEDevice.ViewModels
                 new MapLaunchOptions { Name = Device.UserLabel });
         }
 
-        private void ShowSelectedDevice()
+        private async void UpdateDisplayedDevice(object sender, List<int> ids)
         {
-            if (Device is null) return;
+            if (Device is null)
+            {
+                map.Pins.Clear();
+                return;
+            }
+            if (ids != null && !ids.Contains(Device.ID)) return;
+
+            var updatedDevice = await devicesStore.GetDevice(Device.ID);
+            if (updatedDevice != null)
+            {
+                DisplayDevicePin(updatedDevice);
+            }
+        }
+
+        private void DisplayDevicePin(BTDevice device)
+        {
+            if (device is null) return;
 
             map.Pins.Clear();
             Pin devicePin = new Pin
             {
-                Label = Device.UserLabel,
-                Address = Device.LastGPSTimestamp.ToString(),
+                Label = device.UserLabel,
+                Address = device.LastGPSTimestamp.ToString(),
                 Type = PinType.Place,
-                Position = new Position(Device.LastGPSLatitude, Device.LastGPSLongitude)
+                Position = new Position(device.LastGPSLatitude, device.LastGPSLongitude)
             };
             map.Pins.Add(devicePin);
         }
 
-        private async void CheckIfSelectedDeviceReachable(object sender, EventArgs ea)
+        private async void CheckIfSelectedDeviceReachable(object sender, List<int> ids)
         {
-            if (showingDialogue || Device is null) return;
+            if (showingDialogue || Device is null || (ids != null && !ids.Contains(Device.ID))) return;
             showingDialogue = true;
 
             BTDevice updatedDevice = null;
@@ -109,6 +127,12 @@ namespace FindMyBLEDevice.ViewModels
                 devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
                 bool promptAnswer = false;
                 await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    // the database operation and switching threads can take a while,
+                    // so make sure the map page is still displayed
+                    bool stillShowing =
+                        Application.Current.MainPage is MapPage
+                        || (Application.Current.MainPage is AppShell shell && shell.CurrentPage is MapPage);
+                    if (!stillShowing) return;
                     promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the signal strength search?", "Yes", "No");
                 });
                 if (promptAnswer)
@@ -155,11 +179,13 @@ namespace FindMyBLEDevice.ViewModels
             showingDialogue = false;
             devicesStore.DevicesChanged += CheckIfSelectedDeviceReachable;
 
-            ShowSelectedDevice();
+            DisplayDevicePin(Device);
+            devicesStore.DevicesChanged += UpdateDisplayedDevice;
         }
 
         public void OnDisappearing() {
             devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
+            devicesStore.DevicesChanged -= UpdateDisplayedDevice;
         }
     }
 }

@@ -4,8 +4,6 @@
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Xamarin.Essentials;
@@ -37,11 +35,10 @@ namespace FindMyBLEDevice.Services.Geolocation
             catch (PermissionException)
             {
                 Console.WriteLine("No permission");
-                // Handle permission exception
             }
             catch (Exception)
             {
-                // Unable to get location
+                Console.WriteLine("Getting location failed");
             }
             return null;
         }

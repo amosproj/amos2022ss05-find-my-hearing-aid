@@ -3,6 +3,7 @@
 
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Geolocation;
 using System;
 using Xamarin.Forms;
 
@@ -12,6 +13,7 @@ namespace FindMyBLEDevice.ViewModels
     {
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
+        private readonly IGeolocation geolocation;
 
         public Command SaveCommand { get; }
         public Command CancelCommand { get; }
@@ -25,10 +27,11 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _userLabel, value);
         }
 
-        public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore)
+        public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore, IGeolocation geolocation)
         {
             this.navigator = navigator;
             this.devicesStore = devicesStore;
+            this.geolocation = geolocation;
 
             SaveCommand = new Command(OnSave);
             CancelCommand = new Command(OnCancel);
@@ -50,6 +53,11 @@ namespace FindMyBLEDevice.ViewModels
             {
                 Device.UserLabel = UserLabel;
             }
+
+            var location = await geolocation.GetCurrentLocation();
+            Device.LastGPSLongitude = location.Longitude;
+            Device.LastGPSLatitude = location.Latitude;
+            Device.LastGPSTimestamp = DateTime.Now;
 
             devicesStore.SelectedDevice = await devicesStore.AddDevice(Device);
 
