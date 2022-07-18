@@ -57,6 +57,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
         protected const double base_alpha = 0.95;
         // how much of the non-history factor (1 - alpha) is dependent on GPS movement
         protected const double beta = 0.75;
+        // how many meters of movement cause a reduction of the non-history-factor by 1/e (~1/2.7)
         protected const double base_movement = 10;
 
         protected readonly IGeolocation geolocation;

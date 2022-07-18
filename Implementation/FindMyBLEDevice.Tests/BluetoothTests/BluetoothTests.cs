@@ -216,11 +216,11 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
 
             // act
             int rssi = 0;
-            bt.StartRssiPolling(Guid.Empty.ToString(), (int input, int txPower) =>
+            bt.StartRssiPolling(Guid.Empty.ToString(), (int input) =>
             {
                 rssi = input;
             },
-            () => { },
+            (int txPower) => { },
             () => { }
             );
             await Task.Delay(100); // polling interval is 25ms

@@ -119,6 +119,7 @@ namespace FindMyBLEDevice.ViewModels
 
             meterScaleMin = bluetooth.RssiToMeter(0, Constants.TxPowerDefault);
             meterScaleMax = bluetooth.RssiToMeter(-100, Constants.TxPowerDefault);
+            _currentTxPower = Constants.TxPowerDefault;
             _status = "Uninitialized";
 
             // Width (in xamarin.forms units)
