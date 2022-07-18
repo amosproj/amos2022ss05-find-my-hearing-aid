@@ -2,10 +2,6 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace FindMyBLEDevice.Services.Settings
 {
     public static class SettingsNames
@@ -14,6 +10,7 @@ namespace FindMyBLEDevice.Services.Settings
         public const string DisplayWeakDevices = "DisplayWeakDevices";
 
         public const string RssiInterval = "RssiInterval";
+        public const string IncorporateGpsIntoRssi = "IncorporateGpsIntoRssi";
 
         public const string UpdateServiceInterval = "UpdateServiceInterval";
     }

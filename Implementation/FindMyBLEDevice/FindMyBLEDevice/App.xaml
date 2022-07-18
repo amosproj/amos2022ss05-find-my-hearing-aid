@@ -18,8 +18,8 @@
             <Color x:Key="Accent">#7797B8</Color>
             <Style x:Key="PageHeaderFontSize" TargetType="Label">
                 <Setter Property="FontSize" Value="36" />
-            </Style>
-            <LinearGradientBrush x:Key="DarkGradient" StartPoint="0.25,1" EndPoint="0.75,0">
+                </Style>
+                <LinearGradientBrush x:Key="DarkGradient" StartPoint="0.25,1" EndPoint="0.75,0">
                 <GradientStop Color="{StaticResource PrimaryDark}" Offset="0" />
                 <GradientStop Color="{StaticResource Primary}" Offset="1" />
             </LinearGradientBrush>

@@ -3,6 +3,9 @@
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <domi.pysch@gmail.com>
 
 using FindMyBLEDevice.Models;
+using FindMyBLEDevice.Services.Bluetooth;
+using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Settings;
 using FindMyBLEDevice.ViewModels;
 using FindMyBLEDevice.XamarinAccess;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -23,7 +26,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null, null, null);
 
             // act
             var distances = new List<int>();
@@ -47,9 +50,9 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-
+            
             // act
-            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null, null, null);
 
             // assert
             Assert.IsTrue(vm.CircleSizes.TrueForAll(s => s < (1000 / 10)));
@@ -68,7 +71,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
             // therefore MaxRadiusSize = 90
-            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null, null, null);
 
 
             // act
@@ -89,12 +92,11 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var disAcc = new Mock<IDeviceDisplayAccess>();
             disAcc.SetupGet(mock => mock.Width).Returns(1000);
             disAcc.SetupGet(mock => mock.Density).Returns(10);
-            var vm = new StrengthViewModel(disAcc.Object, null, null, null);
+            var vm = new StrengthViewModel(disAcc.Object, null, null, null, null, null);
 
             // act
-            MethodInfo? methodInfo = typeof(StrengthViewModel).GetMethod("RssiToMeter", BindingFlags.NonPublic | BindingFlags.Instance);
-            object[] arguments = { rssi, Constants.TxPowerDefault, Constants.RssiEnvironmentalDefault };
-            double res = (double)methodInfo.Invoke(vm, arguments);
+            vm.CurrentRssi = rssi;
+            double res = vm.Meter;
 
             // assert
             Assert.IsTrue(res > minMeterExcl && res < maxMeterExcl);            
