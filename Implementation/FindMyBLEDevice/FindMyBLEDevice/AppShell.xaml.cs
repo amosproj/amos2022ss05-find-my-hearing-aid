@@ -18,7 +18,6 @@ namespace FindMyBLEDevice
             Routing.RegisterRoute(nameof(SettingsPage), typeof(SettingsPage));
             Routing.RegisterRoute(nameof(StrengthPage), typeof(StrengthPage));
             Routing.RegisterRoute(nameof(MapPage), typeof(MapPage));
-            Routing.RegisterRoute(nameof(InfoPage), typeof(InfoPage));
         }
 
         protected override void OnNavigating(ShellNavigatingEventArgs args)
@@ -30,11 +29,6 @@ namespace FindMyBLEDevice
                 return;
             }
             base.OnNavigating(args);
-        }
-
-        public async void OnInfoButtonClicked()
-        {
-            await Shell.Current.GoToAsync($"{nameof(InfoPage)}");
         }
 
     }

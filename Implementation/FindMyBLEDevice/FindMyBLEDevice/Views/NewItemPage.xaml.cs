@@ -14,7 +14,7 @@ namespace FindMyBLEDevice.Views
         {
             InitializeComponent();
 
-            BindingContext = _viewModel = new NewItemViewModel(App.Navigator, App.DevicesStore);
+            BindingContext = _viewModel = new NewItemViewModel(App.Navigator, App.DevicesStore, App.Geolocation);
         }
 
         protected override void OnAppearing()

@@ -26,5 +26,11 @@ namespace FindMyBLEDevice.Views
             base.OnAppearing();
             viewModel.OnAppearing();
         }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            viewModel.OnDisappearing();
+        }
     }
 }

@@ -3,8 +3,10 @@
 
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Geolocation;
 using System;
 using Xamarin.Forms;
+using System.Linq;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -12,6 +14,7 @@ namespace FindMyBLEDevice.ViewModels
     {
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
+        private readonly IGeolocation geolocation;
 
         public Command SaveCommand { get; }
         public Command CancelCommand { get; }
@@ -22,13 +25,21 @@ namespace FindMyBLEDevice.ViewModels
         public string UserLabel
         {
             get => _userLabel;
-            set => SetProperty(ref _userLabel, value);
+            set
+            {
+                if (_userLabel != value && value.Length <= Constants.UserLabelMaxLength)
+                {
+                    _userLabel = value;
+                }
+                OnPropertyChanged(nameof(UserLabel));
+            }
         }
 
-        public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore)
+        public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore, IGeolocation geolocation)
         {
             this.navigator = navigator;
             this.devicesStore = devicesStore;
+            this.geolocation = geolocation;
 
             SaveCommand = new Command(OnSave);
             CancelCommand = new Command(OnCancel);
@@ -46,10 +57,19 @@ namespace FindMyBLEDevice.ViewModels
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
                 Device.UserLabel = Device.AdvertisedName;
+            } else if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
+            {
+                await App.Current.MainPage.DisplayAlert("Label already taken", $"The label '{UserLabel}' is already taken by another device. Please choose another one.", "Ok");
+                return;
             } else
             {
                 Device.UserLabel = UserLabel;
             }
+
+            var location = await geolocation.GetCurrentLocation();
+            Device.LastGPSLongitude = location.Longitude;
+            Device.LastGPSLatitude = location.Latitude;
+            Device.LastGPSTimestamp = DateTime.Now;
 
             devicesStore.SelectedDevice = await devicesStore.AddDevice(Device);
 

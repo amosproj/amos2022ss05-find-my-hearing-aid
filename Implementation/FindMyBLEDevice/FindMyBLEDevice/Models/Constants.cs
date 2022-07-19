@@ -32,7 +32,10 @@ namespace FindMyBLEDevice.Models
         public const int UpdateServiceIntervalMin = 1;
         public const int UpdateServiceIntervalMax = 300;
 
+        public const int UserLabelMaxLength = 15;
+
         public const bool DisplayNamelessDevicesDefault = false;
         public const bool DisplayWeakDevicesDefault = false;
+        public const bool IncorporateGpsIntoRssiDefault = false;
     }
 }

@@ -19,11 +19,10 @@ namespace FindMyBLEDevice.ViewModels
         private readonly IDevicesStore devicesStore;
 
         public Command<string> OpenUrl { get; }
-        public Command OpenInfoPageCommand { get; }
         public Command DefaultButtonTapped { get; }
         public Command RemoveDevicesButtonTapped { get; }
 
-        public SettingsViewModel(ISettings settings, INavigator navigator, IDevicesStore devicesStore)
+        public SettingsViewModel(ISettings settings, IDevicesStore devicesStore)
         {
             Title = "Settings";
 
@@ -33,8 +32,6 @@ namespace FindMyBLEDevice.ViewModels
             _rssiIntervalString = RssiInterval.ToString();
             _updateServiceIntervalString = UpdateServiceInterval.ToString();
 
-            OpenInfoPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.InfoPage));
             OpenUrl = new Command<string>(async (url) => await Launcher.OpenAsync(url));
             DefaultButtonTapped = new Command(async () => await RestoreDefaults());
             RemoveDevicesButtonTapped = new Command(async () => await RemoveAllDevices());
@@ -110,6 +107,17 @@ namespace FindMyBLEDevice.ViewModels
             get => Constants.RssiIntervalMax;
         }
 
+        public bool IncorporateGpsIntoRssi
+        {
+            get => settings.Get(SettingsNames.IncorporateGpsIntoRssi, Constants.IncorporateGpsIntoRssiDefault);
+            set
+            {
+                settings.Set(SettingsNames.IncorporateGpsIntoRssi, value);
+                OnPropertyChanged(nameof(IncorporateGpsIntoRssi));
+            }
+        }
+
+
         public int UpdateServiceInterval
         {
             get => settings.Get(SettingsNames.UpdateServiceInterval, Constants.UpdateServiceIntervalDefault);
@@ -172,6 +180,7 @@ namespace FindMyBLEDevice.ViewModels
                 DisplayNamelessDevices = Constants.DisplayNamelessDevicesDefault;
                 DisplayWeakDevices = Constants.DisplayWeakDevicesDefault;
                 RssiInterval = Constants.RssiIntervalDefault;
+                IncorporateGpsIntoRssi = Constants.IncorporateGpsIntoRssiDefault;
                 UpdateServiceInterval = Constants.UpdateServiceIntervalDefault;
             }
         }

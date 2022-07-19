@@ -35,7 +35,7 @@
                         Command="{Binding GoBack}"
                         BackgroundColor="Transparent"/>
                 <Label Text="Saved Devices"
-                       FontSize="40"
+                       Style="{StaticResource PageHeaderFontSize}"
                        TextColor="White"
                        FontAttributes="Bold" 
                        AutomationId="DevicesPage_LabelSavedDevices" />
@@ -108,7 +108,7 @@
         </StackLayout>
         <StackLayout Grid.Row="1">
             <Label Text=" Available Devices"
-                       FontSize="40"
+                       Style="{StaticResource PageHeaderFontSize}"
                        TextColor="White"
                        FontAttributes="Bold" 
                    AutomationId="DevicesPage_LabelAvailableDevices"/>
@@ -122,6 +122,13 @@
                     AutomationId="DevicesPage_ButtonScan"
                     FontSize="Medium" 
                     FontAttributes="Bold"/>
+
+            <Label Text="Searching for devices in vicinity..." 
+                   TextColor="White"
+                   IsVisible="{Binding IsBusyAndNothingFound}"
+                   HorizontalTextAlignment="Center"
+                   />
+
             <ScrollView>
                 <CollectionView x:Name="AvailableDevicesListView"
                                     ItemsSource="{Binding AvailableDevices}"
@@ -154,13 +161,22 @@
             </ScrollView>
         </StackLayout>
 
+        <ActivityIndicator Grid.Row="1" 
+                           VerticalOptions="StartAndExpand" 
+                           HorizontalOptions="EndAndExpand" 
+                           Margin="5" 
+                           IsRunning="{Binding IsBusy}" 
+                           Color="{StaticResource Accent}" 
+                           HeightRequest="36"
+                           />
+        
         <ImageButton Grid.Row="0" 
                      VerticalOptions="StartAndExpand" 
                      HorizontalOptions="EndAndExpand" 
                      Margin="10" 
                      WidthRequest="40"
                      Source="icon_questionmark.png"  
-                     Command="{Binding OpenInfoPageCommand}" 
+                     Command="{Binding ShowInfoPage}" 
                      BackgroundColor="Transparent" />
 
     </Grid>

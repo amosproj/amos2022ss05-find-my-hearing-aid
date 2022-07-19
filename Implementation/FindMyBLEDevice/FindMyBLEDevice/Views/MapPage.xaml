@@ -23,7 +23,7 @@
 
         <StackLayout Grid.Row="0" Orientation="Vertical" Padding="20,0" Spacing="10">
 
-            <Label Text="{Binding Title}" FontSize="40" TextColor="White" FontAttributes="Bold"/>
+            <Label Text="{Binding Title}" Style="{StaticResource PageHeaderFontSize}" TextColor="White" FontAttributes="Bold"/>
 
             <maps:Map x:Name="map"/>
             
@@ -58,7 +58,7 @@
                      CornerRadius="0"
                      WidthRequest="40"
                      Source="icon_questionmark.png"  
-                     Command="{Binding OpenInfoPageCommand}" 
+                     Command="{Binding ShowInfoPage}" 
                      BackgroundColor="Transparent" />
 
     </Grid>

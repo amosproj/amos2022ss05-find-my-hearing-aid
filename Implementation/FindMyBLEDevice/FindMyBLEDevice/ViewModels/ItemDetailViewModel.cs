@@ -7,6 +7,7 @@ using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.ViewModels
@@ -16,12 +17,15 @@ namespace FindMyBLEDevice.ViewModels
         private readonly INavigator navigator;
         private readonly IBluetooth bluetooth;
         private readonly IDevicesStore devicesStore;
+        private readonly string _message = "On this screen you can rename your device,"
+                          + "find additional information and delete the device from the 'Saved Devices' section of the previous page.";
+
 
         public Command StrengthButtonTapped { get; }
         public Command MapButtonTapped { get; }
         public Command RenameButtonTapped { get; }
         public Command DeleteButtonTapped { get; }
-        public Command OpenInfoPageCommand { get; }
+        public Command ShowInfoPage { get; }
         public Command GoBack { get; }
 
         public BTDevice Device => devicesStore.SelectedDevice;
@@ -37,7 +41,14 @@ namespace FindMyBLEDevice.ViewModels
         public string UserLabel
         {
             get => _userLabel;
-            set => SetProperty(ref _userLabel, value);
+            set
+            {
+                if (_userLabel != value && value.Length <= Constants.UserLabelMaxLength)
+                {
+                    _userLabel = value;
+                }
+                OnPropertyChanged(nameof(UserLabel));
+            }
         }
 
         public bool UserLabelEdited
@@ -59,10 +70,10 @@ namespace FindMyBLEDevice.ViewModels
                 async () => await RenameDevice());
             DeleteButtonTapped = new Command(
                 async () => await DeleteDevice());
-            OpenInfoPageCommand = new Command(
-                async () => await navigator.GoToAsync(navigator.InfoPage));
             GoBack = new Command(
                 async () => await navigator.GoToAsync(".."));
+            ShowInfoPage = new Command(
+                async () => await App.Current.MainPage.DisplayAlert("Information", _message, "Ok"));
 
             PropertyChanged += DeviceOrUserLabelChanged;
             UserLabel = Device.UserLabel;
@@ -76,6 +87,14 @@ namespace FindMyBLEDevice.ViewModels
 
         private async Task RenameDevice()
         {
+
+            // Check for UserLabel constraints
+            if ((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
+            {
+                await App.Current.MainPage.DisplayAlert("Label already taken", $"The label '{UserLabel}' is already taken by another device. Please choose another one.", "Ok");
+                return;
+            } 
+            
             // Show confirmation dialog
             bool answer = await Application.Current.MainPage.DisplayAlert(
                 "Rename device", 
@@ -107,8 +126,15 @@ namespace FindMyBLEDevice.ViewModels
                 return;
             }
 
-            await devicesStore.DeleteDevice(Device.ID);
+            var id = Device.ID;
             devicesStore.SelectedDevice = null;
+            try
+            {
+                await devicesStore.DeleteDevice(id);
+            } catch (Exception e)
+            {
+                Console.WriteLine($"[DevicesView] Deleting device failed: {e.StackTrace}");
+            }
 
             // Go back to devices page
             await navigator.GoToAsync("..");
@@ -116,7 +142,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public void OnAppearing()
         {
-            bluetooth.StartRssiPolling(Device.BT_GUID, (int rssi, int txPower) =>
+            bluetooth.StartRssiPolling(Device.BT_GUID, (int rssi) =>
             {
                 CurrentRssi = rssi;
             });
