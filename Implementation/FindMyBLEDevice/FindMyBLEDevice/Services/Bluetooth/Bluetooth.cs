@@ -53,7 +53,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 return;
             }
 
-            DeviceDiscovered.Invoke(this, new BTDevice()
+            DeviceDiscovered?.Invoke(this, new BTDevice()
             {
                 AdvertisedName = e.Device.Name,
                 BT_GUID = e.Device.Id.ToString()
