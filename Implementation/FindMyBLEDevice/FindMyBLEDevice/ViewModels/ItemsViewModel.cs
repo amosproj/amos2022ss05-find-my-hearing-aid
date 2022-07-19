@@ -31,8 +31,6 @@ namespace FindMyBLEDevice.ViewModels
                           + "Click on a device in the 'Saved Devices' section to select a device.\n"
                           + "The settings symbol next to the device allows you to display device specific details.";
 
-        private CancellationTokenSource isBusyCancel;
-
         public Command SearchAvailableDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
         public Command<BTDevice> AvailableDeviceTapped { get; }
@@ -140,9 +138,7 @@ namespace FindMyBLEDevice.ViewModels
         private async Task ExecuteSearchAvailableDevicesCommand()
         {
             await bluetooth.StopSearch();
-            isBusyCancel?.Cancel();
-            isBusyCancel = new CancellationTokenSource();
-            CancellationToken cancellationToken = isBusyCancel.Token;
+
             IsBusy = true;
 
             await location.CheckAndRequestLocationPermission();
@@ -150,17 +146,7 @@ namespace FindMyBLEDevice.ViewModels
             AvailableDevices.CollectionChanged += AvailableDevicesChanged;
             await bluetooth.StartSearch(Constants.DiscoverSearchDuration);
 
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await Task.Delay(Constants.DiscoverSearchDuration, cancellationToken);
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-            }, cancellationToken);
+            IsBusy = false;
         }
 
         public void OnAppearing()
@@ -174,7 +160,6 @@ namespace FindMyBLEDevice.ViewModels
         public async void OnDisappearing()
         {
             await bluetooth.StopSearch();
-            isBusyCancel?.Cancel();
 
             devicesStore.DevicesChanged -= OnDevicesChanged;
             bluetooth.DeviceDiscovered -= AvailableDeviceDiscovered;
