@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 
+using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Settings;
 using FindMyBLEDevice.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -21,7 +22,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
 
             // act
-            vm = new SettingsViewModel(st.Object, null);
+            vm = new SettingsViewModel(st.Object, Mock.Of<IDevicesStore>());
 
             // assert
             Assert.IsNotNull(vm);
@@ -35,10 +36,10 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // arrange
             var st1 = new Mock<ISettings>();
             st1.Setup(mock => mock.Get(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>())).Returns(false);
-            SettingsViewModel vm1 = new SettingsViewModel(st1.Object, null);
+            SettingsViewModel vm1 = new SettingsViewModel(st1.Object, Mock.Of<IDevicesStore>());
             var st2 = new Mock<ISettings>();
             st2.Setup(mock => mock.Get(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>())).Returns(true);
-            SettingsViewModel vm2 = new SettingsViewModel(st2.Object, null);
+            SettingsViewModel vm2 = new SettingsViewModel(st2.Object, Mock.Of<IDevicesStore>());
 
             // act
             var res1 = vm1.DisplayNamelessDevices;
@@ -59,12 +60,12 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var st1 = new Mock<ISettings>();
             st1.Setup(mock => mock.Set(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>()))
                 .Callback<string, bool>((name, value) => res1 = value);
-            SettingsViewModel vm1 = new SettingsViewModel(st1.Object, null);
+            SettingsViewModel vm1 = new SettingsViewModel(st1.Object, Mock.Of<IDevicesStore>());
             var res2 = true;
             var st2 = new Mock<ISettings>();
             st2.Setup(mock => mock.Set(It.Is<string>(s => s == SettingsNames.DisplayNamelessDevices), It.IsAny<bool>()))
                 .Callback<string, bool>((name, value) => res2 = value);
-            SettingsViewModel vm2 = new SettingsViewModel(st2.Object, null);
+            SettingsViewModel vm2 = new SettingsViewModel(st2.Object, Mock.Of<IDevicesStore>());
 
             // act
             vm1.DisplayNamelessDevices = true;

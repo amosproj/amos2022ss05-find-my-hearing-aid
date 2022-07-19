@@ -3,6 +3,8 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@faul.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -11,48 +13,124 @@
              x:Class="FindMyBLEDevice.Views.SettingsPage"
              Title="Settings"
              AutomationId="Page_Settings"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
 
-    <StackLayout Orientation="Vertical" Padding="20,0,20,20" Spacing="10"  Background="{StaticResource DarkGradient}">
-
-        <Label Text="{Binding Title}" Style="{StaticResource PageHeaderFontSize}" TextColor="White" FontAttributes="Bold"/>
-
-        <StackLayout Spacing="20" Orientation="Vertical" VerticalOptions="Start">
-
-            <StackLayout Orientation="Horizontal" >
-                <Label Text="List devices without an advertised name in the devices scan." FontSize="Medium" TextColor="White" AutomationId="Setting_NoAdvName_Label"/>
-                <Switch IsToggled="{Binding DisplayNamelessDevices}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End" AutomationId="Setting_NoAdvName_Switch"/>
-            </StackLayout>
-
-            <StackLayout Orientation="Horizontal">
-                <Label Text="List devices with a very weak connection in the devices scan." FontSize="Medium" TextColor="White" AutomationId="Setting_WeakConn_Label"/>
-                <Switch IsToggled="{Binding DisplayWeakDevices}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End" AutomationId="Setting_WeakConn_Switch"/>
-            </StackLayout>
-
-            <StackLayout Orientation="Vertical">
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="The time between RSSI / signal strength updates in milliseconds." FontSize="Medium" TextColor="White" AutomationId="Setting_RSSIInterval_Label"/>
-                    <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" AutomationId="Setting_RSSIInterval_Entry" BackgroundColor="Transparent"/>
+    <ScrollView>
+        <StackLayout Orientation="Vertical" Padding="20,0,20,20" Spacing="10"  Background="{StaticResource DarkGradient}">
+            <Label Text="{Binding Title}" Style="{StaticResource PageHeaderFontSize}" TextColor="White" FontAttributes="Bold"/>
+            <Label Text="Customization" FontAttributes="Bold" FontSize="Large" TextColor="White"/>
+            <StackLayout Spacing="10" Orientation="Vertical" VerticalOptions="Start" Padding="10">
+                <StackLayout Orientation="Horizontal" >
+                    <Label Text="List devices without an advertised name in the devices scan." FontSize="Body" TextColor="White" AutomationId="Setting_NoAdvName_Label"/>
+                    <Switch IsToggled="{Binding DisplayNamelessDevices}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End" AutomationId="Setting_NoAdvName_Switch"/>
                 </StackLayout>
-                <Slider Maximum="{Binding RssiIntervalMax}" Minimum="{Binding RssiIntervalMin}" Value="{Binding RssiInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" AutomationId="Setting_RSSIInterval_Slider"/>
-            </StackLayout>
 
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Use GPS to improve distance estimation with signal strength." FontSize="Medium" TextColor="White" AutomationId="Setting_WeakConn_Label"/>
-                <Switch IsToggled="{Binding IncorporateGpsIntoRssi}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End"/>
-            </StackLayout>
-
-            <StackLayout Orientation="Vertical">
                 <StackLayout Orientation="Horizontal">
-                    <Label Text="The time between background GPS updates in seconds." FontSize="Medium" TextColor="White" />
-                    <Entry Text="{Binding UpdateServiceIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding UpdateServiceIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" BackgroundColor="Transparent"/>
+                    <Label Text="List devices with a very weak connection in the devices scan." FontSize="Body" TextColor="White" AutomationId="Setting_WeakConn_Label"/>
+                    <Switch IsToggled="{Binding DisplayWeakDevices}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End" AutomationId="Setting_WeakConn_Switch"/>
                 </StackLayout>
-                <Slider Maximum="{Binding UpdateServiceIntervalMax}" Minimum="{Binding UpdateServiceIntervalMin}" Value="{Binding UpdateServiceInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" />
-            </StackLayout>
 
+                <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="The time between RSSI / signal strength updates in milliseconds." FontSize="Body" TextColor="White" AutomationId="Setting_RSSIInterval_Label"/>
+                        <Entry Text="{Binding RssiIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding RssiIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" AutomationId="Setting_RSSIInterval_Entry" BackgroundColor="Transparent"/>
+                    </StackLayout>
+                    <Slider Maximum="{Binding RssiIntervalMax}" Minimum="{Binding RssiIntervalMin}" Value="{Binding RssiInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" AutomationId="Setting_RSSIInterval_Slider"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Horizontal">
+                    <Label Text="Use GPS to improve RSSI / signal strength-based distance estimation." FontSize="Body" TextColor="White" AutomationId="Setting_WeakConn_Label"/>
+                    <Switch IsToggled="{Binding IncorporateGpsIntoRssi}" OnColor="{StaticResource Accent}" ThumbColor="White" HorizontalOptions="End"/>
+                </StackLayout>
+
+                <StackLayout Orientation="Vertical">
+                    <StackLayout Orientation="Horizontal">
+                        <Label Text="The time between background GPS updates in seconds." FontSize="Body" TextColor="White" />
+                        <Entry Text="{Binding UpdateServiceIntervalString}" WidthRequest="50" Keyboard="Numeric" Placeholder="{Binding UpdateServiceIntervalDefault}" TextColor="White" PlaceholderColor="LightGray" BackgroundColor="Transparent"/>
+                    </StackLayout>
+                    <Slider Maximum="{Binding UpdateServiceIntervalMax}" Minimum="{Binding UpdateServiceIntervalMin}" Value="{Binding UpdateServiceInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" />
+                </StackLayout>
+                
+                <Button x:Name="DefaultButton"
+                        Text="Restore Default Settings"
+                        TextColor="White"
+                        Margin="3"
+                        Command="{Binding DefaultButtonTapped}"/>
+                <Button x:Name="RemoveDevicesButton"
+                        Text="Remove All BLE Devices"
+                        TextColor="White"
+                        Margin="3"
+                        Command="{Binding RemoveDevicesButtonTapped}"/>
+
+            </StackLayout>
+            <Label Text="Security" FontAttributes="Bold" FontSize="Large" TextColor="White"/>
+            <StackLayout Spacing="5" Orientation="Vertical" VerticalOptions="Start" Padding="10">
+                <Label Text="Data Policy" FontAttributes="Bold" FontSize="Subtitle" TextColor="White"/>
+                <Label Text=
+                       "This app neither collects any personal data nor sends any data to an external server. The last GPS location of your BLE devices and a timestamp are saved in a local database on your smartphone."
+                       FontSize="Body"
+                       TextColor="White"/>
+            </StackLayout>
+            <Label Text="Help" FontAttributes="Bold" FontSize="Large" TextColor="White"/>
+            <StackLayout Spacing="5" Orientation="Vertical" VerticalOptions="Start" Padding="10">
+                <Label Text="Functionality Specific Help" FontAttributes="Bold" FontSize="Subtitle" TextColor="White"/>
+                <Label Text=
+                       "Please find any explanation of the functionalties of the software within our specific guidance part which you can find by clicking on the white '?' located on the top right corner"
+                       FontSize="Body"
+                       TextColor="White"/>
+            </StackLayout>
+            <Label Text="About" FontAttributes="Bold" FontSize="Large" TextColor="White"/>
+            <StackLayout Orientation="Vertical" VerticalOptions="Start">
+                <StackLayout Spacing="5" Orientation="Vertical" VerticalOptions="Start" Padding="10">
+                    <Label Text="License" FontAttributes="Bold" FontSize="Subtitle" TextColor="White"/>
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="This app is open source software licensed under the " TextColor="White" FontSize="Body"/>
+                                <Span Text="MIT License"
+                                    TextColor="White"
+                                    TextDecorations="Underline"
+                                    FontSize="Body">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenUrl}"
+                                            CommandParameter="https://mit-license.org/"/>
+                                    </Span.GestureRecognizers>
+                                </Span>
+                                <Span Text="." TextColor="White" FontSize="Body"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <StackLayout Spacing="5" Orientation="Vertical" VerticalOptions="Start" Padding="10">
+                    <Label Text="Contribute" FontAttributes="Bold" FontSize="Subtitle" TextColor="White"/>
+                    <Label>
+                        <Label.FormattedText>
+                            <FormattedString>
+                                <Span Text="Go to our " TextColor="White" FontSize="Body"/>
+                                <Span Text="Github Repository"
+                                    TextColor="White"
+                                    TextDecorations="Underline"
+                                    FontSize="Body">
+                                    <Span.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding OpenUrl}"
+                                            CommandParameter="https://github.com/amosproj/amos2022ss05-find-my-hearing-aid" />
+                                    </Span.GestureRecognizers>
+                                </Span>
+                                <Span Text="." TextColor="White" FontSize="Body"/>
+                            </FormattedString>
+                        </Label.FormattedText>
+                    </Label>
+                </StackLayout>
+                <StackLayout Spacing="5" Orientation="Vertical" VerticalOptions="Start" Padding="10">
+                    <Label Text="Version" FontAttributes="Bold" FontSize="Subtitle" TextColor="White"/>
+                    <Label Text=
+                           "0.12.0"
+                           FontSize="Body"
+                           TextColor="White"/>
+                </StackLayout>
+            </StackLayout> 
         </StackLayout>
-
-    </StackLayout>
-
+    </ScrollView>
 </ContentPage>

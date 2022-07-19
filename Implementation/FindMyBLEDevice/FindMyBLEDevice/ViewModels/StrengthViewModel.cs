@@ -154,7 +154,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public void OnAppearing()
         {
-            if (settings.Get(SettingsNames.IncorporateGpsIntoRssi, false))
+            if (settings.Get(SettingsNames.IncorporateGpsIntoRssi, Constants.IncorporateGpsIntoRssiDefault))
             {
                 _rssiBuffer = new RssiExponentialBuffer(geolocation);
             }
