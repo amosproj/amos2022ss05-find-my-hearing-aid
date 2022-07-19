@@ -126,7 +126,7 @@
                 <StackLayout Spacing="5" Orientation="Vertical" VerticalOptions="Start" Padding="10">
                     <Label Text="Version" FontAttributes="Bold" FontSize="Subtitle" TextColor="White"/>
                     <Label Text=
-                           "1.0.0"
+                           "0.12.0"
                            FontSize="Body"
                            TextColor="White"/>
                 </StackLayout>
