@@ -34,6 +34,11 @@ For all the other meetings (meetings with POs, meetings with all SDs, meetings w
 |18|03/06/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner|~~XC~~, EW, ~~DP~~, ~~NS~~, LM, ~~JS~~, AW, MA, LK, MR(WSA), SM (WSA), Guest: Cornelia (WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeting_with_WSA_03062022.md)|
 |19|08/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 6|XC, EW, LM, NS, DP, JS, AW, MA, LK, PH(AMOS Team)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/AMOS_team_meeting_08062022.md)|
 |20|15/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 7|XC, EW, LM, NS, DP, JS, AW, ~~MA~~, LK, Giovanna(COACH Team)|-|
-|21|17/06/22, 11.00 - 12.00|Team|Weekly meeting with the industry partner|XC, EW, LM, NS, DP, ~~JS~~, AW, ~~MA~~, LK, MR(WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeting_with_WSA_17062022.md)|
+|21|17/06/22, 11.00 - 12.00|Team|Bi-Weekly meeting with the industry partner|XC, EW, LM, NS, DP, ~~JS~~, AW, ~~MA~~, LK, MR(WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeting_with_WSA_17062022.md)|
 |22|22/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 8|XC, EW, LM, NS, DP, JS, AW, MA, LK|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/AMOS_team_meeting_22062022.md)|
+|23|29/06/22, 12.30 - 14.00|Team|Team meeting of Sprint 9|XC, EW, LM, NS, DP, JS, AW, MA, LK|-|
+|24|06/07/22, 12.30 - 14.00|Team|Team meeting of Sprint 10|XC, EW, LM, NS, DP, JS, AW, MA, LK|-|
+|25|13/07/22, 12.30 - 14.00|Team|Team meeting of Sprint 11|XC, EW, LM, NS, DP, JS, AW, MA, LK|-|
+|26|15/07/22, 11.00 - 12.00|Team|Bi-Weekly meeting with the industry partner|XC, EW, LM, NS, DP, ~~JS~~, AW, MA, LK, SM(WSA)|[Here](https://github.com/amosproj/amos2022ss05-find-my-hearing-aid/blob/main/project-management/Meeting-protocols/Meeting_with_WSA_15072022.md)|
+
 _______________________
