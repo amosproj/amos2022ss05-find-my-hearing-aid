@@ -53,7 +53,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 return;
             }
 
-            DeviceDiscovered.Invoke(this, new BTDevice()
+            DeviceDiscovered?.Invoke(this, new BTDevice()
             {
                 AdvertisedName = e.Device.Name,
                 BT_GUID = e.Device.Id.ToString()
@@ -74,7 +74,7 @@ namespace FindMyBLEDevice.Services.Bluetooth
             }
         }
         
-        public void StartRssiPolling(String btguid, Action<int, int> updateRssi, Action connected = null, Action disconnected = null)
+        public void StartRssiPolling(String btguid, Action<int> updateRssi, Action<int> connected = null, Action disconnected = null)
         {
             StopRssiPolling();
             rssiCancel = new CancellationTokenSource();
@@ -87,16 +87,16 @@ namespace FindMyBLEDevice.Services.Bluetooth
                     {
                         IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
 
-                        if (!(connected is null)) connected.Invoke();
-
                         int txPower = await DeviceTXPowerAsync(device);
                         
+                        if (!(connected is null)) connected.Invoke(txPower);
+
                         try
                         {
                             while((!token.IsCancellationRequested) && device.State == DeviceState.Connected)
                             {
                                 await device.UpdateRssiAsync();
-                                updateRssi.Invoke(device.Rssi, txPower);
+                                updateRssi.Invoke(device.Rssi);
                                 await Task.Delay(settings.Get(SettingsNames.RssiInterval, Constants.RssiIntervalDefault));
                             }
                             await adapter.DisconnectDeviceAsync(device);
@@ -187,6 +187,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
             IBluetoothLE ble = CrossBluetoothLE.Current;
 
             return ble.State == BluetoothState.On || ble.State == BluetoothState.TurningOn;
+        }
+
+        public static double RssiToMeter(double rssi, double measuredPower, double environmentalFactor = Constants.RssiEnvironmentalDefault)
+        {
+            return Math.Pow(10, (measuredPower - rssi) / (10 * environmentalFactor));
         }
     }
 }

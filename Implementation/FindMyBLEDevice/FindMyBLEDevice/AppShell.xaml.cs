@@ -20,10 +20,16 @@ namespace FindMyBLEDevice
             Routing.RegisterRoute(nameof(MapPage), typeof(MapPage));
         }
 
-        private async void OnMenuItemClicked(object sender, EventArgs e)
+        protected override void OnNavigating(ShellNavigatingEventArgs args)
         {
-            Shell.Current.FlyoutIsPresented = false;
-            await Shell.Current.GoToAsync($"{nameof(SettingsPage)}");
+            //prevents the back-button from closing the app
+            if (string.IsNullOrEmpty(args.Target.Location.ToString()))
+            {
+                args.Cancel();
+                return;
+            }
+            base.OnNavigating(args);
         }
+
     }
 }

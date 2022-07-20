@@ -16,13 +16,13 @@ namespace FindMyBLEDevice.Views
         public StrengthPage()
         {
             InitializeComponent();
-            BindingContext = viewModel = new StrengthViewModel(new DeviceDisplayAccess(), App.DevicesStore, App.Bluetooth);
+            BindingContext = viewModel = new StrengthViewModel(new DeviceDisplayAccess(), App.DevicesStore, App.Bluetooth, App.Navigator, App.Geolocation, App.Settings);
         }
 
-        protected override async void OnAppearing()
+        protected override void OnAppearing()
         {
             base.OnAppearing();
-            await viewModel.OnAppearing();
+            viewModel.OnAppearing();
         }
 
         protected override void OnDisappearing()

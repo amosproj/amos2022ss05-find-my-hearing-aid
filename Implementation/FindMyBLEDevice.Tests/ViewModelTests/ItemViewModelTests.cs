@@ -31,16 +31,16 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // act
             vm.OnAppearing();
             var firstState = vm.SavedDevices;
-            ds.Raise(mock => mock.DevicesChanged += null, EventArgs.Empty);
+            ds.Raise(mock => mock.DevicesChanged += null, null, It.IsAny<List<int>>());
             var secondState = vm.SavedDevices;
-            ds.Raise(mock => mock.DevicesChanged += null, EventArgs.Empty);
+            ds.Raise(mock => mock.DevicesChanged += null, null, It.IsAny<List<int>>());
             var thirdState = vm.SavedDevices;
             vm.OnDisappearing();
 
             // assert
             ds.Verify(mock => mock.GetAllDevices(), Times.Exactly(3));
-            ds.VerifyAdd(mock => mock.DevicesChanged += It.IsAny<EventHandler>(), Times.Once);
-            ds.VerifyRemove(mock => mock.DevicesChanged -= It.IsAny<EventHandler>(), Times.Once);
+            ds.VerifyAdd(mock => mock.DevicesChanged += It.IsAny<EventHandler<List<int>>>(), Times.Once);
+            ds.VerifyRemove(mock => mock.DevicesChanged -= It.IsAny<EventHandler<List<int>>>(), Times.Once);
             Assert.AreEqual(1, firstState.Count);
             Assert.AreEqual(2, secondState.Count);
             Assert.AreEqual(1, thirdState.Count);

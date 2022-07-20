@@ -2,12 +2,16 @@
 <!--
     // SPDX-License-Identifier: MIT
     // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+    // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 -->
 <Shell xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:FindMyBLEDevice.Views"
        Title="FindMyBLEDevice"
-       x:Class="FindMyBLEDevice.AppShell">
+       x:Class="FindMyBLEDevice.AppShell"
+       xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+       ios:Page.PrefersStatusBarHidden="True"
+       ios:Page.PreferredStatusBarUpdateAnimation="Fade">
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.
@@ -18,95 +22,40 @@
     <Shell.Resources>
         <ResourceDictionary>
             <Style x:Key="BaseStyle" TargetType="Element">
-                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.NavBarIsVisible" Value="False" />
+                <Setter Property="Shell.BackgroundColor" Value="{StaticResource Accent}" />
                 <Setter Property="Shell.ForegroundColor" Value="White" />
                 <Setter Property="Shell.TitleColor" Value="White" />
                 <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF" />
                 <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF" />
-                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Primary}" />
+                <Setter Property="Shell.TabBarBackgroundColor" Value="{StaticResource Accent}" />
                 <Setter Property="Shell.TabBarForegroundColor" Value="White"/>
                 <Setter Property="Shell.TabBarUnselectedColor" Value="#95FFFFFF"/>
                 <Setter Property="Shell.TabBarTitleColor" Value="White"/>
             </Style>
             <Style TargetType="TabBar" BasedOn="{StaticResource BaseStyle}" />
             <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
-
-            <!--
-            Default Styles for all Flyout Items
-            https://docs.microsoft.com/xamarin/xamarin-forms/app-fundamentals/shell/flyout#flyoutitem-and-menuitem-style-classes
-            -->
-            <Style Class="FlyoutItemLabelStyle" TargetType="Label">
-                <Setter Property="TextColor" Value="White"></Setter>
-            </Style>
-            <Style Class="FlyoutItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{x:OnPlatform UWP=Transparent, iOS=White}" />
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                            <VisualState x:Name="Selected">
-                                <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
-
-            <!--
-            Custom Style you can apply to any Flyout Item
-            -->
-            <Style Class="MenuItemLayoutStyle" TargetType="Layout" ApplyToDerivedTypes="True">
-                <Setter Property="VisualStateManager.VisualStateGroups">
-                    <VisualStateGroupList>
-                        <VisualStateGroup x:Name="CommonStates">
-                            <VisualState x:Name="Normal">
-                                <VisualState.Setters>
-                                    <Setter TargetName="FlyoutItemLabel" Property="Label.TextColor" Value="{StaticResource Primary}" />
-                                </VisualState.Setters>
-                            </VisualState>
-                        </VisualStateGroup>
-                    </VisualStateGroupList>
-                </Setter>
-            </Style>
         </ResourceDictionary>
     </Shell.Resources>
-
-    <!-- 
-        When the Flyout is visible this defines the content to display in the flyout.
-        FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
-        https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
-    -->
-    <FlyoutItem Title="About" Icon="icon_about.png" AutomationId="FlyoutItem_About">
-        <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}"/>
-    </FlyoutItem>
-    <FlyoutItem Title="Devices" Icon="icon_feed.png" AutomationId="FlyoutItem_Devices">
-        <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}"/>
-    </FlyoutItem>
-    <FlyoutItem Title="StrengthSearch" Icon="signal_strength.png" AutomationId="FlyoutItem_Strength">
-        <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}"/>
-    </FlyoutItem>
-    <FlyoutItem Title="MapSearch" Icon="geolocation.png" AutomationId="FlyoutItem_Map">
-        <ShellContent Route="MapPage" ContentTemplate="{DataTemplate local:MapPage}"/>
-    </FlyoutItem>
-    <!-- When the Flyout is visible this will be a menu item you can tie a click behavior to  -->
-    <MenuItem Text="Settings" StyleClass="MenuItemLayoutStyle" Clicked="OnMenuItemClicked" AutomationId="FlyoutItem_Settings"/>
-
-
-    <Shell.FlyoutFooterTemplate>
-        <DataTemplate>
-            <StackLayout>
-                <Label Text="FindMyHearingAid"
-                       TextColor="DarkGray"
-                       FontAttributes="Bold"
-                       HorizontalOptions="Center" />
-            </StackLayout>
-        </DataTemplate>
-    </Shell.FlyoutFooterTemplate>
+      
+    <TabBar>
+        <Tab Title="Home" Icon="icon_about.png" AutomationId="FlyoutItem_About">
+            <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}"/>
+        </Tab>
+        <!--
+        <Tab Title="Devices" Icon="icon_feed.png" AutomationId="FlyoutItem_Devices">
+            <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}"/>
+        </Tab>
+        -->
+        <Tab Title="Strength Search" Icon="signal_strength.png" AutomationId="FlyoutItem_Strength">
+            <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}" />
+        </Tab>
+        <Tab Title="Map Search" Icon="geolocation.png" AutomationId="FlyoutItem_Map">
+            <ShellContent Route="MapPage" ContentTemplate="{DataTemplate local:MapPage}"/>
+        </Tab>
+        <Tab Title="Settings" Icon="icon_settings.png" AutomationId="FlyoutItem_Settings">
+            <ShellContent Route="SettingsPage" ContentTemplate="{DataTemplate local:SettingsPage}"/>
+        </Tab>
+    </TabBar>
 
 </Shell>

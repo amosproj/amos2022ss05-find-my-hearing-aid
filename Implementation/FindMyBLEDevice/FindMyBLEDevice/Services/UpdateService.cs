@@ -2,6 +2,7 @@
 // SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger<adrian.wandinger@fau.de>
 
+using FindMyBLEDevice.Exceptions;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;
@@ -39,7 +40,7 @@ namespace FindMyBLEDevice.Services
             running = false;
         }
 
-        private async void OnSavedDevicesStoreChanged(object sender, EventArgs e)
+        private async void OnSavedDevicesStoreChanged(object sender, List<int> ids)
         {
             savedDevices = await devicesStore.GetAllDevices();
         }
@@ -124,7 +125,13 @@ namespace FindMyBLEDevice.Services
                         dev.WithinRange = true;
                     };
                 }
-                devicesStore.AtomicGetAndUpdateDevice(databaseDevice, manipulation);
+                try
+                {
+                    devicesStore.AtomicGetAndUpdateDevice(databaseDevice, manipulation);
+                } catch (DeviceStoreException)
+                {
+                    Console.WriteLine($"Failed to update a device");
+                }
             }
         }
     }

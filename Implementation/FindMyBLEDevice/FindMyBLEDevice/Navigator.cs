@@ -25,6 +25,7 @@ namespace FindMyBLEDevice
 
         public string SettingsPage { get; }
 
+
         public Navigator(
             string aboutPage,
             string devicesPage,

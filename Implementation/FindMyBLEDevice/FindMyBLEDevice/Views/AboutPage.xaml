@@ -1,49 +1,94 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+-->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindMyBLEDevice.Views.AboutPage"
              xmlns:vm="clr-namespace:FindMyBLEDevice.ViewModels"
-             Title="{Binding Title}"
              AutomationId="Page_About"
-             >
-    
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <Color x:Key="Accent">#96d1ff</Color>
-        </ResourceDictionary>
-    </ContentPage.Resources>
+             xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
+             ios:Page.UseSafeArea="true">
 
-    <Grid>
+    <Grid Background="{StaticResource DarkGradient}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <StackLayout BackgroundColor="{StaticResource Accent}" VerticalOptions="FillAndExpand" HorizontalOptions="Fill">
-            <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="Center">
-                <ContentView Padding="0,40,0,40" VerticalOptions="FillAndExpand">
-                    <Image Source="find_my_ble_device.png" VerticalOptions="Center" HeightRequest="64" AutomationId="AboutPage_Image"/>
-                </ContentView>
-            </StackLayout>
+
+        <StackLayout Grid.Row="0" Orientation="Vertical" Padding="20" Spacing="10">
+
+            <Label Text="Welcome!" FontSize="60" TextColor="White" FontAttributes="Bold" AutomationId="AboutPage_Title"/>
+            
+            <Label Text="Find your BLE devices via these features:" TextColor="White" FontSize="30" AutomationId="AboutPage_Description"/>
+
+            <Grid Margin="20,20,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ImageButton Grid.Row="0" 
+                                 Padding="0,20,0,45" 
+                                 HeightRequest="220" 
+                                 Source="signal_strength_about.png"
+                                 Aspect="AspectFit" CornerRadius="50" 
+                                 Background="{StaticResource AccentGradient}" 
+                                 Command="{Binding OpenStrengthPageCommand}" 
+                                 AutomationId="AboutPage_Btn_Signal" />
+                <Label Grid.Row="0" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="End" 
+                           Margin="0,0,0,10" 
+                           Text="Strength Search" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="White" />
+            </Grid>
+
+            <Grid Margin="20,20,20,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <ImageButton Grid.Row="0" 
+                                 Padding="0,20,0,45" 
+                                 HeightRequest="220"                                 
+                                 Source="geolocation_about.png"                         
+                                 Aspect="AspectFit" CornerRadius="50"
+                                 Background="{StaticResource AccentGradient}" 
+                                 Command="{Binding OpenMapPageCommand}" 
+                                 AutomationId="AboutPage_Btn_Signal" />
+                <Label Grid.Row="0" 
+                           HorizontalOptions="Center" 
+                           VerticalOptions="End" 
+                           Margin="0,0,0,10" 
+                           Text="Map Search" 
+                           FontSize="20" 
+                           FontAttributes="Bold" 
+                           TextColor="White" />
+            </Grid>
+            
         </StackLayout>
-        <ScrollView Grid.Row="1">
-            <StackLayout Orientation="Vertical" Padding="30,24,30,24" Spacing="10">
 
-                <Label Text="Welcome in Find My BLE Device" FontSize="Title" TextColor="Black" AutomationId="AboutPage_Title"/>
-                <Label Text="The app is able to detect BLE devices and assign labels to it. In addition it helps tracking the device and navigating to the exact location of the device no matter if in short or long distance. This ensures an overview of all relevant devices at all times." TextColor="Black" FontSize="16" Padding="0,0,0,0" AutomationId="AboutPage_Description"/>
-                
-                <Button Margin="0,10,0,0" Text="Signal Strength Search" AutomationId="AboutPage_Btn_Signal"
-                        Command="{Binding OpenStrengthPageCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" 
-                        />
+        <Button Grid.Row="1" 
+                Text="{Binding SelectedDeviceString}"
+                Command="{Binding SelectDevice}"
+                BackgroundColor="{StaticResource Accent}"
+                Margin="10"
+                CornerRadius="5"
+                TextColor="White" 
+                FontSize="Medium" 
+                FontAttributes="Bold" />
 
-                <Button Margin="0,10,0,0" Text="Geolocation Search" AutomationId="AboutPage_Btn_GPS"
-                        Command="{Binding OpenMapPageCommand}"
-                        BackgroundColor="{StaticResource Primary}"
-                        TextColor="White" />
-
-            </StackLayout>
-        </ScrollView>
+        <ImageButton Grid.Row="0" 
+                     VerticalOptions="StartAndExpand" 
+                     HorizontalOptions="EndAndExpand" 
+                     Margin="10" 
+                     WidthRequest="40"
+                     Source="icon_questionmark.png"  
+                     Command="{Binding ShowInfoPage}" 
+                     BackgroundColor="Transparent" />
+        
     </Grid>
-
+    
 </ContentPage>

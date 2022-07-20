@@ -15,6 +15,7 @@ using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Location;
 using System.Threading;
 using FindMyBLEDevice.Services;
+using System.Collections.Generic;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -24,14 +25,18 @@ namespace FindMyBLEDevice.ViewModels
         private readonly IDevicesStore devicesStore;
         private readonly IBluetooth bluetooth;
         private readonly ILocation location;
-
-        private CancellationTokenSource isBusyCancel;
+        private readonly string _message = "By clicking on 'Scan for available devices' all devices in your surrounding"
+                          + "that are currently emitting a Bluetooth signal are displayed.\n"
+                          + "You can permanently store a device on your app by clicking on the device and by assigning it an individual name.\n"
+                          + "Click on a device in the 'Saved Devices' section to select a device.\n"
+                          + "The settings symbol next to the device allows you to display device specific details.";
 
         public Command SearchAvailableDevicesCommand { get; }
         public Command<BTDevice> SavedDeviceTapped { get; }
         public Command<BTDevice> AvailableDeviceTapped { get; }
-        public Command<BTDevice> StrengthButtonTapped { get; }
-        public Command<BTDevice> MapButtonTapped { get; }
+        public Command<BTDevice> SavedDeviceSettingsTapped { get; }
+        public Command ShowInfoPage { get; }
+        public Command GoBack { get; }
 
         private ObservableCollection<BTDevice> _savedDevices;
         public ObservableCollection<BTDevice> SavedDevices
@@ -45,6 +50,11 @@ namespace FindMyBLEDevice.ViewModels
         {
             get => _availableDevices;
             set => SetProperty(ref _availableDevices, value);
+        }
+
+        public bool IsBusyAndNothingFound
+        {
+            get => IsBusy && AvailableDevices.Count == 0;
         }
 
         public ItemsViewModel(INavigator navigator, IDevicesStore devicesStore, IBluetooth bluetooth, ILocation location)
@@ -62,16 +72,34 @@ namespace FindMyBLEDevice.ViewModels
             SearchAvailableDevicesCommand = new Command(
                 async () => await ExecuteSearchAvailableDevicesCommand());
             SavedDeviceTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.DeviceDetailPage, false));
+                async (BTDevice device) => await SelectAndRedirectTo(device, ".."));
+            SavedDeviceSettingsTapped = new Command<BTDevice>(
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.DeviceDetailPage));
             AvailableDeviceTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.NewDevicePage, false));
-            StrengthButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.StrengthPage, true));
-            MapButtonTapped = new Command<BTDevice>(
-                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.MapPage, true));
+                async (BTDevice device) => await SelectAndRedirectTo(device, navigator.NewDevicePage));
+            GoBack = new Command(
+                async () => await navigator.GoToAsync(".."));
+            ShowInfoPage = new Command(
+                async () => await App.Current.MainPage.DisplayAlert("Information", _message, "Ok"));
+            
+            PropertyChanged += IsBusyChanged;
+
         }
 
-        private async Task SelectAndRedirectTo(BTDevice device, string page, bool newStack)
+        private void IsBusyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(IsBusy))
+            {
+                OnPropertyChanged(nameof(IsBusyAndNothingFound));
+            }
+        }
+
+        private void AvailableDevicesChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(IsBusyAndNothingFound));
+        }
+
+        private async Task SelectAndRedirectTo(BTDevice device, string page, bool newStack = false)
         {
             if (device == null)
                 return;
@@ -80,7 +108,7 @@ namespace FindMyBLEDevice.ViewModels
             await navigator.GoToAsync(page, newStack);
         }
 
-        private async void OnDevicesChanged(object sender, EventArgs e)
+        private async void OnDevicesChanged(object sender, List<int> ids)
         {
             try
             {
@@ -110,32 +138,19 @@ namespace FindMyBLEDevice.ViewModels
         private async Task ExecuteSearchAvailableDevicesCommand()
         {
             await bluetooth.StopSearch();
-            isBusyCancel?.Cancel();
-            isBusyCancel = new CancellationTokenSource();
-            CancellationToken cancellationToken = isBusyCancel.Token;
+
             IsBusy = true;
 
             await location.CheckAndRequestLocationPermission();
             AvailableDevices = new ObservableCollection<BTDevice>();
+            AvailableDevices.CollectionChanged += AvailableDevicesChanged;
             await bluetooth.StartSearch(Constants.DiscoverSearchDuration);
 
-            _ = Task.Run(async () =>
-            {
-                try
-                {
-                    await Task.Delay(Constants.DiscoverSearchDuration, cancellationToken);
-                }
-                finally
-                {
-                    IsBusy = false;
-                }
-            }, cancellationToken);
+            IsBusy = false;
         }
 
-        public async void OnAppearing()
+        public void OnAppearing()
         {
-            await CheckBluetoothAndLocation.Check();
-
             devicesStore.DevicesChanged += OnDevicesChanged;
             OnDevicesChanged(null, null);
             AvailableDevices = new ObservableCollection<BTDevice>();
@@ -145,7 +160,6 @@ namespace FindMyBLEDevice.ViewModels
         public async void OnDisappearing()
         {
             await bluetooth.StopSearch();
-            isBusyCancel?.Cancel();
 
             devicesStore.DevicesChanged -= OnDevicesChanged;
             bluetooth.DeviceDiscovered -= AvailableDeviceDiscovered;

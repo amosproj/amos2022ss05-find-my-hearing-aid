@@ -34,6 +34,8 @@ namespace FindMyBLEDevice
         private static UpdateService updateService;
         // Interface to access Shell navigation
         private static INavigator navigator;
+        // Check-service
+        private static CheckBluetoothAndLocationService checkService;
 
         // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
@@ -114,7 +116,7 @@ namespace FindMyBLEDevice
                 if(navigator == null)
                 {
                     navigator = new Navigator(
-                        nameof(AboutPage), 
+                        nameof(AboutPage),
                         nameof(ItemsPage),
                         nameof(NewItemPage),
                         nameof(ItemDetailPage),
@@ -126,7 +128,18 @@ namespace FindMyBLEDevice
             }
         }
 
-
+        
+        public static CheckBluetoothAndLocationService CheckService
+        {
+            get
+            {
+                if(checkService == null)
+                {
+                    checkService = new CheckBluetoothAndLocationService();
+                }
+                return checkService;
+            }
+        }
 
 
         public App()
@@ -135,6 +148,7 @@ namespace FindMyBLEDevice
 
             MainPage = new AppShell();
 
+            CheckService.Start();
             UpdateService.Start();
         }
     }

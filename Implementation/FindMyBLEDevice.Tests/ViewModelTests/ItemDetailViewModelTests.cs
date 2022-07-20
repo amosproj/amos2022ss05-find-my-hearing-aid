@@ -85,7 +85,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
         {
             // arrange
             var bt = new Mock<IBluetooth>();
-            bt.Setup(mock => mock.StartRssiPolling(It.IsAny<string>(), It.IsAny<Action<int,int>>(), It.IsAny<Action>(), It.IsAny<Action>()));
+            bt.Setup(mock => mock.StartRssiPolling(It.IsAny<string>(), It.IsAny<Action<int>>(), It.IsAny<Action<int>>(), It.IsAny<Action>()));
             var btd = new Models.BTDevice();
             btd.BT_GUID = "1234";
             var ds = new Mock<IDevicesStore>();
@@ -98,7 +98,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             // assert
             bt.Verify(mock => mock.StartRssiPolling(
                 It.Is<string>(guid => guid == btd.BT_GUID), 
-                It.IsAny<Action<int, int>>(), It.IsAny<Action>(), It.IsAny<Action>()), 
+                It.IsAny<Action<int>>(), It.IsAny<Action<int>>(), It.IsAny<Action>()), 
                 Times.Once);
         }
 
@@ -107,8 +107,8 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
         {
             // arrange
             var bt = new Mock<IBluetooth>();
-            bt.Setup(mock => mock.StartRssiPolling(It.IsAny<string>(),It.IsAny<Action<int, int>>(), It.IsAny<Action>(), It.IsAny<Action>()))
-                .Callback<string, Action<int, int>, Action, Action>((guid, update, connected, disconnected) => { update.Invoke(1, 0); });
+            bt.Setup(mock => mock.StartRssiPolling(It.IsAny<string>(),It.IsAny<Action<int>>(), It.IsAny<Action<int>>(), It.IsAny<Action>()))
+                .Callback<string, Action<int>, Action<int>, Action>((guid, update, connected, disconnected) => { update.Invoke(1); });
             var btd = new Models.BTDevice();
             btd.BT_GUID = "1234";
             var ds = new Mock<IDevicesStore>();

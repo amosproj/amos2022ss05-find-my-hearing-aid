@@ -13,33 +13,53 @@ using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Geolocation;
 using System.Threading.Tasks;
 using System;
+using System.Collections.Generic;
+using FindMyBLEDevice.Views;
 
 namespace FindMyBLEDevice.ViewModels
 {
     public class MapViewModel : BaseViewModel
     {
-        public bool DeviceNotNull => Device != null;
-
         private readonly Xamarin.Forms.Maps.Map map;
         private readonly IGeolocation geolocation;
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
         private bool showingDialogue;
+        private readonly string _message = "'Map Search' shows the last known GPS coordinate of your lost device.\n"
+                    + "Please note that the displayed GPS coordinate is the latest tracked location of your smartphone while having a connection to your device.\n"
+                    + "The 'Open in maps'-button will forward you to your local map app to start a navigation.\n"
+                    + "After you have reached your destination, you can switch to the 'Strength Search' within the app to track your device in your near surrounding.";
 
-        public BTDevice Device { get => devicesStore.SelectedDevice;  }
-
+        public Command ShowInfoPage { get; }
+        public Command SelectDevice { get; }
         public Command OpenMapPin { get; }
+
+        public BTDevice Device => devicesStore.SelectedDevice;
+
+        public bool DeviceNotNull => Device != null;
+
+        private string _selectedDeviceString;
+        public string SelectedDeviceString
+        {
+            get => _selectedDeviceString;
+            set => SetProperty(ref _selectedDeviceString, value);
+        }
+
         public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
         {
             Title = "MapSearch";
-            OpenMapPin = new Command(async () => await OpenMapswithPin());
+
             this.map = map;
             this.geolocation = geolocation;
             this.navigator = navigator;
             this.devicesStore = devicesStore;
 
+            SelectDevice = new Command(
+                async () => await navigator.GoToAsync(navigator.DevicesPage));
             OpenMapPin = new Command(
                 async () => await OpenMapswithPin());
+            ShowInfoPage = new Command(
+                async () => await App.Current.MainPage.DisplayAlert("Information", _message, "Ok"));
 
             PropertyChanged += DeviceChanged;
         }
@@ -56,31 +76,47 @@ namespace FindMyBLEDevice.ViewModels
                 new MapLaunchOptions { Name = Device.UserLabel });
         }
 
-        private void ShowSelectedDevice()
+        private async void UpdateDisplayedDevice(object sender, List<int> ids)
         {
-            if (Device is null) return;
+            if (Device is null)
+            {
+                map.Pins.Clear();
+                return;
+            }
+            if (ids != null && !ids.Contains(Device.ID)) return;
+
+            var updatedDevice = await devicesStore.GetDevice(Device.ID);
+            if (updatedDevice != null)
+            {
+                DisplayDevicePin(updatedDevice);
+            }
+        }
+
+        private void DisplayDevicePin(BTDevice device)
+        {
+            if (device is null) return;
 
             map.Pins.Clear();
             Pin devicePin = new Pin
             {
-                Label = Device.UserLabel,
-                Address = Device.LastGPSTimestamp.ToString(),
+                Label = device.UserLabel,
+                Address = device.LastGPSTimestamp.ToString(),
                 Type = PinType.Place,
-                Position = new Position(Device.LastGPSLatitude, Device.LastGPSLongitude)
+                Position = new Position(device.LastGPSLatitude, device.LastGPSLongitude)
             };
             map.Pins.Add(devicePin);
         }
 
-        private async void CheckIfSelectedDeviceReachable(object sender, EventArgs ea)
+        private async void CheckIfSelectedDeviceReachable(object sender, List<int> ids)
         {
-            if (showingDialogue || Device is null) return;
+            if (showingDialogue || Device is null || (ids != null && !ids.Contains(Device.ID))) return;
             showingDialogue = true;
 
             BTDevice updatedDevice = null;
             try
             {
                 updatedDevice = await devicesStore.GetDevice(Device.ID);
-            } catch (ArgumentException ae)
+            } catch (ArgumentException)
             {
                 Console.WriteLine($"[MapPage] Error retrieving selected device from database");
             }
@@ -91,6 +127,12 @@ namespace FindMyBLEDevice.ViewModels
                 devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
                 bool promptAnswer = false;
                 await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    // the database operation and switching threads can take a while,
+                    // so make sure the map page is still displayed
+                    bool stillShowing =
+                        Application.Current.MainPage is MapPage
+                        || (Application.Current.MainPage is AppShell shell && shell.CurrentPage is MapPage);
+                    if (!stillShowing) return;
                     promptAnswer = await Application.Current.MainPage.DisplayAlert($"BLE Signal From {Device.UserLabel} Detected", $"Do you want to switch to the signal strength search?", "Yes", "No");
                 });
                 if (promptAnswer)
@@ -109,7 +151,13 @@ namespace FindMyBLEDevice.ViewModels
             //updates device label above map when opened
             OnPropertyChanged(nameof(Device));
 
-            await CheckBluetoothAndLocation.Check();
+            if (devicesStore.SelectedDevice != null)
+            {
+                SelectedDeviceString = "" + devicesStore.SelectedDevice.UserLabel + "\n> Click to select a different device <";
+            } else
+            {
+                SelectedDeviceString = "No device selected!\n> Click to select a device <";
+            }
 
             var currentLocation = await geolocation.GetCurrentLocation();
             if (currentLocation != null)
@@ -129,11 +177,13 @@ namespace FindMyBLEDevice.ViewModels
             showingDialogue = false;
             devicesStore.DevicesChanged += CheckIfSelectedDeviceReachable;
 
-            ShowSelectedDevice();
+            DisplayDevicePin(Device);
+            devicesStore.DevicesChanged += UpdateDisplayedDevice;
         }
 
         public void OnDisappearing() {
             devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
+            devicesStore.DevicesChanged -= UpdateDisplayedDevice;
         }
     }
 }

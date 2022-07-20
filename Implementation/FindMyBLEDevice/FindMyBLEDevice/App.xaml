@@ -1,4 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+-->
 <Application xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FindMyBLEDevice.App">
@@ -7,7 +12,26 @@
     -->
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="Primary">#0C488E</Color>
+            <Color x:Key="PrimaryDark">#051B2E</Color>
+            <Color x:Key="Secondary">#C0D7EB</Color>
+            <Color x:Key="Accent">#7797B8</Color>
+            <Style x:Key="PageHeaderFontSize" TargetType="Label">
+                <Setter Property="FontSize" Value="36" />
+                </Style>
+                <LinearGradientBrush x:Key="DarkGradient" StartPoint="0.25,1" EndPoint="0.75,0">
+                <GradientStop Color="{StaticResource PrimaryDark}" Offset="0" />
+                <GradientStop Color="{StaticResource Primary}" Offset="1" />
+            </LinearGradientBrush>
+            <LinearGradientBrush x:Key="AccentGradient" StartPoint="0,1" EndPoint="1,0">
+                <GradientStop Color="#7692AD" Offset="0" />
+                <GradientStop Color="{StaticResource Accent}" Offset="1" />
+            </LinearGradientBrush>
+            <RadialGradientBrush x:Key="RadialGradient" Center="0.5,0.5" Radius="0.5">
+                <GradientStop Color="{StaticResource Secondary}" Offset="0" />
+                <GradientStop Color="{StaticResource Accent}" Offset="1" />
+            </RadialGradientBrush>
+            <SolidColorBrush x:Key="SolidPrimary" Color="{StaticResource Primary}" />
             <Style TargetType="Button">
                 <Setter Property="TextColor" Value="White"></Setter>
                 <Setter Property="VisualStateManager.VisualStateGroups">
@@ -15,18 +39,22 @@
                         <VisualStateGroup x:Name="CommonStates">
                             <VisualState x:Name="Normal">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
                                 </VisualState.Setters>
                             </VisualState>
                             <VisualState x:Name="Disabled">
                                 <VisualState.Setters>
-                                    <Setter Property="BackgroundColor" Value="#332196F3" />
+                                    <Setter Property="BackgroundColor" Value="#7797B8F3" />
                                 </VisualState.Setters>
                             </VisualState>
                         </VisualStateGroup>
                     </VisualStateGroupList>
                 </Setter>
             </Style>
+            <Style TargetType="ImageButton">
+                <Setter Property="BackgroundColor" Value="{StaticResource Accent}" />
+            </Style>
+
         </ResourceDictionary>        
     </Application.Resources>
 </Application>
