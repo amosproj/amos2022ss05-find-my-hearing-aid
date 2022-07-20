@@ -15,7 +15,7 @@
     <ContentPage.Content>
         <StackLayout Background="{StaticResource DarkGradient}" Spacing="3" Padding="15">
             <Label Text="User-Label" FontSize="Medium" TextColor="White" />
-            <Entry Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.AdvertisedName}" FontSize="Medium" TextColor="White" />
+            <Entry Text="{Binding UserLabel, Mode=TwoWay}" Placeholder="{Binding Device.AdvertisedName}" FontSize="Medium" TextColor="White" PlaceholderColor="{StaticResource Accent}"/>
             <StackLayout Orientation="Horizontal">
                 <Button Text="Cancel" Command="{Binding CancelCommand}" CornerRadius="5" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Accent}"></Button>
                 <Button Text="Save" Command="{Binding SaveCommand}" CornerRadius="5" HorizontalOptions="FillAndExpand" BackgroundColor="{StaticResource Accent}"></Button>
