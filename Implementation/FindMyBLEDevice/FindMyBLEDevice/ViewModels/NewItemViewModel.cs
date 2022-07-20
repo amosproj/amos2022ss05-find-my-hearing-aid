@@ -45,14 +45,14 @@ namespace FindMyBLEDevice.ViewModels
             CancelCommand = new Command(OnCancel);
         }
 
-        private async void OnCancel()
+        public async void OnCancel()
         {
             // This will pop the current page off the navigation stack
             devicesStore.SelectedDevice = null;
             await navigator.GoToAsync("..");
         }
 
-        private async void OnSave()
+        public async void OnSave()
         {
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
