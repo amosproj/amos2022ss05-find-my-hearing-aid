@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
@@ -26,7 +26,7 @@
             <Label Text="{Binding Title}" Style="{StaticResource PageHeaderFontSize}" TextColor="White" FontAttributes="Bold"/>
 
             <maps:Map x:Name="map"/>
-            
+
         </StackLayout>
 
         <Button Grid.Row="0" 

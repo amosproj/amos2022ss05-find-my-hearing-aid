@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Database;

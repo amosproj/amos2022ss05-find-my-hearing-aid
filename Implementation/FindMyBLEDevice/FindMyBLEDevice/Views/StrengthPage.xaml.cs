@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
-// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
 using FindMyBLEDevice.ViewModels;
 using FindMyBLEDevice.XamarinAccess;

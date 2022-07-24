@@ -1,16 +1,12 @@
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Xamarin.Essentials;
 using FindMyBLEDevice.Services.Settings;
-using FindMyBLEDevice.Services;
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.XamarinAccess;
 using FindMyBLEDevice.Services.Database;
@@ -36,10 +32,6 @@ namespace FindMyBLEDevice.ViewModels
                     + "By moving around, the blue circle radius changes.\n"
                     + "If you move away from your device, the circle radius will increase.\n"
                     + "If you approach your device, the circle radius will decrease.";
-
-
-        public Command ShowInfoPage { get; }
-        public Command SelectDevice { get; }
 
         public BTDevice Device => devicesStore.SelectedDevice;
 
@@ -102,6 +94,9 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _selectedDeviceString, value);
         }
 
+        public Command ShowInfoPage { get; }
+        public Command SelectDevice { get; }
+
         public StrengthViewModel(
             IDeviceDisplayAccess displayAccess, 
             IDevicesStore devicesStore, 
@@ -110,7 +105,7 @@ namespace FindMyBLEDevice.ViewModels
             IGeolocation geolocation, 
             ISettings settings)
         {
-            Title = "StrengthSearch";
+            Title = "Strength Search";
 
             this.devicesStore = devicesStore;
             this.bluetooth = bluetooth;

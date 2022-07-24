@@ -2,21 +2,13 @@
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
-using FindMyBLEDevice.Models;
-using Plugin.BLE;
-using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using System.Linq;
-using Plugin.BLE.Abstractions.Contracts;
-using System;
-using System.Threading;
 using Xamarin.Essentials;
 
 namespace FindMyBLEDevice.Services.Location
 {
     public class Location : ILocation
     {
-
         public async Task<PermissionStatus> CheckAndRequestLocationPermission()
         {
             var status = await Permissions.CheckStatusAsync<Permissions.LocationWhenInUse>();
@@ -39,7 +31,5 @@ namespace FindMyBLEDevice.Services.Location
 
             return status;
         }
-
-
     }
 }

@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using System;
@@ -34,13 +34,13 @@ namespace FindMyBLEDevice.Services.Database
             _database.CreateTableAsync<BTDevice>().Wait();
         }
         public DevicesStore() : this(new SQLiteAsyncConnection(Path.Combine(
-            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BTDevices.db3")))
-        { }
+            Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "BTDevices.db3"))) {}
 
 
         public async Task<BTDevice> AddDevice(BTDevice device)
         {
             device.ID = 0; //so that database adds instead of overwriting existing device
+            device.CreatedAt = DateTime.Now;
             int result = await _database.InsertAsync(device);
 
             if (result != 1)
@@ -117,18 +117,20 @@ namespace FindMyBLEDevice.Services.Database
             return _database.Table<BTDevice>().ToListAsync();
         }
 
-        public void AtomicGetAndUpdateDevice(BTDevice device, Action<BTDevice> manipulation)
+        public Task AtomicGetAndUpdateDevice(int id, Action<BTDevice> manipulation)
         {
-            if (device is null) return;
-            lock(_database)
+            return Task.Run(() =>
             {
-                var getTask = GetDevice(device.ID);
-                getTask.Wait();
-                BTDevice latestVersion = getTask.Result;
-                manipulation?.Invoke(latestVersion);
-                var updateTask = UpdateDevice(latestVersion);
-                updateTask.Wait();
-            }
+                lock (_database)
+                {
+                    var getTask = GetDevice(id);
+                    getTask.Wait();
+                    BTDevice latestVersion = getTask.Result;
+                    manipulation?.Invoke(latestVersion);
+                    var updateTask = UpdateDevice(latestVersion);
+                    updateTask.Wait();
+                }
+            });
         }
     }
 }

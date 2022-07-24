@@ -1,5 +1,5 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
@@ -7,7 +7,6 @@
 using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
-using FindMyBLEDevice.Services;
 using Xamarin.Forms;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Geolocation;
@@ -32,10 +31,6 @@ namespace FindMyBLEDevice.ViewModels
                     + "The 'Open in maps'-button will forward you to your local map app to start a navigation.\n"
                     + "After you have reached your destination, you can switch to the 'Strength Search' within the app to track your device in your near surrounding.";
 
-        public Command ShowInfoPage { get; }
-        public Command SelectDevice { get; }
-        public Command OpenMapPin { get; }
-
         public BTDevice Device => devicesStore.SelectedDevice;
 
         public bool DeviceNotNull => Device != null;
@@ -47,9 +42,13 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _selectedDeviceString, value);
         }
 
+        public Command ShowInfoPage { get; }
+        public Command SelectDevice { get; }
+        public Command OpenMapPin { get; }
+
         public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore, IDeviceAccess deviceAccess)
         {
-            Title = "MapSearch";
+            Title = "Map Search";
 
             this.map = map;
             this.geolocation = geolocation;

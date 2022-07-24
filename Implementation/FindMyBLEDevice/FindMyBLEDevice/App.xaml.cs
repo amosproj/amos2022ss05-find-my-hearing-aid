@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
 // SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
@@ -19,25 +19,8 @@ namespace FindMyBLEDevice
 {
     public partial class App : Application
     {
-
         // Interface to stored BTDevices
         private static IDevicesStore devicesStore;
-        // Encapsulation of bluetooth functionality
-        private static IBluetooth bluetooth;
-        // Interface to stored location Permission
-        private static ILocation location;
-        // Interface to access Geolocation
-        private static IGeolocation geolocation;
-        // Interface to stored settings 
-        private static ISettings settings;
-        // Update-service
-        private static UpdateService updateService;
-        // Interface to access Shell navigation
-        private static INavigator navigator;
-        // Check-service
-        private static CheckBluetoothAndLocationService checkService;
-
-        // Create the devices store as a singleton.
         public static IDevicesStore DevicesStore
         {
             get
@@ -49,6 +32,9 @@ namespace FindMyBLEDevice
                 return devicesStore;
             }
         }
+
+        // Encapsulation of bluetooth functionality
+        private static IBluetooth bluetooth;
         public static IBluetooth Bluetooth
         {
             get
@@ -61,6 +47,8 @@ namespace FindMyBLEDevice
             }
         }
 
+        // Interface to stored location Permission
+        private static ILocation location;
         public static ILocation Location
         {
             get
@@ -73,6 +61,8 @@ namespace FindMyBLEDevice
             }
         }
 
+        // Interface to access Geolocation
+        private static IGeolocation geolocation;
         public static IGeolocation Geolocation
         {
             get
@@ -85,6 +75,8 @@ namespace FindMyBLEDevice
             }
         }
 
+        // Interface to stored settings 
+        private static ISettings settings;
         public static ISettings Settings
         {
             get
@@ -97,6 +89,8 @@ namespace FindMyBLEDevice
             }
         }
 
+        // Update-service
+        private static UpdateService updateService;
         public static UpdateService UpdateService
         {
             get
@@ -109,6 +103,8 @@ namespace FindMyBLEDevice
             }
         }
 
+        // Interface to access Shell navigation
+        private static INavigator navigator;
         public static INavigator Navigator
         {
             get
@@ -128,7 +124,8 @@ namespace FindMyBLEDevice
             }
         }
 
-        
+        // Check-service
+        private static CheckBluetoothAndLocationService checkService;
         public static CheckBluetoothAndLocationService CheckService
         {
             get
@@ -140,7 +137,6 @@ namespace FindMyBLEDevice
                 return checkService;
             }
         }
-
 
         public App()
         {
