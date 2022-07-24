@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using FindMyBLEDevice.Views;
+using FindMyBLEDevice.XamarinAccess;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -23,6 +24,7 @@ namespace FindMyBLEDevice.ViewModels
         private readonly IGeolocation geolocation;
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
+        private readonly IDeviceAccess deviceAccess;
         private bool showingDialogue;
         private readonly string _message = "'Map Search' shows the last known GPS coordinate of your lost device.\n"
                     + "Please note that the displayed GPS coordinate is the latest tracked location of your smartphone while having a connection to your device.\n"
@@ -44,7 +46,7 @@ namespace FindMyBLEDevice.ViewModels
         public Command SelectDevice { get; }
         public Command OpenMapPin { get; }
 
-        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
+        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore, IDeviceAccess deviceAccess)
         {
             Title = "Map Search";
 
@@ -52,6 +54,7 @@ namespace FindMyBLEDevice.ViewModels
             this.geolocation = geolocation;
             this.navigator = navigator;
             this.devicesStore = devicesStore;
+            this.deviceAccess = deviceAccess;
 
             SelectDevice = new Command(
                 async () => await navigator.GoToAsync(navigator.DevicesPage));
@@ -125,7 +128,7 @@ namespace FindMyBLEDevice.ViewModels
             {
                 devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
                 bool promptAnswer = false;
-                await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                await deviceAccess.InvokeOnMainThreadAsync(async () => {
                     // the database operation and switching threads can take a while,
                     // so make sure the map page is still displayed
                     bool stillShowing =
@@ -136,7 +139,7 @@ namespace FindMyBLEDevice.ViewModels
                 });
                 if (promptAnswer)
                 {
-                    await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    await deviceAccess.InvokeOnMainThreadAsync(async () => {
                         await navigator.GoToAsync(navigator.StrengthPage, true);
                     });
                 }

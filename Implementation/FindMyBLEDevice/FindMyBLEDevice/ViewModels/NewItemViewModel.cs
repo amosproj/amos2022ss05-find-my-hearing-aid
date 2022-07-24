@@ -45,18 +45,18 @@ namespace FindMyBLEDevice.ViewModels
             CancelCommand = new Command(OnCancel);
         }
 
-        private async void OnCancel()
+        public async void OnCancel()
         {
             // This will pop the current page off the navigation stack
             devicesStore.SelectedDevice = null;
             await navigator.GoToAsync("..");
         }
 
-        private async void OnSave()
+        public async void OnSave()
         {
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
-                UserLabel = Device.AdvertisedName.Substring(0, Constants.UserLabelMaxLength);
+                UserLabel = Device.AdvertisedName.Substring(0, Math.Min(Device.AdvertisedName.Length, Constants.UserLabelMaxLength));
             }
 
             if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
@@ -64,7 +64,7 @@ namespace FindMyBLEDevice.ViewModels
                 await App.Current.MainPage.DisplayAlert("Label already taken", $"The label '{UserLabel}' is already taken by another device. Please choose another one.", "Ok");
                 return;
             } 
-            else
+            else if(!String.IsNullOrWhiteSpace(UserLabel))
             {
                 Device.UserLabel = UserLabel;
             }
