@@ -1,5 +1,5 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 
 using Xamarin.Essentials;
 

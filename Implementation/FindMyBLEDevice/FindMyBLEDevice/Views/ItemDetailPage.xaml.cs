@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+
 using FindMyBLEDevice.ViewModels;
 using System;
 using System.ComponentModel;

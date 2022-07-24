@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@gmx.net>
-// SPDX-FileCopyrightText: 2022 Adrian Wandinger<adrian.wandinger@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
 
 

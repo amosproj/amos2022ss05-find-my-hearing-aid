@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SPDX-FileCopyrightText: 2022 Dominik Pysch <domi.pysch@gmail.com>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
+// SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 
 using FindMyBLEDevice.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
