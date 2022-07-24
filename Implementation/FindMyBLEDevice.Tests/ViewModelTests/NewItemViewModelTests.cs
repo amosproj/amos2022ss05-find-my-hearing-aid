@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
 
 using FindMyBLEDevice.Services.Database;
@@ -62,9 +63,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             vm.OnCancel();
 
             // assert
-            // TODO: verify how to check for the right navigation
-            // nvg.Verify(mock => mock.GoToAsync(It.Is<string>(pageName =>
-            //   pageName == "MapPage"), It.IsAny<bool>()), Times.Once);
+            nvg.Verify(mock => mock.GoToAsync("..", It.IsAny<bool>()), Times.Once);
             Assert.IsNull(deviceStore.Object.SelectedDevice);
         }
 
@@ -83,6 +82,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             var deviceStore = new Mock<IDevicesStore>();
             deviceStore.SetupAllProperties();
             deviceStore.Object.SelectedDevice = btDevice;
+            deviceStore.Setup(mock => mock.GetAllDevices()).Returns(Task.FromResult(new System.Collections.Generic.List<Models.BTDevice>()));
 
             var geolocation = new Mock<IGeolocation>();
             geolocation.Setup(mock => mock.GetCurrentLocation()).Returns(Task.FromResult(new Location()
@@ -99,8 +99,9 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
             // assert
             Assert.AreEqual(btDevice.UserLabel, advertisedName);
+            nvg.Verify(mock => mock.GoToAsync("..", It.IsAny<bool>()), Times.Once);
         }
-        /*
+
         [TestMethod]
         public void OnSaveCommandUserLabel_Works()
         {
@@ -108,22 +109,35 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             NewItemViewModel vm;
             var nvg = new Mock<INavigator>();
 
-            string userLabel = "MyNewName";
+            string userLabel = "customLabel";
             string advertisedName = "advertisedName";
             var btDevice = new Models.BTDevice();
             btDevice.AdvertisedName = advertisedName;
-
             var deviceStore = new Mock<IDevicesStore>();
+            deviceStore.SetupAllProperties();
             deviceStore.Object.SelectedDevice = btDevice;
+            deviceStore.Setup(mock => mock.GetAllDevices()).Returns(Task.FromResult(new System.Collections.Generic.List<Models.BTDevice>()));
+
+            int latitude = 10;
+            int longitude = 10;
+            var geolocation = new Mock<IGeolocation>();
+            geolocation.Setup(mock => mock.GetCurrentLocation()).Returns(Task.FromResult(new Location()
+            {
+                Latitude = latitude,
+                Longitude = longitude
+            }));
 
             // act
-            vm = new NewItemViewModel(nvg.Object, null, null);
+            vm = new NewItemViewModel(nvg.Object, deviceStore.Object, geolocation.Object);
+            vm.OnAppearing();
             vm.UserLabel = userLabel;
             vm.OnSave();
 
             // assert
             Assert.AreEqual(btDevice.UserLabel, userLabel);
+            Assert.AreEqual(btDevice.LastGPSLatitude, latitude);
+            Assert.AreEqual(btDevice.LastGPSLongitude, longitude);
+            nvg.Verify(mock => mock.GoToAsync("..", It.IsAny<bool>()), Times.Once);
         }
-        */
     }
 }
