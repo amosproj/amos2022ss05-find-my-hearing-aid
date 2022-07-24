@@ -6,8 +6,7 @@
 
 using Xamarin.Forms;
 using FindMyBLEDevice.ViewModels;
-
-
+using FindMyBLEDevice.XamarinAccess;
 
 namespace FindMyBLEDevice.Views
 {
@@ -18,7 +17,7 @@ namespace FindMyBLEDevice.Views
         public MapPage()
         {
             InitializeComponent();
-            BindingContext = viewModel = new MapViewModel(map, App.Geolocation, App.Navigator, App.DevicesStore);
+            BindingContext = viewModel = new MapViewModel(map, App.Geolocation, App.Navigator, App.DevicesStore, new DeviceAccess());
         }
 
         protected override void OnAppearing()
