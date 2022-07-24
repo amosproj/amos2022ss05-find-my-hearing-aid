@@ -3,10 +3,12 @@
 
 
 using FindMyBLEDevice.Services.Database;
+using FindMyBLEDevice.Services.Geolocation;
 using FindMyBLEDevice.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Threading.Tasks;
+using Xamarin.Essentials;
 
 namespace FindMyBLEDevice.Tests.ViewModelTests
 {
@@ -78,12 +80,20 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
             string advertisedName = "advertisedName";
             var btDevice = new Models.BTDevice();
             btDevice.AdvertisedName = advertisedName;
-
             var deviceStore = new Mock<IDevicesStore>();
+            deviceStore.SetupAllProperties();
             deviceStore.Object.SelectedDevice = btDevice;
 
+            var geolocation = new Mock<IGeolocation>();
+            geolocation.Setup(mock => mock.GetCurrentLocation()).Returns(Task.FromResult(new Location()
+            {
+                Latitude = 0,
+                Longitude = 0
+            }));
+
             // act
-            vm = new NewItemViewModel(nvg.Object, null, null);
+            vm = new NewItemViewModel(nvg.Object, deviceStore.Object, geolocation.Object);
+            vm.OnAppearing();
             vm.UserLabel = userLabel;
             vm.OnSave();
 
