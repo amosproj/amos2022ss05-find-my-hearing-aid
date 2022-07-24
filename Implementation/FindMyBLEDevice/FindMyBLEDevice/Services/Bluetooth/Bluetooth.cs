@@ -5,7 +5,6 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
-
 using FindMyBLEDevice.Models;
 using Plugin.BLE;
 using System.Threading.Tasks;
@@ -35,11 +34,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
             this.adapter = adapter;
             this.settings = settings;
 
-            adapter.DeviceDiscovered += OnDeviceDiscovered;
+            adapter.DeviceDiscovered += OnAdapterDeviceDiscovered;
         }
         public Bluetooth(ISettings settings) : this(CrossBluetoothLE.Current.Adapter, settings) {}
 
-        private void OnDeviceDiscovered(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
+        private void OnAdapterDeviceDiscovered(object sender, Plugin.BLE.Abstractions.EventArgs.DeviceEventArgs e)
         {
             if (e.Device.Rssi < Constants.RssiTooFarThreshold 
                 && !settings.Get(SettingsNames.DisplayWeakDevices, false))
@@ -60,18 +59,19 @@ namespace FindMyBLEDevice.Services.Bluetooth
             });
         }
 
-        public async Task StartSearch(int timeout)
+        public Task StartSearch(int timeout)
         {
             adapter.ScanTimeout = timeout;
-            await adapter.StartScanningForDevicesAsync();
+            return adapter.StartScanningForDevicesAsync();
         }
 
-        public async Task StopSearch()
+        public Task StopSearch()
         {
             if (adapter.IsScanning)
             {
-                await adapter.StopScanningForDevicesAsync();
+                return adapter.StopScanningForDevicesAsync();
             }
+            return Task.CompletedTask;
         }
         
         public void StartRssiPolling(String btguid, Action<int> updateRssi, Action<int> connected = null, Action disconnected = null)
@@ -87,9 +87,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
                     {
                         IDevice device = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid));
 
-                        int txPower = await DeviceTXPowerAsync(device);
-                        
-                        if (!(connected is null)) connected.Invoke(txPower);
+                        if (!(connected is null))
+                        {
+                            int txPower = await DeviceTXPowerAsync(device);
+                            connected.Invoke(txPower);
+                        }
 
                         try
                         {
@@ -159,10 +161,10 @@ namespace FindMyBLEDevice.Services.Bluetooth
             return Constants.TxPowerDefault;
         }
 
-        public async Task<int> DeviceReachableAsync(BTDevice device)
+        public async Task<int> DeviceReachableAsync(String btguid)
         {
             IDevice adapterDevice = null;
-            var connDevMatchingGuid = adapter.ConnectedDevices.Where(connDev => connDev.Id.ToString() == device.BT_GUID);
+            var connDevMatchingGuid = adapter.ConnectedDevices.Where(connDev => connDev.Id.ToString() == btguid);
             if (connDevMatchingGuid.Any())
             {
                 adapterDevice = connDevMatchingGuid.First();
@@ -172,11 +174,11 @@ namespace FindMyBLEDevice.Services.Bluetooth
                 try
                 {
                     ConnectParameters par = new ConnectParameters(autoConnect: false, forceBleTransport: true);
-                    adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(device.BT_GUID), par);
+                    adapterDevice = await adapter.ConnectToKnownDeviceAsync(Guid.Parse(btguid), par);
                     if (!(adapterDevice is null)) await adapter.DisconnectDeviceAsync(adapterDevice);
                 } catch (Exception e)
                 {
-                    Console.WriteLine($"Checking if {device.UserLabel} is reachable failed:\n"+e.ToString());
+                    Console.WriteLine($"Checking if device is reachable failed:\n"+e.ToString());
                 }
             }
             return adapterDevice != null ? adapterDevice.Rssi : int.MinValue;

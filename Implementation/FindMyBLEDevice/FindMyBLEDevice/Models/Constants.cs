@@ -4,10 +4,6 @@
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace FindMyBLEDevice.Models
 {
     public static class Constants
