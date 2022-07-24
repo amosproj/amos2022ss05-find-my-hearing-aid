@@ -87,7 +87,10 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
 
             var ds = new Mock<IDevicesStore>();
             BTDevice nullDev = null;
-            ds.SetupSequence(mock => mock.SelectedDevice).Returns(device).Returns(nullDev);
+            ds.SetupSequence(mock => mock.SelectedDevice)
+                .Returns(device) // on appearing calls get twice for the initial pin
+                .Returns(device)
+                .Returns(nullDev); // the event handler should get null
             var vm = new MapViewModel(map, Mock.Of<IGeolocation>(), Mock.Of<INavigator>(), ds.Object, Mock.Of<IDeviceAccess>());
 
             // act
@@ -103,7 +106,7 @@ namespace FindMyBLEDevice.Tests.ViewModelTests
         public void CurrentDeviceReachableCausesDisplayAlert()
         {
             // arrange
-            var device = new BTDevice() { ID = 0, WithinRange = true };
+            var device = new BTDevice() { ID = 0, WithinRange = true, UserLabel = "some label for the pin" };
             var map = new Map();
 
             var ds = new Mock<IDevicesStore>();
