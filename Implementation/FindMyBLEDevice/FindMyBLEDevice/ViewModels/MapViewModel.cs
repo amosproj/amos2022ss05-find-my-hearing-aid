@@ -47,7 +47,7 @@ namespace FindMyBLEDevice.ViewModels
 
         public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
         {
-            Title = "MapSearch";
+            Title = "Map Search";
 
             this.map = map;
             this.geolocation = geolocation;

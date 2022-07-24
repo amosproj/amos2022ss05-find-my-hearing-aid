@@ -110,7 +110,7 @@ namespace FindMyBLEDevice.ViewModels
             IGeolocation geolocation, 
             ISettings settings)
         {
-            Title = "StrengthSearch";
+            Title = "Strength Search";
 
             this.devicesStore = devicesStore;
             this.bluetooth = bluetooth;
