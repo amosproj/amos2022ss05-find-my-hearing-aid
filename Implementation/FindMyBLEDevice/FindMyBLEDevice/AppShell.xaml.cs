@@ -1,8 +1,8 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
+
 using FindMyBLEDevice.Views;
-using System;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice
@@ -30,6 +30,5 @@ namespace FindMyBLEDevice
             }
             base.OnNavigating(args);
         }
-
     }
 }

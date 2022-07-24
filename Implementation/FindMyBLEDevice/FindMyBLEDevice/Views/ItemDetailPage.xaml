@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--
 // SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
@@ -9,7 +9,6 @@
              x:Class="FindMyBLEDevice.Views.ItemDetailPage"
              Title="{Binding Device.UserLabel}"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels"
-             xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
              x:DataType="local:ItemDetailViewModel"
              x:Name="BrowseItemDetailPage"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"

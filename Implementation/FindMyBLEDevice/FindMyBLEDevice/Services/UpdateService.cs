@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SPDX-FileCopyrightText: 2022 Adrian Wandinger<adrian.wandinger@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
 using FindMyBLEDevice.Exceptions;
 using FindMyBLEDevice.Models;
@@ -21,9 +21,7 @@ namespace FindMyBLEDevice.Services
         private readonly IGeolocation geolocation;
         private readonly ISettings settings;
 
-#pragma warning disable S1450
         private List<BTDevice> savedDevices;
-#pragma warning restore S1450
 
         private bool running;
 
@@ -95,7 +93,7 @@ namespace FindMyBLEDevice.Services
             Dictionary<BTDevice, Task<int>> reachableTasks = new Dictionary<BTDevice, Task<int>>();
             foreach (BTDevice device in savedDevices)
             {
-                reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device));
+                reachableTasks.Add(device, bluetooth.DeviceReachableAsync(device.BT_GUID));
             }
 
             // wait until all connection attempts finished (adapter timeout ~5s)
@@ -127,7 +125,7 @@ namespace FindMyBLEDevice.Services
                 }
                 try
                 {
-                    devicesStore.AtomicGetAndUpdateDevice(databaseDevice, manipulation);
+                    await devicesStore.AtomicGetAndUpdateDevice(databaseDevice.ID, manipulation);
                 } catch (DeviceStoreException)
                 {
                     Console.WriteLine($"Failed to update a device");

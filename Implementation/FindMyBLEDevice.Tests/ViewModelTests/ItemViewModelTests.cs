@@ -1,4 +1,7 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FindMyBLEDevice.Models;

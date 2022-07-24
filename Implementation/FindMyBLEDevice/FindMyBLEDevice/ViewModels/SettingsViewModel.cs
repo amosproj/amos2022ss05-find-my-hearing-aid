@@ -1,7 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
 
 using FindMyBLEDevice.Models;
@@ -17,25 +17,6 @@ namespace FindMyBLEDevice.ViewModels
     {
         private readonly ISettings settings;
         private readonly IDevicesStore devicesStore;
-
-        public Command<string> OpenUrl { get; }
-        public Command DefaultButtonTapped { get; }
-        public Command RemoveDevicesButtonTapped { get; }
-
-        public SettingsViewModel(ISettings settings, IDevicesStore devicesStore)
-        {
-            Title = "Settings";
-
-            this.settings = settings;
-            this.devicesStore = devicesStore;
-
-            _rssiIntervalString = RssiInterval.ToString();
-            _updateServiceIntervalString = UpdateServiceInterval.ToString();
-
-            OpenUrl = new Command<string>(async (url) => await Launcher.OpenAsync(url));
-            DefaultButtonTapped = new Command(async () => await RestoreDefaults());
-            RemoveDevicesButtonTapped = new Command(async () => await RemoveAllDevices());
-        }
 
         public bool DisplayNamelessDevices
         {
@@ -166,6 +147,25 @@ namespace FindMyBLEDevice.ViewModels
         public int UpdateServiceIntervalMax
         {
             get => Constants.UpdateServiceIntervalMax;
+        }
+
+        public Command<string> OpenUrl { get; }
+        public Command DefaultButtonTapped { get; }
+        public Command RemoveDevicesButtonTapped { get; }
+
+        public SettingsViewModel(ISettings settings, IDevicesStore devicesStore)
+        {
+            Title = "Settings";
+
+            this.settings = settings;
+            this.devicesStore = devicesStore;
+
+            _rssiIntervalString = RssiInterval.ToString();
+            _updateServiceIntervalString = UpdateServiceInterval.ToString();
+
+            OpenUrl = new Command<string>(async (url) => await Launcher.OpenAsync(url));
+            DefaultButtonTapped = new Command(async () => await RestoreDefaults());
+            RemoveDevicesButtonTapped = new Command(async () => await RemoveAllDevices());
         }
 
         private async Task RestoreDefaults()

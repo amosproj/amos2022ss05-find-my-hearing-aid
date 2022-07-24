@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 
 namespace FindMyBLEDevice.Services.Settings
 {
     public interface ISettings
     {
-        //
+        ///
         // Summary:
         //     Gets the value for a given key, or the default specified if the key does not
         //     exist.

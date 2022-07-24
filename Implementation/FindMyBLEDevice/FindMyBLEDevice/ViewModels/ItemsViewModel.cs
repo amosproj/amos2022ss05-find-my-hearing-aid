@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Adrian Wandinger<adrian.wandinger@fau.de>
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Models;
@@ -13,8 +13,6 @@ using System.Linq;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Bluetooth;
 using FindMyBLEDevice.Services.Location;
-using System.Threading;
-using FindMyBLEDevice.Services;
 using System.Collections.Generic;
 
 namespace FindMyBLEDevice.ViewModels
@@ -30,13 +28,6 @@ namespace FindMyBLEDevice.ViewModels
                           + "You can permanently store a device on your app by clicking on the device and by assigning it an individual name.\n"
                           + "Click on a device in the 'Saved Devices' section to select a device.\n"
                           + "The settings symbol next to the device allows you to display device specific details.";
-
-        public Command SearchAvailableDevicesCommand { get; }
-        public Command<BTDevice> SavedDeviceTapped { get; }
-        public Command<BTDevice> AvailableDeviceTapped { get; }
-        public Command<BTDevice> SavedDeviceSettingsTapped { get; }
-        public Command ShowInfoPage { get; }
-        public Command GoBack { get; }
 
         private ObservableCollection<BTDevice> _savedDevices;
         public ObservableCollection<BTDevice> SavedDevices
@@ -56,6 +47,13 @@ namespace FindMyBLEDevice.ViewModels
         {
             get => IsBusy && AvailableDevices.Count == 0;
         }
+
+        public Command SearchAvailableDevicesCommand { get; }
+        public Command<BTDevice> SavedDeviceTapped { get; }
+        public Command<BTDevice> AvailableDeviceTapped { get; }
+        public Command<BTDevice> SavedDeviceSettingsTapped { get; }
+        public Command ShowInfoPage { get; }
+        public Command GoBack { get; }
 
         public ItemsViewModel(INavigator navigator, IDevicesStore devicesStore, IBluetooth bluetooth, ILocation location)
         {

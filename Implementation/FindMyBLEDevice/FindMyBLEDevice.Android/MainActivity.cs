@@ -2,8 +2,6 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
-using System;
-
 using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
@@ -15,7 +13,7 @@ using AndroidX.Core.App;
 namespace FindMyBLEDevice.Droid
 {
     [Activity(Label = "Find My BLE Device", Icon = "@mipmap/ic_launcher", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+    public class MainActivity : Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         readonly int requiredPermissionsRequestCode = 1000;
 

@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
-// SPDX-FileCopyrightText: 2022 Dominik Pysch <domi.pysch@gmail.com>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
 
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Bluetooth;
