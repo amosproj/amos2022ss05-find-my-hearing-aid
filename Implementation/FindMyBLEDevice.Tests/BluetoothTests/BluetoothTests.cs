@@ -227,8 +227,8 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             bt.StopRssiPolling();
 
             // assert
-            device.Verify(mock => mock.UpdateRssiAsync(), Times.Between(1, 4, Moq.Range.Inclusive));
-            device.VerifyGet(mock => mock.Rssi, Times.Between(1, 4, Moq.Range.Inclusive));
+            device.Verify(mock => mock.UpdateRssiAsync(), Times.Between(1, 6, Moq.Range.Inclusive));
+            device.VerifyGet(mock => mock.Rssi, Times.Between(1, 6, Moq.Range.Inclusive));
             Assert.AreEqual(fakeRssi, rssi);
         }
 
