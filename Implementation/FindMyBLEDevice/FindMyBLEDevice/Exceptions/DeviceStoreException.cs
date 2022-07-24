@@ -1,4 +1,7 @@
-﻿using System;
+﻿// SPDX-License-Identifier: MIT
+// SPDX-FileCopyrightText: 2022 Dominik Pysch <dominik.pysch@fau.de>
+
+using System;
 using System.Runtime.Serialization;
 
 namespace FindMyBLEDevice.Exceptions
