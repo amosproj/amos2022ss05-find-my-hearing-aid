@@ -169,7 +169,7 @@
                            Color="{StaticResource Accent}" 
                            HeightRequest="36"
                            />
-        
+
         <ImageButton Grid.Row="0" 
                      VerticalOptions="StartAndExpand" 
                      HorizontalOptions="EndAndExpand" 

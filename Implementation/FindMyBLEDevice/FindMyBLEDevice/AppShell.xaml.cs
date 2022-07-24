@@ -3,7 +3,6 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Views;
-using System;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice
@@ -31,6 +30,5 @@ namespace FindMyBLEDevice
             }
             base.OnNavigating(args);
         }
-
     }
 }

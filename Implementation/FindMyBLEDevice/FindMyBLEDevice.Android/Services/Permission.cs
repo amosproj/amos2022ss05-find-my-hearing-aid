@@ -12,12 +12,12 @@ namespace FindMyBLEDevice.Droid.Services
     // These functions only return true, because we only need the iOS implementation for it
     internal class Permission : IPermission
     {
-        public bool checkBluetoothPermission()
+        public bool CheckBluetoothPermission()
         {
             return true;
         }
 
-        public bool checkLocationPermission()
+        public bool CheckLocationPermission()
         {
             return true;
         }

@@ -3,8 +3,6 @@
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.ViewModels;
-using System;
-using System.ComponentModel;
 using Xamarin.Forms;
 
 namespace FindMyBLEDevice.Views

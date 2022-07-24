@@ -9,7 +9,6 @@
              x:Class="FindMyBLEDevice.Views.ItemDetailPage"
              Title="{Binding Device.UserLabel}"
              xmlns:local="clr-namespace:FindMyBLEDevice.ViewModels"
-             xmlns:model="clr-namespace:FindMyBLEDevice.Models"  
              x:DataType="local:ItemDetailViewModel"
              x:Name="BrowseItemDetailPage"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"

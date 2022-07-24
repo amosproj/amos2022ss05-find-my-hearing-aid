@@ -13,6 +13,8 @@ namespace FindMyBLEDevice.Services.Database
 {
     public interface IDevicesStore
     {
+        event EventHandler<List<int>> DevicesChanged;
+
         /// <summary>
         /// The currently selected device. 
         /// Note that this value is uninitialized when the app starts.
@@ -88,14 +90,13 @@ namespace FindMyBLEDevice.Services.Database
         /// <exception cref="ArgumentException">When no device with given id is saved</exception>
         /// <exception cref="DeviceStoreException">When operation in local database fails</exception>
         Task UpdateDevice(BTDevice device);
+
         /// <summary>
         /// Gets the latest version of the device from the database
         /// and applies the given manipulations.
         /// </summary>
         /// <param name="device">The device to be manipulated</param>
         /// <param name="manipulation">A method that applies the manipulations to the device object.</param>
-        void AtomicGetAndUpdateDevice(BTDevice device, Action<BTDevice> manipulation);
-
-        event EventHandler<List<int>> DevicesChanged;
+        Task AtomicGetAndUpdateDevice(int id, Action<BTDevice> manipulation);
     }
 }

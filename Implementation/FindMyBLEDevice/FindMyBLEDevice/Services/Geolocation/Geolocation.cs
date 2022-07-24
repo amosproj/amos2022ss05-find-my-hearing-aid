@@ -15,11 +15,11 @@ namespace FindMyBLEDevice.Services.Geolocation
         private CancellationTokenSource cts;
         private readonly IGeolocationAccess _geolocationAccess;
 
-        public Geolocation() : this(new GeolocationAccess()) { }
         public Geolocation(IGeolocationAccess geolocationAccess)
         {
             _geolocationAccess = geolocationAccess;
         }
+        public Geolocation() : this(new GeolocationAccess()) { }
 
         public async Task<Xamarin.Essentials.Location> GetCurrentLocation()
         {

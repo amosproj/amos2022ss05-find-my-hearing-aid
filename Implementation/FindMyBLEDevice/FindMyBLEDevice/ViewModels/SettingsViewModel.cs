@@ -18,25 +18,6 @@ namespace FindMyBLEDevice.ViewModels
         private readonly ISettings settings;
         private readonly IDevicesStore devicesStore;
 
-        public Command<string> OpenUrl { get; }
-        public Command DefaultButtonTapped { get; }
-        public Command RemoveDevicesButtonTapped { get; }
-
-        public SettingsViewModel(ISettings settings, IDevicesStore devicesStore)
-        {
-            Title = "Settings";
-
-            this.settings = settings;
-            this.devicesStore = devicesStore;
-
-            _rssiIntervalString = RssiInterval.ToString();
-            _updateServiceIntervalString = UpdateServiceInterval.ToString();
-
-            OpenUrl = new Command<string>(async (url) => await Launcher.OpenAsync(url));
-            DefaultButtonTapped = new Command(async () => await RestoreDefaults());
-            RemoveDevicesButtonTapped = new Command(async () => await RemoveAllDevices());
-        }
-
         public bool DisplayNamelessDevices
         {
             get => settings.Get(SettingsNames.DisplayNamelessDevices, Constants.DisplayNamelessDevicesDefault);
@@ -166,6 +147,25 @@ namespace FindMyBLEDevice.ViewModels
         public int UpdateServiceIntervalMax
         {
             get => Constants.UpdateServiceIntervalMax;
+        }
+
+        public Command<string> OpenUrl { get; }
+        public Command DefaultButtonTapped { get; }
+        public Command RemoveDevicesButtonTapped { get; }
+
+        public SettingsViewModel(ISettings settings, IDevicesStore devicesStore)
+        {
+            Title = "Settings";
+
+            this.settings = settings;
+            this.devicesStore = devicesStore;
+
+            _rssiIntervalString = RssiInterval.ToString();
+            _updateServiceIntervalString = UpdateServiceInterval.ToString();
+
+            OpenUrl = new Command<string>(async (url) => await Launcher.OpenAsync(url));
+            DefaultButtonTapped = new Command(async () => await RestoreDefaults());
+            RemoveDevicesButtonTapped = new Command(async () => await RemoveAllDevices());
         }
 
         private async Task RestoreDefaults()

@@ -16,9 +16,6 @@ namespace FindMyBLEDevice.ViewModels
         private readonly IDevicesStore devicesStore;
         private readonly IGeolocation geolocation;
 
-        public Command SaveCommand { get; }
-        public Command CancelCommand { get; }
-
         public BTDevice Device => devicesStore.SelectedDevice;
 
         private string _userLabel;
@@ -34,6 +31,9 @@ namespace FindMyBLEDevice.ViewModels
                 OnPropertyChanged(nameof(UserLabel));
             }
         }
+
+        public Command SaveCommand { get; }
+        public Command CancelCommand { get; }
 
         public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore, IGeolocation geolocation)
         {
@@ -56,12 +56,15 @@ namespace FindMyBLEDevice.ViewModels
         {
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
-                Device.UserLabel = Device.AdvertisedName;
-            } else if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
+                UserLabel = Device.AdvertisedName.Substring(0, Constants.UserLabelMaxLength);
+            }
+
+            if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
             {
                 await App.Current.MainPage.DisplayAlert("Label already taken", $"The label '{UserLabel}' is already taken by another device. Please choose another one.", "Ok");
                 return;
-            } else
+            } 
+            else
             {
                 Device.UserLabel = UserLabel;
             }
@@ -70,6 +73,7 @@ namespace FindMyBLEDevice.ViewModels
             Device.LastGPSLongitude = location.Longitude;
             Device.LastGPSLatitude = location.Latitude;
             Device.LastGPSTimestamp = DateTime.Now;
+            Device.WithinRange = true;
 
             devicesStore.SelectedDevice = await devicesStore.AddDevice(Device);
 

@@ -1,8 +1,7 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@gmx.net>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
-
 
 using System;
 using System.Threading.Tasks;
@@ -15,9 +14,10 @@ namespace FindMyBLEDevice.Services
     public class CheckBluetoothAndLocationService
     {
         private readonly int checkInterval = 5000;
+
         private bool running;
-        static public IPlatformSpecificLocation platFormLocationService => DependencyService.Get<IPlatformSpecificLocation>();
-        static public IPermission permissionService => DependencyService.Get<IPermission>();
+        static public IPlatformSpecificLocation PlatFormLocationService => DependencyService.Get<IPlatformSpecificLocation>();
+        static public IPermission PermissionService => DependencyService.Get<IPermission>();
 
         public CheckBluetoothAndLocationService()
         {
@@ -40,7 +40,7 @@ namespace FindMyBLEDevice.Services
             {
                 try
                 {
-                    var locationEnabled = platFormLocationService.IsLocationServiceEnabled();
+                    var locationEnabled = PlatFormLocationService.IsLocationServiceEnabled();
                     var bluetoothEnabled = App.Bluetooth.IsEnabled();
 
                     string message = "If Bluetooth and GPS are not activated the correct functionality of this app cannot be guaranteed.\n";
@@ -51,8 +51,8 @@ namespace FindMyBLEDevice.Services
 
                     // check is only valid for iOS devices, for Android the permission service always returns true
                     // This is done because requesting permissions for Android works completely different and it was not possible to implement it in the same way
-                    bool hasBluetoothPermission = permissionService.checkBluetoothPermission();
-                    bool hasLocationPermission = permissionService.checkLocationPermission();
+                    bool hasBluetoothPermission = PermissionService.CheckBluetoothPermission();
+                    bool hasLocationPermission = PermissionService.CheckLocationPermission();
 
                     if (!hasBluetoothPermission || !hasLocationPermission)
                     {

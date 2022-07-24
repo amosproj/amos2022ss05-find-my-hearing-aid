@@ -7,8 +7,6 @@
 using Xamarin.Forms;
 using FindMyBLEDevice.ViewModels;
 
-
-
 namespace FindMyBLEDevice.Views
 {
     public partial class MapPage : ContentPage

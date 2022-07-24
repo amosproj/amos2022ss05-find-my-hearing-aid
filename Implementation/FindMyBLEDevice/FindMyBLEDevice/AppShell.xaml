@@ -37,16 +37,17 @@
             <Style TargetType="FlyoutItem" BasedOn="{StaticResource BaseStyle}" />
         </ResourceDictionary>
     </Shell.Resources>
-      
+    
+    <!--
+        In case you want a FlyoutMenu instead of the TabBar at the bottom, simply: 
+        - Remove the <TabBar> and </TabBar> tags below (optionally un-indent the items within), 
+        - Turn every <Tab> tag below into a <FlyoutItem> tag (only change the tag name, the rest stays the same) and
+        - Remove the line <Setter Property="Shell.NavBarIsVisible" Value="False" /> above
+    -->
     <TabBar>
         <Tab Title="Home" Icon="icon_about.png" AutomationId="FlyoutItem_About">
             <ShellContent Route="AboutPage" ContentTemplate="{DataTemplate local:AboutPage}"/>
         </Tab>
-        <!--
-        <Tab Title="Devices" Icon="icon_feed.png" AutomationId="FlyoutItem_Devices">
-            <ShellContent Route="ItemsPage" ContentTemplate="{DataTemplate local:ItemsPage}"/>
-        </Tab>
-        -->
         <Tab Title="Strength Search" Icon="signal_strength.png" AutomationId="FlyoutItem_Strength">
             <ShellContent Route="StrengthPage" ContentTemplate="{DataTemplate local:StrengthPage}" />
         </Tab>

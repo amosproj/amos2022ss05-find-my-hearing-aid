@@ -19,11 +19,6 @@ namespace FindMyBLEDevice.ViewModels
                                 + "- The tab bar at the bottom of this page allows you to directly navigate to your desired function.\n"
                                 + "- With the button above the tab bar, you can select your desired device.";
 
-        public Command OpenMapPageCommand { get; }
-        public Command OpenStrengthPageCommand { get; }
-        public Command ShowInfoPage { get; }
-        public Command SelectDevice { get; }
-
         public BTDevice Device => devicesStore.SelectedDevice;
 
         private string _selectedDeviceString;
@@ -32,6 +27,11 @@ namespace FindMyBLEDevice.ViewModels
             get => _selectedDeviceString;
             set => SetProperty(ref _selectedDeviceString, value);
         }
+
+        public Command OpenMapPageCommand { get; }
+        public Command OpenStrengthPageCommand { get; }
+        public Command ShowInfoPage { get; }
+        public Command SelectDevice { get; }
 
         public AboutViewModel(INavigator navigator, IDevicesStore devicesStore)
         {

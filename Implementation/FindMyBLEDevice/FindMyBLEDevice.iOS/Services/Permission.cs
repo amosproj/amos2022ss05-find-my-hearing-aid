@@ -15,7 +15,7 @@ namespace FindMyBLEDevice.iOS.Services
 {
     public class Permission : IPermission
     {
-        public bool checkBluetoothPermission()
+        public bool CheckBluetoothPermission()
         {
             if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
             {
@@ -28,7 +28,7 @@ namespace FindMyBLEDevice.iOS.Services
             }
         }
 
-        public bool checkLocationPermission()
+        public bool CheckLocationPermission()
         {
             switch (CLLocationManager.Status)
             {

@@ -21,9 +21,7 @@ namespace FindMyBLEDevice.Services
         private readonly IGeolocation geolocation;
         private readonly ISettings settings;
 
-#pragma warning disable S1450
         private List<BTDevice> savedDevices;
-#pragma warning restore S1450
 
         private bool running;
 
@@ -127,7 +125,7 @@ namespace FindMyBLEDevice.Services
                 }
                 try
                 {
-                    devicesStore.AtomicGetAndUpdateDevice(databaseDevice, manipulation);
+                    await devicesStore.AtomicGetAndUpdateDevice(databaseDevice.ID, manipulation);
                 } catch (DeviceStoreException)
                 {
                     Console.WriteLine($"Failed to update a device");
