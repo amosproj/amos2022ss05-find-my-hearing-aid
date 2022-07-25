@@ -1,7 +1,7 @@
-﻿// X - License - Identifier: MIT
+﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
-// SPDX-FileCopyrightText: Jannik Schuetz <jannik.schuetz@gmx.net>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using UIKit;
 
@@ -15,7 +15,7 @@ namespace FindMyBLEDevice.iOS.Services
 {
     public class Permission : IPermission
     {
-        public bool checkBluetoothPermission()
+        public bool CheckBluetoothPermission()
         {
             if (UIDevice.CurrentDevice.CheckSystemVersion(13, 0))
             {
@@ -28,7 +28,7 @@ namespace FindMyBLEDevice.iOS.Services
             }
         }
 
-        public bool checkLocationPermission()
+        public bool CheckLocationPermission()
         {
             switch (CLLocationManager.Status)
             {

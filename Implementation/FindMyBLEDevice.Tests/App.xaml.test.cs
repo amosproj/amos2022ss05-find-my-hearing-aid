@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
-// SDPX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SDPX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@googlemail.com>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 

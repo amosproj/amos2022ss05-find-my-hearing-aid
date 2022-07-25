@@ -1,5 +1,5 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
@@ -7,7 +7,6 @@
 using Xamarin.Essentials;
 using Xamarin.Forms.Maps;
 using FindMyBLEDevice.Models;
-using FindMyBLEDevice.Services;
 using Xamarin.Forms;
 using FindMyBLEDevice.Services.Database;
 using FindMyBLEDevice.Services.Geolocation;
@@ -15,6 +14,7 @@ using System.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using FindMyBLEDevice.Views;
+using FindMyBLEDevice.XamarinAccess;
 
 namespace FindMyBLEDevice.ViewModels
 {
@@ -24,15 +24,12 @@ namespace FindMyBLEDevice.ViewModels
         private readonly IGeolocation geolocation;
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
+        private readonly IDeviceAccess deviceAccess;
         private bool showingDialogue;
         private readonly string _message = "'Map Search' shows the last known GPS coordinate of your lost device.\n"
                     + "Please note that the displayed GPS coordinate is the latest tracked location of your smartphone while having a connection to your device.\n"
                     + "The 'Open in maps'-button will forward you to your local map app to start a navigation.\n"
                     + "After you have reached your destination, you can switch to the 'Strength Search' within the app to track your device in your near surrounding.";
-
-        public Command ShowInfoPage { get; }
-        public Command SelectDevice { get; }
-        public Command OpenMapPin { get; }
 
         public BTDevice Device => devicesStore.SelectedDevice;
 
@@ -45,14 +42,19 @@ namespace FindMyBLEDevice.ViewModels
             set => SetProperty(ref _selectedDeviceString, value);
         }
 
-        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore)
+        public Command ShowInfoPage { get; }
+        public Command SelectDevice { get; }
+        public Command OpenMapPin { get; }
+
+        public MapViewModel(Xamarin.Forms.Maps.Map map, IGeolocation geolocation, INavigator navigator, IDevicesStore devicesStore, IDeviceAccess deviceAccess)
         {
-            Title = "MapSearch";
+            Title = "Map Search";
 
             this.map = map;
             this.geolocation = geolocation;
             this.navigator = navigator;
             this.devicesStore = devicesStore;
+            this.deviceAccess = deviceAccess;
 
             SelectDevice = new Command(
                 async () => await navigator.GoToAsync(navigator.DevicesPage));
@@ -126,7 +128,7 @@ namespace FindMyBLEDevice.ViewModels
             {
                 devicesStore.DevicesChanged -= CheckIfSelectedDeviceReachable;
                 bool promptAnswer = false;
-                await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                await deviceAccess.InvokeOnMainThreadAsync(async () => {
                     // the database operation and switching threads can take a while,
                     // so make sure the map page is still displayed
                     bool stillShowing =
@@ -137,7 +139,7 @@ namespace FindMyBLEDevice.ViewModels
                 });
                 if (promptAnswer)
                 {
-                    await Xamarin.Forms.Device.InvokeOnMainThreadAsync(async () => {
+                    await deviceAccess.InvokeOnMainThreadAsync(async () => {
                         await navigator.GoToAsync(navigator.StrengthPage, true);
                     });
                 }

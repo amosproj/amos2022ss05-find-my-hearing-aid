@@ -1,6 +1,6 @@
 ﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Models;
@@ -227,8 +227,8 @@ namespace FindMyBLEDevice.Tests.BluetoothTests
             bt.StopRssiPolling();
 
             // assert
-            device.Verify(mock => mock.UpdateRssiAsync(), Times.Between(1, 4, Moq.Range.Inclusive));
-            device.VerifyGet(mock => mock.Rssi, Times.Between(1, 4, Moq.Range.Inclusive));
+            device.Verify(mock => mock.UpdateRssiAsync(), Times.Between(1, 6, Moq.Range.Inclusive));
+            device.VerifyGet(mock => mock.Rssi, Times.Between(1, 6, Moq.Range.Inclusive));
             Assert.AreEqual(fakeRssi, rssi);
         }
 

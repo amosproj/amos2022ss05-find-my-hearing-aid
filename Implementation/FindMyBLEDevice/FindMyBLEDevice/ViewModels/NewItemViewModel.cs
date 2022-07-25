@@ -1,5 +1,5 @@
 ﻿// SPDX-License-Identifier: MIT
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
 
 using FindMyBLEDevice.Models;
 using FindMyBLEDevice.Services.Database;
@@ -15,9 +15,6 @@ namespace FindMyBLEDevice.ViewModels
         private readonly INavigator navigator;
         private readonly IDevicesStore devicesStore;
         private readonly IGeolocation geolocation;
-
-        public Command SaveCommand { get; }
-        public Command CancelCommand { get; }
 
         public BTDevice Device => devicesStore.SelectedDevice;
 
@@ -35,6 +32,9 @@ namespace FindMyBLEDevice.ViewModels
             }
         }
 
+        public Command SaveCommand { get; }
+        public Command CancelCommand { get; }
+
         public NewItemViewModel(INavigator navigator, IDevicesStore devicesStore, IGeolocation geolocation)
         {
             this.navigator = navigator;
@@ -45,23 +45,26 @@ namespace FindMyBLEDevice.ViewModels
             CancelCommand = new Command(OnCancel);
         }
 
-        private async void OnCancel()
+        public async void OnCancel()
         {
             // This will pop the current page off the navigation stack
             devicesStore.SelectedDevice = null;
             await navigator.GoToAsync("..");
         }
 
-        private async void OnSave()
+        public async void OnSave()
         {
             if(String.IsNullOrWhiteSpace(UserLabel))
             {
-                Device.UserLabel = Device.AdvertisedName;
-            } else if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
+                UserLabel = Device.AdvertisedName.Substring(0, Math.Min(Device.AdvertisedName.Length, Constants.UserLabelMaxLength));
+            }
+
+            if((await devicesStore.GetAllDevices()).Any(d => d.UserLabel == UserLabel))
             {
                 await App.Current.MainPage.DisplayAlert("Label already taken", $"The label '{UserLabel}' is already taken by another device. Please choose another one.", "Ok");
                 return;
-            } else
+            } 
+            else if(!String.IsNullOrWhiteSpace(UserLabel))
             {
                 Device.UserLabel = UserLabel;
             }
@@ -70,6 +73,7 @@ namespace FindMyBLEDevice.ViewModels
             Device.LastGPSLongitude = location.Longitude;
             Device.LastGPSLatitude = location.Latitude;
             Device.LastGPSTimestamp = DateTime.Now;
+            Device.WithinRange = true;
 
             devicesStore.SelectedDevice = await devicesStore.AddDevice(Device);
 

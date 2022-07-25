@@ -1,4 +1,4 @@
-﻿// X - License - Identifier: MIT
+﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 
 using Android.Content;

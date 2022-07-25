@@ -2,18 +2,16 @@
 <!--
 // SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
-// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo@wolfgang-koeberlein.de>
-// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nico.stellwag@gmail.com>
-// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@faul.de>
+// SPDX-FileCopyrightText: 2022 Leo Köberlein <leo.koeberlein@fau.de>
+// SPDX-FileCopyrightText: 2022 Nicolas Stellwag <nicolas.stellwag@fau.de>
+// SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
 -->
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="viewmodels:SettingsViewModel"
+             xmlns:viewmodels="clr-namespace:FindMyBLEDevice.ViewModels" x:DataType="viewmodels:SettingsViewModel"
              x:Class="FindMyBLEDevice.Views.SettingsPage"
              Title="Settings"
              AutomationId="Page_Settings"
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:ios="clr-namespace:Xamarin.Forms.PlatformConfiguration.iOSSpecific;assembly=Xamarin.Forms.Core"
              ios:Page.UseSafeArea="true">
 
@@ -52,7 +50,7 @@
                     </StackLayout>
                     <Slider Maximum="{Binding UpdateServiceIntervalMax}" Minimum="{Binding UpdateServiceIntervalMin}" Value="{Binding UpdateServiceInterval}" ThumbColor="White" MinimumTrackColor="{StaticResource Accent}" MaximumTrackColor="{StaticResource Accent}" />
                 </StackLayout>
-                
+
                 <Button x:Name="DefaultButton"
                         Text="Restore Default Settings"
                         TextColor="White"
@@ -126,11 +124,11 @@
                 <StackLayout Spacing="5" Orientation="Vertical" VerticalOptions="Start" Padding="10">
                     <Label Text="Version" FontAttributes="Bold" FontSize="Subtitle" TextColor="White"/>
                     <Label Text=
-                           "0.12.0"
+                           "1.0.0"
                            FontSize="Body"
                            TextColor="White"/>
                 </StackLayout>
-            </StackLayout> 
+            </StackLayout>
         </StackLayout>
     </ScrollView>
 </ContentPage>

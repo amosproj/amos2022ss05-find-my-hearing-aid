@@ -1,7 +1,7 @@
-﻿// X - License - Identifier: MIT
+﻿// SPDX-License-Identifier: MIT
 // SPDX-FileCopyrightText: 2022 Adrian Wandinger <adrian.wandinger@fau.de>
 // SPDX-FileCopyrightText: 2022 Marib Aldoais <marib.aldoais@fau.de>
-// SPDX-FileCopyrightText: Jannik Schuetz <jannik.schuetz@gmx.net>
+// SPDX-FileCopyrightText: 2022 Jannik Schuetz <jannik.schuetz@fau.de>
 
 using FindMyBLEDevice.Services.Permission;
 using Xamarin.Forms;
@@ -12,12 +12,12 @@ namespace FindMyBLEDevice.Droid.Services
     // These functions only return true, because we only need the iOS implementation for it
     internal class Permission : IPermission
     {
-        public bool checkBluetoothPermission()
+        public bool CheckBluetoothPermission()
         {
             return true;
         }
 
-        public bool checkLocationPermission()
+        public bool CheckLocationPermission()
         {
             return true;
         }
